@@ -33,7 +33,7 @@ def find_gsp_file_paths():
 # =============================================================================
 # Validate a single file
 # =============================================================================
-def validate_file(json_schema: dict, file_path: Path) -> tuple[bool, str | None]:
+def validate_json(json_schema: dict, file_path: Path) -> tuple[bool, str | None]:
     """
     Validate a single file against the schema.
     Returns (True, None) if valid, (False, error_message) if invalid.
@@ -66,23 +66,24 @@ def main():
         print("No .gsp.json files found.")
         return 0
 
-    total = 0
-    passed = 0
+    total_count = 0
+    pass_count = 0
     for file_path in file_paths:
-        total += 1
-        ok, err = validate_file(json_schema, file_path)
+        total_count += 1
+        ok, err = validate_json(json_schema, file_path)
         if ok:
             print(f"OK: {file_path}")
-            passed += 1
+            pass_count += 1
         else:
             print(f"FAIL: {file_path}\n{err}\n")
 
-    print(f"Summary: {passed}/{total} passed")
-    return 0 if passed == total else 1
+    print(f"Summary: {pass_count}/{total_count} passed")
+    return 0 if pass_count == total_count else 1
 
 
 # =============================================================================
 # Entry point
 # =============================================================================
 if __name__ == "__main__":
-    main()
+    status_code = main()
+    os._exit(status_code)
