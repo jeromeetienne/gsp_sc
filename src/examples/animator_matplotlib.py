@@ -7,6 +7,7 @@ import numpy as np
 import os
 import gsp_sc
 from examples.common.gsp_animator import GspAnimatorMatplotlib
+from examples.common.fps_monitor import FpsMonitor
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -45,30 +46,18 @@ renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
 renderer.render(canvas, camera)
 
 # =============================================================================
-# Code to measure FPS
-# =============================================================================
-time_previous_render = None
-
-
-def monitor_fps() -> None:
-    global time_previous_render
-    time_now = time.time()
-    if time_previous_render is not None:
-        fps = 1.0 / (time_now - time_previous_render)
-        print(f"Frame per second: {fps:.2f}")
-    time_previous_render = time_now
-
-
-# =============================================================================
 # Animate the scene with matplotlib
 # =============================================================================
+fps_monitor = FpsMonitor()
+
+
 def animator_callback() -> list[gsp_sc.core.VisualBase]:
     new_sizes = np.random.uniform(10, 100, (n_points,)).astype(np.float32)
     # copy inplace to avoid reallocations
     sizes_np[:] = new_sizes
 
     # measure FPS to monitor performance
-    monitor_fps()
+    fps_monitor.print_fps()
 
     changed_visuals: list[gsp_sc.core.VisualBase] = [pixels]
     return changed_visuals

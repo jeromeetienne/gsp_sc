@@ -12,6 +12,7 @@ import time
 import numpy as np
 
 # local imports
+from examples.common.fps_monitor import FpsMonitor
 import gsp_sc
 from examples.common.gsp_animator import GspAnimatorNetwork
 from gsp_sc.types import DiffableNdarray
@@ -51,32 +52,20 @@ viewport.add(pixels)
 # Render the scene with matplotlib
 #
 camera = gsp_sc.core.Camera(camera_type="perspective")
-network_renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=True)
-
-# =============================================================================
-# Code to measure FPS
-# =============================================================================
-time_previous_render = None
-
-
-def monitor_fps() -> None:
-    global time_previous_render
-    time_now = time.perf_counter()
-    if time_previous_render is not None:
-        fps = 1.0 / (time_now - time_previous_render)
-        print(f"Frame per second: {fps:.2f}")
-    time_previous_render = time_now
-
+network_renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=False)
 
 # =============================================================================
 # Animate the scene with matplotlib thru the network renderer
 # =============================================================================
+fps_monitor = FpsMonitor()
+
+
 def animate() -> list[gsp_sc.core.VisualBase]:
     # copy inplace to avoid reallocations
     sizes[:] = np.random.uniform(10, 100, (n_points,)).astype(np.float32)
 
     # measure FPS to monitor performance
-    monitor_fps()
+    fps_monitor.print_fps()
 
     changed_visuals: list[gsp_sc.core.VisualBase] = [pixels]
     return changed_visuals
