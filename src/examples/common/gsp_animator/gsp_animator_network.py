@@ -66,14 +66,40 @@ class GspAnimatorNetwork:
         image_data_np = np.zeros((canvas.height, canvas.width, 3), dtype=np.uint8)
         axes_image = mpl_axes.imshow(image_data_np)
 
+        # =============================================================================
+        # Handle GSP_SC_INTERACTIVE is False
+        # =============================================================================
+
         # detect if we are in not interactive mode - used during testing
         gsp_sc_interactive = "GSP_SC_INTERACTIVE" not in os.environ or os.environ["GSP_SC_INTERACTIVE"] != "False"
-        screenshot_saved = False
+        if gsp_sc_interactive is False:
+            # notify all animator callbacks
+            changed_visuals: list[gsp_sc.core.VisualBase] = []
+            for animator_callback in animator_callbacks:
+                _changed_visuals = animator_callback()
+                changed_visuals.extend(_changed_visuals)
+
+            # render the scene to get the new image
+            image_png_data = self._network_renderer.render(canvas, camera)
+            # get the main script name
+            main_script_name = os.path.basename(__main__.__file__) if hasattr(__main__, "__file__") else "interactive"
+            main_script_basename = os.path.splitext(main_script_name)[0]
+            # buid the output image path
+            image_path = os.path.join(__dirname__, "../../output", f"{main_script_basename}_animator.png")
+            image_path = os.path.abspath(image_path)
+            # save image_png_data in a image file
+            with open(image_path, "wb") as image_file:
+                image_file.write(image_png_data)
+            # log the event
+            print(f"Saved animation preview image to: {image_path}")
+            return
+
+        # =============================================================================
+        # Animation function
+        # =============================================================================
 
         # function called at each animation frame
         def mpl_animate(frame_index: int):
-            nonlocal screenshot_saved
-
             # notify all animator callbacks
             changed_visuals: list[gsp_sc.core.VisualBase] = []
             for animator_callback in animator_callbacks:
@@ -88,24 +114,6 @@ class GspAnimatorNetwork:
             # update the image data
             axes_image.set_data(image_data_np)
 
-            # if we are not in interactive mode, save a preview image and return
-            if gsp_sc_interactive is False:
-                # get the main script name
-                main_script_name = os.path.basename(__main__.__file__) if hasattr(__main__, "__file__") else "interactive"
-                main_script_basename = os.path.splitext(main_script_name)[0]
-                # buid the output image path
-                image_path = os.path.join(__dirname__, "../../output", f"{main_script_basename}_animator.png")
-                image_path = os.path.abspath(image_path)
-                # save image_png_data in a image file
-                with open(image_path, "wb") as image_file:
-                    image_file.write(image_png_data)
-                # mark the screenshot as saved
-                screenshot_saved = True
-                # log the event
-                print(f"Saved animation preview image to: {image_path}")
-                anim.event_source.stop()
-                return []
-
             # return the changed mpl artists
             changed_mpl_artists = [axes_image]
             return changed_mpl_artists
@@ -117,24 +125,6 @@ class GspAnimatorNetwork:
         # save the animation if a path is provided
         if self._video_path is not None:
             anim.save(self._video_path, writer=self._video_writer, fps=self._target_fps)
-
-        # =============================================================================
-        # if not interactive, wait for the screenshot to be saved, and then close the figure
-        # =============================================================================
-        if gsp_sc_interactive is False:
-
-            def close_figure_if_screenshot():
-                nonlocal screenshot_saved
-                if screenshot_saved is False:
-                    return
-                # Stop the animation and close the figure
-                print("Screenshot saved, now closing the figure")
-                mpl_timer.stop()
-                matplotlib.pyplot.close(figure)
-
-            mpl_timer = figure.canvas.new_timer(interval=500)
-            mpl_timer.add_callback(close_figure_if_screenshot)
-            mpl_timer.start()
 
         # show the animation
         matplotlib.pyplot.show()
