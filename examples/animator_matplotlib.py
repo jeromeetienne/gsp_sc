@@ -5,8 +5,8 @@ Basic example of creating and rendering a simple GSP scene with matplotlib.
 import time
 import numpy as np
 import os
-import gsp_sc.src as gsp_sc
-from gsp_sc.examples.common.gsp_animator import GspAnimatorMatplotlib
+import gsp_sc
+from examples.common.gsp_animator import GspAnimatorMatplotlib
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility

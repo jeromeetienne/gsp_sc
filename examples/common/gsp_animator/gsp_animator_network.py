@@ -10,8 +10,8 @@ import matplotlib.image
 import matplotlib.animation
 
 # local imports
-import gsp_sc.src as gsp_sc
-from gsp_sc.src.core import canvas
+import gsp_sc
+from gsp_sc.core import canvas
 from .gsp_animator_types import GSPAnimatorFunc
 
 

@@ -9,7 +9,7 @@ import os
 import numpy as np
 
 # local imports
-import gsp_sc.src as gsp_sc
+import gsp_sc
 from gsp_sc.examples.common.gsp_animator import GspAnimatorNetwork
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))

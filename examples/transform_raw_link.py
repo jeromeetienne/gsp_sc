@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from gsp_sc.src.transform import TransformLinkLoad, TransformLinkMathOp, TransformLinkImmediate, TransformLinkLambda
+from gsp_sc.transform import TransformLinkLoad, TransformLinkMathOp, TransformLinkImmediate, TransformLinkLambda
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))

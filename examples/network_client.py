@@ -6,7 +6,7 @@ NOTE: This example requires the network server to be running. You can start the 
 """
 
 from matplotlib import colors
-import gsp_sc.src as gsp_sc
+import gsp_sc
 import numpy as np
 import matplotlib.pyplot
 import matplotlib.image

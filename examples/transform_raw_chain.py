@@ -1,7 +1,5 @@
-import gsp_sc.src as gsp_sc
-import numpy as np
 import os
-from gsp_sc.src.transform import TransformChain
+from gsp_sc.transform import TransformChain
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 url_npy = f"file://{__dirname__}/data/sample_positions_3d.npy"

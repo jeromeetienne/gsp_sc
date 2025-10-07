@@ -2,7 +2,7 @@
 Example of serialising a scene to JSON and MessagePack files.
 """
 
-import gsp_sc.src as gsp_sc
+import gsp_sc
 import numpy as np
 import os
 import msgpack

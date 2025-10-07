@@ -2,7 +2,7 @@ import matplotlib.pyplot
 import mpl3d.glm
 import os
 
-import gsp_sc.src as gsp_sc
+import gsp_sc
 import numpy as np
 
 

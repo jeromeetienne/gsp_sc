@@ -9,8 +9,8 @@ import os
 import numpy as np
 
 # local imports
-import gsp_sc.src as gsp_sc
-from gsp_sc.src.transform import TransformChain
+import gsp_sc
+from gsp_sc.transform import TransformChain
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility

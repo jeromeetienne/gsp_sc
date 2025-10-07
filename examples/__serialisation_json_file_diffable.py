@@ -2,12 +2,12 @@
 Example of serialising a scene to JSON and MessagePack files.
 """
 
-import gsp_sc.src as gsp_sc
+import gsp_sc
 import numpy as np
 import os
 import msgpack
 import json
-from gsp_sc.src.types import DiffableNdarray
+from gsp_sc.types import DiffableNdarray
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))

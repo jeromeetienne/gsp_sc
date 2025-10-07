@@ -3,7 +3,7 @@ Example of serialising a scene to JSON and loading it back.
 It is rendered before and after to verify the scene serialisation works correctly.
 """
 
-import gsp_sc.src as gsp_sc
+import gsp_sc
 import numpy as np
 import matplotlib.image as mpl_img
 

@@ -5,7 +5,7 @@ import matplotlib.animation
 import matplotlib.artist
 
 # local imports
-import gsp_sc.src as gsp_sc
+import gsp_sc
 from .gsp_animator_types import GSPAnimatorFunc
 
 

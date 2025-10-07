@@ -1,5 +1,5 @@
 import matplotlib.pyplot
-import gsp_sc.src as gsp_sc
+import gsp_sc
 import numpy as np
 import matplotlib.image
 

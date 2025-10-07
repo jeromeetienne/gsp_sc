@@ -7,7 +7,7 @@ import matplotlib.image
 import numpy as np
 import os
 
-import gsp_sc.src as gsp_sc
+import gsp_sc
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
