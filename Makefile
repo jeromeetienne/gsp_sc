@@ -13,7 +13,7 @@ pytest: ## Run pytest on the tests/ directory
 	cd src/tests && pytest -W ignore::DeprecationWarning
 
 pytest_verbose: ## Run pytest in verbose mode on the tests/ directory
-	cd tests && pytest -v -W ignore::DeprecationWarning
+	cd src/tests && pytest -v -W ignore::DeprecationWarning
 
 
 ##############################################################################
@@ -21,10 +21,10 @@ pytest_verbose: ## Run pytest in verbose mode on the tests/ directory
 lint: lint_src lint_examples ## Run pyright type checker on src and examples
 
 lint_src: ## Run pyright type checker on ./src
-	pyright src/
+	pyright src/gsp_sc/
 
 lint_examples: ## Run pyright type checker on ./examples
-	pyright examples/
+	pyright src/examples/
 
 ##########################################################################
 

@@ -5,12 +5,8 @@ NOTE: This example requires the network server to be running. You can start the 
 `network_server.py` script in a separate terminal.
 """
 
-from matplotlib import colors
 import gsp_sc
 import numpy as np
-import matplotlib.pyplot
-import matplotlib.image
-
 import os
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -43,7 +39,7 @@ viewport.add(pixels)
 ###############################################################################
 # Render the scene using the matplotlib renderer to verify it looks correct
 #
-matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+matplotlib_renderer = gsp_sc.renderer.MatplotlibRenderer()
 image_png_data = matplotlib_renderer.render(canvas, camera)
 
 # Save the image to a file
@@ -55,7 +51,7 @@ print(f"Image saved to {local_image_path}")
 ###############################################################################
 # Render the scene using a network renderer
 #
-network_renderer = gsp_sc.renderer.network.NetworkRenderer(
+network_renderer = gsp_sc.renderer.NetworkRenderer(
     server_url="http://localhost:5000/",
     jsondiff_allowed=True,
 )

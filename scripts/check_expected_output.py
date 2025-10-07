@@ -103,8 +103,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Check the output files against expected files.")
     args = parser.parse_args()
 
-    expected_folder = f"{__dirname__}/../examples/expected/"
-    output_folder = f"{__dirname__}/../examples/output/"
+    expected_folder = f"{__dirname__}/../src/examples/expected/"
+    output_folder = f"{__dirname__}/../src/examples/output/"
 
     # get all basename of files in output directory
     expected_basenames = [basename for basename in os.listdir(expected_folder)]

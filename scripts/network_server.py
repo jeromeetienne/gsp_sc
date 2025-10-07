@@ -53,11 +53,7 @@ def render_scene_json() -> Response:
             return Response("json_diff resource not found. Resend as 'absolute'.", status=410)
         # Reconstruct the absolute scene by applying the diff
         scene_diff = payload["data"]
-        try:
-            scene_dict = jsonpatch.apply_patch(old_scene_dict, scene_diff)
-        except jsonpatch.JsonPatchConflict as e:
-            breakpoint()  # for debugging
-            return Response(f"Failed to apply JSON patch: {e}", status=400)
+        scene_dict = jsonpatch.apply_patch(old_scene_dict, scene_diff)
         # Update the stored absolute scene
         absolute_scenes[client_id] = scene_dict
         # log the operation
