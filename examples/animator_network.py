@@ -6,7 +6,7 @@ import numpy as np
 import os
 import time
 import gsp_sc
-from examples.gsp_animator import GspAnimatorNetwork
+from examples.common.gsp_animator import GspAnimatorNetwork
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -73,5 +73,10 @@ def animate() -> list[gsp_sc.core.VisualBase]:
     return changed_visuals
 
 
-gsp_animator = GspAnimatorNetwork(network_renderer)
-gsp_animator.animate(canvas, camera, [animate])
+def main() -> None:
+    gsp_animator = GspAnimatorNetwork(network_renderer)
+    gsp_animator.animate(canvas, camera, [animate])
+
+
+if __name__ == "__main__":
+    main()

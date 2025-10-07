@@ -6,7 +6,7 @@ import numpy as np
 import os
 import time
 import gsp_sc
-from gsp_sc.examples.common.gsp_animator import GspAnimatorNetwork
+from examples.common.gsp_animator import GspAnimatorNetwork
 from gsp_sc.types import DiffableNdarray
 
 

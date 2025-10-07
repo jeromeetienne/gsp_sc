@@ -3,7 +3,7 @@ import numpy as np
 import typing
 from typing import Any
 
-from gsp_sc.src.transform import TransformSerialisation
+from . import TransformSerialisation
 # from .transform_chain import TransformLinkBase
 from .transform_link_base import TransformLinkBase
 

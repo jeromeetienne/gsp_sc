@@ -10,7 +10,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
-from gsp_sc.examples.common.gsp_animator import GspAnimatorNetwork
+from examples.common.gsp_animator import GspAnimatorNetwork
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility

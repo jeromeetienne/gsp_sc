@@ -1,0 +1,295 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "GSP .gsp.json export schema",
+	"description": "Permissive schema for GSP JSON exports (camera, canvas, viewports, visuals, ndarray payloads).",
+	"type": "object",
+	"properties": {
+		"camera": {
+			"$ref": "#/definitions/camera"
+		},
+		"canvas": {
+			"$ref": "#/definitions/canvas"
+		},
+		"metadata": {
+			"type": "object",
+			"description": "Optional free-form metadata about the export.",
+			"additionalProperties": false
+		}
+	},
+	"required": [
+		"canvas"
+	],
+	"additionalProperties": false,
+	"definitions": {
+		"camera": {
+			"type": "object",
+			"description": "Camera settings. Examples: { uuid, type: 'perspective'|'orthographic', fov, near, far, position, target }",
+			"properties": {
+				"uuid": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"fov": {
+					"type": "number"
+				},
+				"near": {
+					"type": "number"
+				},
+				"far": {
+					"type": "number"
+				},
+				"position": {
+					"$ref": "#/definitions/vec3"
+				},
+				"target": {
+					"$ref": "#/definitions/vec3"
+				}
+			},
+			"additionalProperties": false
+		},
+		"canvas": {
+			"type": "object",
+			"description": "Canvas and viewport layout",
+			"properties": {
+				"uuid": {
+					"type": "string"
+				},
+				"width": {
+					"type": "integer"
+				},
+				"height": {
+					"type": "integer"
+				},
+				"dpi": {
+					"type": "number"
+				},
+				"viewports": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/viewport"
+					}
+				}
+			},
+			"required": [
+				"uuid",
+				"width",
+				"height"
+			],
+			"additionalProperties": false
+		},
+		"viewport": {
+			"type": "object",
+			"properties": {
+				"uuid": {
+					"type": "string"
+				},
+				"origin_x": {
+					"type": "number"
+				},
+				"origin_y": {
+					"type": "number"
+				},
+				"width": {
+					"type": "integer"
+				},
+				"height": {
+					"type": "integer"
+				},
+				"background_color": {
+					"type": "array",
+					"items": {
+						"type": "number"
+					},
+					"minItems": 3,
+					"maxItems": 4,
+					"description": "RGB or RGBA color as numbers in [0..1]"
+				},
+				"visuals": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/visual"
+					}
+				}
+			},
+			"required": [
+				"uuid",
+				"width",
+				"height"
+			],
+			"additionalProperties": false
+		},
+		"visual": {
+			"oneOf": [
+				{
+					"$ref": "#/definitions/visual_pixels"
+				},
+				{
+					"$ref": "#/definitions/visual_image"
+				},
+				{
+					"$ref": "#/definitions/visual_mesh"
+				}
+			],
+			"description": "A visual object. Specific properties depend on `type` (see per-type subschemas)."
+		},
+		"ndarray": {
+			"type": "object",
+			"description": "Representation of an n-dimensional array used in the export. Observed shape: { type: 'ndarray', data: [...] }"
+		},
+		"visual_pixels": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "Pixels"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"positions": {
+					"$ref": "#/definitions/ndarray"
+				},
+				"sizes": {
+					"$ref": "#/definitions/ndarray"
+				},
+				"colors": {
+					"oneOf": [
+						{
+							"$ref": "#/definitions/ndarray"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "number"
+							}
+						}
+					]
+				}
+			},
+			"required": [
+				"type",
+				"uuid",
+				"positions",
+				"sizes",
+				"colors"
+			],
+			"additionalProperties": false
+		},
+		"visual_image": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "Image"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"position": {
+					"$ref": "#/definitions/vec3"
+				},
+				"bounds": {
+					"type": "array",
+					"items": {
+						"type": "number"
+					},
+					"minItems": 4,
+					"maxItems": 4
+				},
+				"image_data_shape": {
+					"type": "array",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"image_data": {
+					"type": "array"
+				}
+			},
+			"required": [
+				"type",
+				"uuid",
+				"position",
+				"bounds",
+				"image_data_shape",
+				"image_data"
+			],
+			"additionalProperties": false
+		},
+		"visual_mesh": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "Mesh"
+				},
+				"uuid": {
+					"type": "string"
+				},
+				"vertices": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/vec3"
+					}
+				},
+				"faces": {
+					"type": "array",
+					"items": {
+						"type": "array",
+						"items": {
+							"type": "integer"
+						},
+						"minItems": 3,
+						"maxItems": 3
+					}
+				},
+				"cmap": {
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				"facecolors": {
+					"type": "array"
+				},
+				"edgecolors": {
+					"type": "array"
+				},
+				"linewidths": {
+					"oneOf": [
+						{
+							"type": "number"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "number"
+							}
+						}
+					]
+				},
+				"mode": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"type",
+				"uuid",
+				"vertices",
+				"faces"
+			],
+			"additionalProperties": false
+		},
+		"vec3": {
+			"type": "array",
+			"description": "3-number vector",
+			"items": {
+				"type": "number"
+			},
+			"minItems": 3,
+			"maxItems": 3
+		}
+	}
+}
