@@ -78,7 +78,7 @@ viewport.add(mesh)
 # Export the scene to JSON
 # =============================================================================
 camera = gsp_sc.core.Camera("perspective")
-json_renderer = gsp_sc.renderer.json.JsonRenderer()
+json_renderer = gsp_sc.renderer.JsonRenderer()
 scene_dict = json_renderer.render(canvas, camera)
 scene_json = json.dumps(scene_dict, indent=4)
 
@@ -93,7 +93,7 @@ print(f"Scene exported to JSON and saved to {json_output_path}. length={len(scen
 # Import the scene from JSON
 #
 
-json_parser = gsp_sc.renderer.json.JsonParser()
+json_parser = gsp_sc.renderer.JsonParser()
 canvas_parsed, camera_parsed = json_parser.parse(scene_json)
 
 ###############################################################################
