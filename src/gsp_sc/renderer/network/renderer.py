@@ -106,6 +106,7 @@ class NetworkRenderer:
 
         # Mark that an absolute rendering has been sent
         # - MUST be done after the response is successful
+        # TODO do this IIF jsondiff was allowed?
         if payload["type"] == "absolute":
             self.__absolute_scene = scene_dict
 
