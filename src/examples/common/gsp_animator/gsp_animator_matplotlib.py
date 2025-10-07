@@ -1,5 +1,9 @@
-# pip imports
+# stdlib imports
 import os
+import __main__
+
+
+# pip imports
 import matplotlib.pyplot
 import matplotlib.animation
 import matplotlib.artist
@@ -7,6 +11,8 @@ import matplotlib.artist
 # local imports
 import gsp_sc
 from .gsp_animator_types import GSPAnimatorFunc
+
+__dirname__ = os.path.dirname(os.path.abspath(__file__))
 
 
 class GspAnimatorMatplotlib:
@@ -24,7 +30,7 @@ class GspAnimatorMatplotlib:
         self._matplotlib_renderer = matplotlib_renderer
         self._target_fps = target_fps
         self._video_path = video_path
-        self._video_writer: str | None = None   
+        self._video_writer: str | None = None
 
         # guess the video writer from the file extension if not provided
         if self._video_path is not None:
@@ -34,7 +40,7 @@ class GspAnimatorMatplotlib:
                 video_ext = os.path.splitext(self._video_path)[1].lower()
                 if video_ext in [".mp4", ".m4v", ".mov"]:
                     self._video_writer = "ffmpeg"
-                elif video_ext in [".gif", '.apng', '.webp']:
+                elif video_ext in [".gif", ".apng", ".webp"]:
                     self._video_writer = "pillow"
                 else:
                     raise ValueError(f"Unsupported video format: {video_ext}")
@@ -63,6 +69,23 @@ class GspAnimatorMatplotlib:
             return changed_mpl_artists
 
         figure = matplotlib.pyplot.gcf()
+
+        # detect if we are in not interactive mode - used during testing
+        gsp_sc_interactive = "GSP_SC_INTERACTIVE" not in os.environ or os.environ["GSP_SC_INTERACTIVE"] != "False"
+
+        # if we are not in interactive mode, save a preview image and return
+        if gsp_sc_interactive == False:
+            # get the main script name
+            main_script_name = os.path.basename(__main__.__file__) if hasattr(__main__, "__file__") else "interactive"
+            main_script_basename = os.path.splitext(main_script_name)[0]
+            # buid the output image path
+            image_path = os.path.join(__dirname__, "../../output", f"{main_script_basename}_animator.png")
+            image_path = os.path.abspath(image_path)
+            # save the current figure in a image file
+            figure.savefig(image_path)
+            # log the event
+            print(f"Saved animation preview image to: {image_path}")
+            return
 
         # =============================================================================
         # Initialize the animation

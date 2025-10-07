@@ -4,11 +4,17 @@
 Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
 
-import numpy as np
+# stdlib imports
 import os
 import time
+
+# pip imports
+import numpy as np
+
+# local imports
 import gsp_sc
 from examples.common.gsp_animator import GspAnimatorNetwork
+from gsp_sc.types import DiffableNdarray
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -29,10 +35,15 @@ canvas.add(viewport)
 # Add some random points
 #
 n_points = 3_000
-positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
-sizes_np = np.array([50 for _ in range(n_points)], np.float32)
-colors_np = np.array([gsp_sc.Constants.Green for _ in range(n_points)], np.float32)
-pixels = gsp_sc.visuals.Pixels(positions_np, sizes_np, colors_np)
+positions = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
+sizes = np.array([50 for _ in range(n_points)], np.float32)
+colors = np.array([gsp_sc.Constants.Green for _ in range(n_points)], np.float32)
+
+positions = DiffableNdarray(positions)
+sizes = DiffableNdarray(sizes)
+colors = DiffableNdarray(colors)
+
+pixels = gsp_sc.visuals.Pixels(positions, sizes, colors)
 viewport.add(pixels)
 
 
@@ -62,7 +73,7 @@ def monitor_fps() -> None:
 # =============================================================================
 def animate() -> list[gsp_sc.core.VisualBase]:
     # copy inplace to avoid reallocations
-    sizes_np[:] = np.random.uniform(10, 100, (n_points,)).astype(np.float32)
+    sizes[:] = np.random.uniform(10, 100, (n_points,)).astype(np.float32)
 
     # measure FPS to monitor performance
     monitor_fps()
