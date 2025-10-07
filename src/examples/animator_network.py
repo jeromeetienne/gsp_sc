@@ -16,18 +16,14 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 gsp_sc.core.Random.set_random_seed(10)
 np.random.seed(10)
 
+
 ###############################################################################
 # Create a GSP scene
 #
-canvas = gsp_sc.core.Canvas(width=256, height=256, dpi=100)
-viewport = gsp_sc.core.Viewport(
-    origin_x=0,
-    origin_y=0,
-    width=canvas.width,
-    height=canvas.height,
-    background_color=gsp_sc.Constants.White,
-)
-canvas.add(viewport=viewport)
+canvas = gsp_sc.core.Canvas(256, 256, 100)
+viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
+canvas.add(viewport)
+
 
 ###############################################################################
 # Add some random points
@@ -75,10 +71,5 @@ def animate() -> list[gsp_sc.core.VisualBase]:
     return changed_visuals
 
 
-def main() -> None:
-    gsp_animator = GspAnimatorNetwork(network_renderer)
-    gsp_animator.animate(canvas, camera, [animate])
-
-
-if __name__ == "__main__":
-    main()
+gsp_animator = GspAnimatorNetwork(network_renderer)
+gsp_animator.animate(canvas, camera, [animate])

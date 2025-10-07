@@ -13,6 +13,7 @@ import argparse
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 
+
 def launch_example(cmdline_args: list[str]) -> bool:
     """
     Launches the example script with the given command line arguments.
@@ -45,6 +46,7 @@ def launch_example(cmdline_args: list[str]) -> bool:
 
     return run_success
 
+
 def launch_network_server():
     """
     Launches the network server in a separate process.
@@ -70,21 +72,24 @@ def launch_network_server():
         print("Failed to start network server:", str(e))
         return None
 
+
 ###############################################################################
 # Main script logic
 #
 
+
 def split_argv():
-    if '--' not in sys.argv:
+    if "--" not in sys.argv:
         local_args = sys.argv[1:]
         example_args = []
     else:
-        separator_index = sys.argv.index('--')
+        separator_index = sys.argv.index("--")
         local_args = sys.argv[1:separator_index]
-        example_args = sys.argv[separator_index + 1:]
+        example_args = sys.argv[separator_index + 1 :]
     return local_args, example_args
 
-def main()->None:
+
+def main() -> None:
     # Split local args and launcher.py args
     local_args, example_args = split_argv()
 
@@ -103,7 +108,7 @@ def main()->None:
         sys.exit(1)
 
     # get script paths in the examples folder
-    examples_folder = f"{__dirname__}/../examples"
+    examples_folder = f"{__dirname__}/../src/examples"
     basenames = [basename for basename in os.listdir(examples_folder) if os.path.isfile(os.path.join(examples_folder, basename))]
     basenames.sort()
     script_paths = [os.path.abspath(os.path.join(examples_folder, basename)) for basename in basenames if basename.endswith(".py")]
@@ -129,6 +134,7 @@ def main()->None:
     server_process.terminate()
     server_process.wait()
     print("Network server terminated.")
+
 
 if __name__ == "__main__":
     main()
