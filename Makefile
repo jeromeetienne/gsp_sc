@@ -2,7 +2,7 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 clean_output: ## Remove all generated output files
-	rm -f examples/output/*
+	rm -f ./src/examples/output/*
 
 validate_json: ## Validate all .gsp.json files against the gsp.schema.json
 	python scripts/validate_gsp_schema.py
