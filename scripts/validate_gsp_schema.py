@@ -4,15 +4,15 @@ Validate all .gsp.json files in the repository against schema/gsp.json (Draft-07
 
 Usage: python tools/validate_gsp.py
 """
+# stdlib imports
 import json
-import sys
 from pathlib import Path
-
-import jsonschema
 import os
 
-__dirname__ = os.path.dirname(__file__)
+# pip imports
+import jsonschema
 
+__dirname__ = os.path.dirname(__file__)
 json_schema_path = os.path.join(__dirname__, "../data/json-schemas/early_gsp.schema.json")
 output_folder_path = os.path.join(__dirname__, "../examples/output")
 

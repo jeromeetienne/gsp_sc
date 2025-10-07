@@ -10,7 +10,8 @@ validate_json: ## Validate all .gsp.json files against the gsp.schema.json
 ###############################################################################
 
 pytest: ## Run pytest on the tests/ directory
-	cd tests && pytest -W ignore::DeprecationWarning
+	PYTHONPATH=${PWD} cd tests && pytest -W ignore::DeprecationWarning
+
 
 pytest_verbose: ## Run pytest in verbose mode on the tests/ directory
 	cd tests && pytest -v -W ignore::DeprecationWarning

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Server example using Flask to render a scene from JSON input.
 
@@ -15,7 +16,7 @@ import jsonpatch
 # local imports
 import argparse
 import gsp_sc
-from gsp_sc.renderer.network.renderer import NetworkPayload
+from gsp_sc.renderer.network import NetworkPayload
 from gsp_sc.core.types import SceneDict
 from gsp_sc.types import DiffableNdarraySerialisationError
 

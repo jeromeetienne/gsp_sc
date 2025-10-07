@@ -1,3 +1,5 @@
+# !/usr/bin/env python3
+
 """
 Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
