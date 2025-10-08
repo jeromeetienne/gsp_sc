@@ -34,6 +34,9 @@ import matplotlib.pyplot
 # RendererBase.new_gc = types.MethodType(custom_new_gc, RendererBase)
 
 
+# =============================================================================
+# OBJ file reader
+# =============================================================================
 def obj_read(filename):
     """
     Read a wavefront filename and returns vertices, texcoords and
@@ -68,6 +71,9 @@ def obj_read(filename):
     )
 
 
+# =============================================================================
+# Affine transform to warp triangles
+# =============================================================================
 def warp_coordinates(face_coord_1: np.ndarray, face_coord_2: np.ndarray) -> matplotlib.transforms.Affine2D:
     """
     Return an affine transform that warp triangle T1 into triangle
@@ -85,6 +91,9 @@ def warp_coordinates(face_coord_1: np.ndarray, face_coord_2: np.ndarray) -> matp
     return matplotlib.transforms.Affine2D(matrix.T)
 
 
+# =============================================================================
+# textured triangle function
+# =============================================================================
 def textured_triangle(
     mpl_axes: matplotlib.axes.Axes,
     face_vertices: np.ndarray,

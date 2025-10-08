@@ -72,7 +72,7 @@ class JsonRenderer:
                     visual_dict = {
                         "type": "Mesh",
                         "uuid": mesh.uuid,
-                        "vertices": mesh.vertices.tolist(),
+                        "vertices": mesh.vertices_coords.tolist(),
                         "cmap": None if mesh.cmap is None else mesh.cmap.name,
                         "faces": mesh.face_indices.tolist(),
                         "facecolors": mesh.facecolors.tolist(),

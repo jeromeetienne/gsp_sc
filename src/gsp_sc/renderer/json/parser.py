@@ -75,8 +75,8 @@ class JsonParser:
                 elif visual_info["type"] == "Mesh":
                     cmap = None if visual_info["cmap"] is None else matplotlib.pyplot.get_cmap(visual_info["cmap"])
                     mesh = Mesh(
-                        vertices=np.array(visual_info["vertices"]),
-                        face_indices=np.array(visual_info["faces"]),
+                        vertices_coords=np.array(visual_info["vertices"]),
+                        faces_indices=np.array(visual_info["faces"]),
                         cmap=cmap,
                         facecolors=visual_info.get("facecolors", "white"),
                         edgecolors=visual_info.get("edgecolors", "black"),

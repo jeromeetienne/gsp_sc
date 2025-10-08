@@ -34,7 +34,7 @@ class MatplotlibRendererMesh:
         # Retrieve the PolyCollection for this mesh
         polyCollection = renderer._polyCollections[full_uuid]
 
-        vertices_transformed = mpl3d.glm.transform(mesh.vertices, transform)
+        vertices_transformed = mpl3d.glm.transform(mesh.vertices_coords, transform)
         faces_coords_3d = vertices_transformed[mesh.face_indices]
 
         edgecolors = mesh.edgecolors
