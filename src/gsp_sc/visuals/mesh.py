@@ -75,14 +75,12 @@ class Mesh(VisualBase):
 
         meshio_mesh = meshio.read(file_path)
         vertices = meshio_mesh.points
-        vertices = mpl3d.glm.fit_unit_cube(vertices)
+
+        # Extract triangular faces
         face_indices = meshio_mesh.cells[0].data
-        return Mesh(
-            vertices=vertices,
-            face_indices=face_indices,
-            cmap=cmap,
-            facecolors=facecolors,
-            edgecolors=edgecolors,
-            linewidths=linewidths,
-            mode=mode,
-        )
+
+        # Normalize vertices to fit within a unit cube
+        vertices = mpl3d.glm.fit_unit_cube(vertices)
+
+        mesh = Mesh(vertices=vertices, face_indices=face_indices, cmap=cmap, facecolors=facecolors, edgecolors=edgecolors, linewidths=linewidths, mode=mode)
+        return mesh
