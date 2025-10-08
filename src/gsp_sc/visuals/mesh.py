@@ -1,3 +1,4 @@
+from typing_extensions import Literal
 import mpl3d.glm
 import numpy as np
 import nptyping
@@ -16,7 +17,7 @@ class Mesh(VisualBase):
         "facecolors",
         "edgecolors",
         "linewidths",
-        "mode",
+        "culling_mode",
     )
 
     def __init__(
@@ -27,7 +28,7 @@ class Mesh(VisualBase):
         facecolors="white",
         edgecolors="black",
         linewidths=0.5,
-        mode="front",
+        culling_mode: Literal["front", "back", "all"] = "front",
     ) -> None:
         """
         Initialize a Mesh visual.
@@ -50,7 +51,7 @@ class Mesh(VisualBase):
         self.facecolors = matplotlib.colors.to_rgba_array(facecolors)
         self.edgecolors = matplotlib.colors.to_rgba_array(edgecolors)
         self.linewidths = linewidths
-        self.mode = mode
+        self.culling_mode = culling_mode
 
     @staticmethod
     def from_obj_file(
@@ -59,7 +60,7 @@ class Mesh(VisualBase):
         facecolors="white",
         edgecolors="black",
         linewidths=0.5,
-        mode="front",
+        culling_mode: Literal["front", "back", "all"] = "front",
     ) -> "Mesh":
         """
         Create a Mesh visual from an .obj file.
@@ -82,5 +83,13 @@ class Mesh(VisualBase):
         # Normalize vertices to fit within a unit cube
         vertices = mpl3d.glm.fit_unit_cube(vertices)
 
-        mesh = Mesh(vertices=vertices, face_indices=face_indices, cmap=cmap, facecolors=facecolors, edgecolors=edgecolors, linewidths=linewidths, mode=mode)
+        mesh = Mesh(
+            vertices=vertices,
+            face_indices=face_indices,
+            cmap=cmap,
+            facecolors=facecolors,
+            edgecolors=edgecolors,
+            linewidths=linewidths,
+            culling_mode=culling_mode,
+        )
         return mesh

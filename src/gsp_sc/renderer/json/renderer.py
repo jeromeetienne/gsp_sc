@@ -78,7 +78,7 @@ class JsonRenderer:
                         "facecolors": mesh.facecolors.tolist(),
                         "edgecolors": mesh.edgecolors.tolist(),
                         "linewidths": mesh.linewidths,
-                        "mode": mesh.mode,
+                        "mode": mesh.culling_mode,
                     }
                 else:
                     raise NotImplementedError(f"Rendering for visual type {type(visual)} is not implemented.")

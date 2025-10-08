@@ -81,7 +81,7 @@ class JsonParser:
                         facecolors=visual_info.get("facecolors", "white"),
                         edgecolors=visual_info.get("edgecolors", "black"),
                         linewidths=visual_info.get("linewidths", 0.5),
-                        mode=visual_info.get("mode", "front"),
+                        culling_mode=visual_info.get("mode", "front"),
                     )
                     # restore the original uuid
                     mesh.uuid = visual_info["uuid"]

@@ -1,7 +1,7 @@
 # TODO
-- the image is blank when interactive mode is on
-  - because plt.savefig is not called ?
-  - need to call it in the interactive loop ?
+- move transform_chain to ./examples/common
+- make a type for ndarray like nptyping
+  - thus you can specify the shape of the array
 - make all visual accept TransformChain
   - DONE for pixels on matplotlib+json renderer
   - generalize it to all parameters and all visuals
@@ -11,6 +11,9 @@
   - https://github.com/beartype/beartype
 
 ---
+- DONE the image is blank when interactive mode is on
+  - because plt.savefig is not called ?
+  - need to call it in the interactive loop ?
 - DONE keep the rendering events - useful for some tricks
   - can i emulate the stuff from nicolas 
 - DONE the server rendered image still got some borders

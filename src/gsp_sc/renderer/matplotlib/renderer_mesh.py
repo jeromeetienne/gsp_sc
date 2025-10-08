@@ -25,46 +25,45 @@ class MatplotlibRendererMesh:
     ) -> None:
         transform = camera.transform
 
+        # Create a PolyCollection for this mesh if it doesn't exist yet
         if full_uuid not in renderer._polyCollections:
             # print(f"Creating new PathCollection for mesh visual {full_uuid}")
             renderer._polyCollections[full_uuid] = matplotlib.collections.PolyCollection([], clip_on=False, snap=False)
             axes.add_collection(renderer._polyCollections[full_uuid], autolim=False)
 
+        # Retrieve the PolyCollection for this mesh
         polyCollection = renderer._polyCollections[full_uuid]
 
         vertices_transformed = mpl3d.glm.transform(mesh.vertices, transform)
         faces_coords_3d = vertices_transformed[mesh.face_indices]
+
+        edgecolors = mesh.edgecolors
+        linewidths = mesh.linewidths
+
+        # =============================================================================
+        # Face culling
+        # =============================================================================
+        if mesh.culling_mode == "front":
+            faces_to_keep, _ = mpl3d.glm.frontback(faces_coords_3d)
+        elif mesh.culling_mode == "back":
+            _, faces_to_keep = mpl3d.glm.frontback(faces_coords_3d)
+        elif mesh.culling_mode == "all":
+            faces_to_keep = np.arange(len(faces_coords_3d))
+        else:
+            raise ValueError(f"Invalid mesh.mode: {mesh.culling_mode}, should be 'front', 'back' or 'all'")
+
+        # Cull faces
+        faces_coords_3d = faces_coords_3d[faces_to_keep]
+
         faces_depths = -faces_coords_3d[:, :, 2].mean(axis=1)
 
+        # compute facecolors
         if mesh.cmap is not None:
             # Facecolors using depth buffer
             color_normalizer = matplotlib.colors.Normalize(vmin=faces_depths.min(), vmax=faces_depths.max())
             facecolors = mesh.cmap(color_normalizer(faces_depths))
         else:
             facecolors = mesh.facecolors
-
-        edgecolors = mesh.edgecolors
-        linewidths = mesh.linewidths
-
-        # Back face culling
-        if mesh.mode == "front":
-            front, back = mpl3d.glm.frontback(faces_coords_3d)
-            faces_coords_3d = faces_coords_3d[front]
-            faces_depths = faces_depths[front]
-            if len(facecolors) == len(mesh.face_indices):
-                facecolors = facecolors[front]
-            if len(edgecolors) == len(mesh.face_indices):
-                edgecolors = edgecolors[front]
-
-        # Front face culling
-        elif mesh.mode == "back":
-            front, back = mpl3d.glm.frontback(faces_coords_3d)
-            faces_coords_3d = faces_coords_3d[back]
-            faces_depths = faces_depths[back]
-            if len(facecolors) == len(mesh.face_indices):
-                facecolors = facecolors[back]
-            if len(edgecolors) == len(mesh.face_indices):
-                edgecolors = edgecolors[back]
 
         # Separate 2d triangles from zbuffer
         faces_coords_2d = faces_coords_3d[:, :, :2]

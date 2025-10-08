@@ -148,61 +148,42 @@ mpl_axes.set_yticks([])
 model_path = os.path.join(__dirname__, "head.obj")
 texture_path = os.path.join(__dirname__, "uv-grid.png")
 
-vertices_coords, uvs_coords, normals_coords, faces_vertice_indices, face_uv_indices, face_normal_indices = obj_read(model_path)
+vertices_coords, uvs_coords, normals_coords, faces_vertice_indices, face_uv_indices, normal_indices = obj_read(model_path)
 texture = imageio.imread(texture_path)[::-1, ::1, :3]
 face_vertices = vertices_coords[faces_vertice_indices]
 face_uvs = uvs_coords[face_uv_indices]
 
 # =============================================================================
-# Compute face normals
+# Lighting
 # =============================================================================
-faces_normals = np.cross(
+# N is the normal to the triangle
+faces_normal = np.cross(
     face_vertices[:, 2] - face_vertices[:, 0],
     face_vertices[:, 1] - face_vertices[:, 0],
 )
-faces_normals_unit = faces_normals / np.linalg.norm(faces_normals, axis=1).reshape(len(faces_normals), 1)
-
-# =============================================================================
-# Face culling
-# =============================================================================
-
-# camera_cosines is the cosine of the angle between the normal and the camera
-camera_direction = (0, 0, -1)
-camera_cosines: np.ndarray = np.dot(faces_normals_unit, camera_direction)
-
-# back face culling
-face_vertices = face_vertices[camera_cosines > 0]
-face_uvs = face_uvs[camera_cosines > 0]
-
-# =============================================================================
-# Lighting
-# =============================================================================
-light_direction = np.array([1, 1, -1])
-light_direction_unit = light_direction / np.linalg.norm(light_direction)
-light_cosines: np.ndarray = np.dot(faces_normals_unit, light_direction_unit)
-light_intensities = (light_cosines + 1) / 2
+faces_normal_unit = faces_normal / np.linalg.norm(faces_normal, axis=1).reshape(len(faces_normal), 1)
+# L is the cosine of the angle between the normal and the light
+light_direction = (0, 0, -1)
+light_cosines = np.dot(faces_normal_unit, light_direction)
 
 # =============================================================================
 # Sort triangles by depth (painter's algorithm)
 # =============================================================================
-faces_depth = face_vertices[:, :, 2].mean(axis=1)
-depth_sorted_indices = np.argsort(faces_depth)
-face_vertices = face_vertices[depth_sorted_indices][..., :2]
+depth_sorted_indices = np.argsort(face_vertices[:, :, 2].mean(axis=1))
+face_vertices_2d = face_vertices[depth_sorted_indices][..., :2]
 face_uvs = face_uvs[depth_sorted_indices][..., :2]
-light_intensities = light_intensities[depth_sorted_indices]
+light_cosines = light_cosines[depth_sorted_indices]
 
 # =============================================================================
 # Loop over faces and draw them
 # =============================================================================
-for vertices, face_uvs, light_intensity in zip(face_vertices, face_uvs, light_intensities):
-    try:
-        textured_triangle(mpl_axes=mpl_axes, face_vertices=vertices, uvs_normalized=face_uvs, texture=texture, intensity=light_intensity)
-    except np.linalg.LinAlgError:
-        pass
+for vertices, face_uvs, light_cosine in zip(face_vertices, face_uvs, light_cosines):
+    if light_cosine > 0:
+        try:
+            textured_triangle(mpl_axes=mpl_axes, face_vertices=vertices, uvs_normalized=face_uvs, texture=texture, intensity=(light_cosine + 1) / 2)
+        except np.linalg.LinAlgError:
+            pass
 
-# =============================================================================
-# Save or show figure
-# =============================================================================
 # plt.savefig("head.pdf")
 # plt.savefig("head.png")
 # plt.savefig("head.svg")
