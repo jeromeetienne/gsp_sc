@@ -94,10 +94,10 @@ def warp_coordinates(face_coord_1: np.ndarray, face_coord_2: np.ndarray) -> matp
 # =============================================================================
 # textured triangle function
 # =============================================================================
-def textured_triangle(
+def render_textured_triangle(
     mpl_axes: matplotlib.axes.Axes,
     face_vertices: np.ndarray,
-    uvs_normalized: np.ndarray,
+    face_uvs: np.ndarray,
     texture: np.ndarray,
     intensity: np.float64,
     interpolation="none",
@@ -114,7 +114,7 @@ def textured_triangle(
     """
 
     image_w, image_h = texture.shape[:2]
-    uvs_pixel = uvs_normalized * (image_w, image_h)
+    uvs_pixel = face_uvs * (image_w, image_h)
 
     x_min = int(np.floor(uvs_pixel[:, 0].min()))
     x_max = int(np.ceil(uvs_pixel[:, 0].max()))
@@ -124,10 +124,10 @@ def textured_triangle(
     texture = (texture[y_min:y_max, x_min:x_max, :] * intensity).astype(np.uint8)
     extent = x_min / image_w, x_max / image_w, y_min / image_h, y_max / image_h
 
-    transform = warp_coordinates(uvs_normalized, face_vertices) + mpl_axes.transData
+    transform = warp_coordinates(face_uvs, face_vertices) + mpl_axes.transData
 
     path = matplotlib.path.Path(
-        [uvs_normalized[0], uvs_normalized[1], uvs_normalized[2], uvs_normalized[0]],
+        [face_uvs[0], face_uvs[1], face_uvs[2], face_uvs[0]],
         closed=True,
     )
 
@@ -159,15 +159,15 @@ texture_path = os.path.join(__dirname__, "uv-grid.png")
 
 vertices_coords, uvs_coords, normals_coords, faces_vertice_indices, face_uv_indices, face_normal_indices = obj_read(model_path)
 texture = imageio.imread(texture_path)[::-1, ::1, :3]
-face_vertices = vertices_coords[faces_vertice_indices]
-face_uvs = uvs_coords[face_uv_indices]
+faces_vertices = vertices_coords[faces_vertice_indices]
+faces_uvs = uvs_coords[face_uv_indices]
 
 # =============================================================================
 # Compute face normals
 # =============================================================================
 faces_normals = np.cross(
-    face_vertices[:, 2] - face_vertices[:, 0],
-    face_vertices[:, 1] - face_vertices[:, 0],
+    faces_vertices[:, 2] - faces_vertices[:, 0],
+    faces_vertices[:, 1] - faces_vertices[:, 0],
 )
 faces_normals_unit = faces_normals / np.linalg.norm(faces_normals, axis=1).reshape(len(faces_normals), 1)
 
@@ -180,8 +180,8 @@ camera_direction = (0, 0, -1)
 camera_cosines: np.ndarray = np.dot(faces_normals_unit, camera_direction)
 
 # back face culling
-face_vertices = face_vertices[camera_cosines > 0]
-face_uvs = face_uvs[camera_cosines > 0]
+faces_vertices = faces_vertices[camera_cosines > 0]
+faces_uvs = faces_uvs[camera_cosines > 0]
 
 # =============================================================================
 # Lighting
@@ -194,18 +194,18 @@ light_intensities = (light_cosines + 1) / 2
 # =============================================================================
 # Sort triangles by depth (painter's algorithm)
 # =============================================================================
-faces_depth = face_vertices[:, :, 2].mean(axis=1)
+faces_depth = faces_vertices[:, :, 2].mean(axis=1)
 depth_sorted_indices = np.argsort(faces_depth)
-face_vertices = face_vertices[depth_sorted_indices][..., :2]
-face_uvs = face_uvs[depth_sorted_indices][..., :2]
+faces_vertices = faces_vertices[depth_sorted_indices][..., :2]
+faces_uvs = faces_uvs[depth_sorted_indices][..., :2]
 light_intensities = light_intensities[depth_sorted_indices]
 
 # =============================================================================
 # Loop over faces and draw them
 # =============================================================================
-for vertices, face_uvs, light_intensity in zip(face_vertices, face_uvs, light_intensities):
+for face_vertices, face_uvs, light_intensity in zip(faces_vertices, faces_uvs, light_intensities):
     try:
-        textured_triangle(mpl_axes=mpl_axes, face_vertices=vertices, uvs_normalized=face_uvs, texture=texture, intensity=light_intensity)
+        render_textured_triangle(mpl_axes=mpl_axes, face_vertices=face_vertices, face_uvs=face_uvs, texture=texture, intensity=light_intensity)
     except np.linalg.LinAlgError:
         pass
 
