@@ -1,4 +1,12 @@
-def convert_obj_for_meshio(input_path, output_path):
+"""
+Convert OBJ file for meshio compatibility. it doesnt accept different number of vertices and texture coordinates.
+"""
+
+# pip imports
+import argparse
+
+
+def convert_obj_for_meshio(input_path: str, output_path: str) -> None:
     vertices = []
     tex_coords = []
     normals = []
@@ -77,9 +85,11 @@ def convert_obj_for_meshio(input_path, output_path):
             f.write(face + "\n")
 
 
-if __name__ == "__main__":
-    import argparse
+# =============================================================================
+# Main entry point
+# =============================================================================
 
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Convert OBJ file for meshio compatibility. it doesnt accept different number of vertices and texture coordinates."
     )
