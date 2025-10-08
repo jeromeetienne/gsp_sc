@@ -835,9 +835,9 @@ numpy = "*"
 
 [package.source]
 type = "git"
-url = "https://github.com/rougier/matplotlib-3d"
+url = "https://github.com/jeromeetienne/matplotlib-3d"
 reference = "HEAD"
-resolved_reference = "5e79358cf1d3baec17674a0651de0a8571df5831"
+resolved_reference = "d81fcc18136ccbbee1b58fb75480c4fa1e1bc1e0"
 
 [[package]]
 name = "msgpack"
@@ -1460,4 +1460,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "63f1042b412a37491380467b70acc1787691aef7ad69c90ef5a0e8454c86412b"
+content-hash = "6760e4d5d943f54bfcc7bebed03c63ea060686181a06948a576248068e4385f2"

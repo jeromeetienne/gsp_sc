@@ -10,7 +10,7 @@ requires-python = ">=3.11"
 dependencies = [
     "numpy ==1.26.4",
     "blinker (>=1.9.0,<2.0.0)",
-    "mpl3d @ git+https://github.com/rougier/matplotlib-3d",
+    "mpl3d @ git+https://github.com/jeromeetienne/matplotlib-3d",
     "requests (>=2.32.5,<3.0.0)",
     "requests-file (>=2.1.0,<3.0.0)",
     "meshio (>=5.3.5,<6.0.0)",
