@@ -6,7 +6,6 @@ import json
 import numpy as np
 
 
-
 # local imports
 from ...core.canvas import Canvas
 from ...core.camera import Camera
@@ -75,7 +74,7 @@ class JsonRenderer:
                         "uuid": mesh.uuid,
                         "vertices": mesh.vertices.tolist(),
                         "cmap": None if mesh.cmap is None else mesh.cmap.name,
-                        "faces": mesh.faces.tolist(),
+                        "faces": mesh.face_indices.tolist(),
                         "facecolors": mesh.facecolors.tolist(),
                         "edgecolors": mesh.edgecolors.tolist(),
                         "linewidths": mesh.linewidths,
