@@ -2,6 +2,7 @@ import matplotlib.pyplot
 import mpl3d.glm
 import os
 
+from examples.common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
 import gsp_sc
 import numpy as np
 
@@ -33,11 +34,10 @@ canvas.add(viewport4)
 # Add a mesh and add it to all viewports
 #
 obj_mesh_path = f"{__dirname__}/data/bunny.obj"
-mesh = gsp_sc.visuals.Mesh.from_obj_file(
-    obj_mesh_path,
-    cmap=matplotlib.pyplot.get_cmap("magma"),
-    edgecolors=(0, 0, 0, 0.25), # type: ignore
-)
+vertices_coords, faces_indices, uvs_coords, normals_coords = MeshParserMeshio.parse_obj_file(obj_mesh_path)
+vertices_coords = mpl3d.glm.fit_unit_cube(vertices_coords)
+mesh = gsp_sc.visuals.Mesh(vertices_coords, faces_indices, cmap=matplotlib.pyplot.get_cmap("magma"), edgecolors=(0, 0, 0, 0.25))  # type: ignore
+
 viewport1.add(mesh)
 viewport2.add(mesh)
 viewport3.add(mesh)
@@ -47,19 +47,19 @@ viewport4.add(mesh)
 # setup one camera per viewport
 #
 camera1 = gsp_sc.core.Camera(camera_type="perspective")
-camera1.mpl3d_camera.trackball._model =  mpl3d.glm.yrotate(-30) @ mpl3d.glm.xrotate(-10)
+camera1.mpl3d_camera.trackball._model = mpl3d.glm.yrotate(-30) @ mpl3d.glm.xrotate(-10)
 camera1.mpl3d_camera.transform = camera1.mpl3d_camera.proj @ camera1.mpl3d_camera.view @ camera1.mpl3d_camera.trackball.model.T
 
 camera2 = gsp_sc.core.Camera(camera_type="ortho")
-camera2.mpl3d_camera.trackball._model =  mpl3d.glm.xrotate(-90)
+camera2.mpl3d_camera.trackball._model = mpl3d.glm.xrotate(-90)
 camera2.mpl3d_camera.transform = camera2.mpl3d_camera.proj @ camera2.mpl3d_camera.view @ camera2.mpl3d_camera.trackball.model.T
 
 camera3 = gsp_sc.core.Camera(camera_type="ortho")
-camera3.mpl3d_camera.trackball._model =  mpl3d.glm.yrotate(-90)
+camera3.mpl3d_camera.trackball._model = mpl3d.glm.yrotate(-90)
 camera3.mpl3d_camera.transform = camera3.mpl3d_camera.proj @ camera3.mpl3d_camera.view @ camera3.mpl3d_camera.trackball.model.T
 
 camera4 = gsp_sc.core.Camera(camera_type="perspective")
-camera4.mpl3d_camera.trackball._model =  np.eye(4)
+camera4.mpl3d_camera.trackball._model = np.eye(4)
 camera4.mpl3d_camera.transform = camera4.mpl3d_camera.proj @ camera4.mpl3d_camera.view @ camera4.mpl3d_camera.trackball.model.T
 
 ###############################################################################

@@ -1,9 +1,15 @@
-import matplotlib.pyplot
-import matplotlib.image
-import numpy as np
+# stdlib imports
 import os
 
+# pip imports
+import matplotlib.pyplot
+import matplotlib.image
+import mpl3d.glm
+import numpy as np
+
+# local imports
 import gsp_sc
+from examples.common.mesh_parser import MeshParserMeshio, MeshParserObjManual
 
 # Setup __dirname__
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -18,7 +24,6 @@ canvas = gsp_sc.core.Canvas(512, 512, 100)
 viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
 canvas.add(viewport)
 
-
 # =============================================================================
 # Add a mesh visual
 # =============================================================================
@@ -26,7 +31,9 @@ canvas.add(viewport)
 # obj_mesh_path = f"{__dirname__}/data/head.obj"
 # obj_mesh_path = f"{__dirname__}/data/pyramid.obj"
 obj_mesh_path = f"{__dirname__}/data/head_meshio.obj"
-mesh = gsp_sc.visuals.Mesh.from_obj_file(obj_mesh_path, cmap=matplotlib.pyplot.get_cmap("magma"), edgecolors=(0, 0, 0, 0.25))  # type: ignore
+vertices_coords, faces_indices, uvs_coords, normals_coords = MeshParserMeshio.parse_obj_file(obj_mesh_path)
+vertices_coords = mpl3d.glm.fit_unit_cube(vertices_coords)
+mesh = gsp_sc.visuals.Mesh(vertices_coords, faces_indices, cmap=matplotlib.pyplot.get_cmap("magma"), edgecolors=(0, 0, 0, 0.25))  # type: ignore
 viewport.add(mesh)
 
 

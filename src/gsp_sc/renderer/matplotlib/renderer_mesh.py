@@ -26,18 +26,6 @@ class MatplotlibRendererMesh:
         transform = camera.transform
 
         # =============================================================================
-        # Create the matplotlib artist if needed
-        # =============================================================================
-        # Create a PolyCollection for this mesh if it doesn't exist yet
-        if full_uuid not in renderer._polyCollections:
-            # print(f"Creating new PathCollection for mesh visual {full_uuid}")
-            renderer._polyCollections[full_uuid] = matplotlib.collections.PolyCollection([], clip_on=False, snap=False)
-            axes.add_collection(renderer._polyCollections[full_uuid], autolim=False)
-
-        # Retrieve the PolyCollection for this mesh
-        polyCollection = renderer._polyCollections[full_uuid]
-
-        # =============================================================================
         # Transform and render the mesh
         # =============================================================================
 
@@ -83,6 +71,22 @@ class MatplotlibRendererMesh:
         faces_coords_2d = faces_coords_2d[faces_indices_sorted, :]
         facecolors = facecolors[faces_indices_sorted, :] if len(facecolors) == len(faces_indices_sorted) else facecolors
         edgecolors = edgecolors[faces_indices_sorted, :] if len(edgecolors) == len(faces_indices_sorted) else edgecolors
+
+        # =============================================================================
+        # Create the matplotlib artist if needed
+        # =============================================================================
+        # Create a PolyCollection for this mesh if it doesn't exist yet
+        if full_uuid not in renderer._polyCollections:
+            # print(f"Creating new PathCollection for mesh visual {full_uuid}")
+            renderer._polyCollections[full_uuid] = matplotlib.collections.PolyCollection([], clip_on=False, snap=False)
+            axes.add_collection(renderer._polyCollections[full_uuid], autolim=False)
+
+        # Retrieve the PolyCollection for this mesh
+        polyCollection = renderer._polyCollections[full_uuid]
+
+        # =============================================================================
+        # Update the matplotlib artist
+        # =============================================================================
 
         polyCollection.set_verts(faces_coords_2d)
         polyCollection.set_linewidth(linewidths)

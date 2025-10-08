@@ -31,7 +31,10 @@ viewport = gsp_sc.core.Viewport(
 )
 canvas.add(viewport=viewport)
 
+# =============================================================================
 # Add some random points
+# =============================================================================
+
 n_points = 1000
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
@@ -52,17 +55,6 @@ image = gsp_sc.visuals.Image(
 viewport.add(image)
 
 ###############################################################################
-# Add a mesh
-#
-obj_mesh_path = f"{__dirname__}/data/bunny.obj"
-mesh = gsp_sc.visuals.Mesh.from_obj_file(
-    obj_mesh_path,
-    cmap=matplotlib.pyplot.get_cmap("magma"),
-    edgecolors=(0, 0, 0, 0.25),  # type: ignore
-)
-viewport.add(mesh)
-
-###############################################################################
 # Render the scene using the matplotlib renderer to verify it looks correct
 #
 camera = gsp_sc.core.Camera("perspective")
@@ -79,9 +71,7 @@ print(f"Image saved to {local_image_path}")
 # Render the scene using a network renderer
 #
 camera = gsp_sc.core.Camera("perspective")
-network_renderer = gsp_sc.renderer.network.NetworkRenderer(
-    server_url="http://localhost:5000/"
-)
+network_renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/")
 image_png_data = network_renderer.render(canvas, camera)
 
 ###############################################################################

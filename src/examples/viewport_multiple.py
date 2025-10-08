@@ -1,9 +1,10 @@
 import matplotlib.pyplot
+from examples.common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
 import gsp_sc
 import numpy as np
 import matplotlib.image
 
-
+import mpl3d.glm
 import os
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -41,20 +42,17 @@ viewport2.add(pixels)
 image_path = f"{__dirname__}/images/UV_Grid_Sm.jpg"
 image_data_np = matplotlib.image.imread(image_path)
 image_position = np.array([0, 0, 0])
-image = gsp_sc.visuals.Image(
-    position=image_position, image_extent=(-1, +1, -1, +1), image_data=image_data_np
-)
+image = gsp_sc.visuals.Image(position=image_position, image_extent=(-1, +1, -1, +1), image_data=image_data_np)
 viewport2.add(image)
 
-###############################################################################
-# Add a mesh
-#
+# =============================================================================
+# Add a mesh from an OBJ file
+# =============================================================================
 obj_mesh_path = f"{__dirname__}/data/bunny.obj"
-mesh = gsp_sc.visuals.Mesh.from_obj_file(
-    obj_mesh_path,
-    cmap=matplotlib.pyplot.get_cmap("magma"),
-    edgecolors=(0, 0, 0, 0.25),  # type: ignore
-)
+vertices_coords, faces_indices, uvs_coords, normals_coords = MeshParserMeshio.parse_obj_file(obj_mesh_path)
+vertices_coords = mpl3d.glm.fit_unit_cube(vertices_coords)
+mesh = gsp_sc.visuals.Mesh(vertices_coords, faces_indices, cmap=matplotlib.pyplot.get_cmap("magma"), edgecolors=(0, 0, 0, 0.25))  # type: ignore
+
 viewport2.add(mesh)
 viewport3.add(mesh)
 

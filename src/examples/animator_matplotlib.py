@@ -2,7 +2,6 @@
 Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
 
-import time
 import numpy as np
 import os
 import gsp_sc

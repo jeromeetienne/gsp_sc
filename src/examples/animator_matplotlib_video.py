@@ -1,6 +1,7 @@
 """
 Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
+
 # stdlib imports
 import os
 
@@ -33,21 +34,21 @@ canvas.add(viewport=viewport)
 # Add some random points
 #
 n_points = 10
-positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
-sizes_np = np.array([100 for _ in range(n_points)], np.float32)
-colors_np = np.array([gsp_sc.Constants.Green for _ in range(n_points)], np.float32)
-pixels = gsp_sc.visuals.Pixels(positions_np, sizes_np, colors_np)
+positions = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
+sizes = np.array([100 for _ in range(n_points)], np.float32)
+colors = np.array([gsp_sc.Constants.Green for _ in range(n_points)], np.float32)
+pixels = gsp_sc.visuals.Pixels(positions, sizes, colors)
 viewport.add(pixels)
 
 # =============================================================================
 # Define random velocities for each point
 # =============================================================================
-velocities_np = np.zeros((n_points, 3), dtype=np.float32)
+velocities = np.zeros((n_points, 3), dtype=np.float32)
 for i in range(n_points):
     angle = np.random.uniform(0, 2 * np.pi)
     speed = 1
-    velocities_np[i, 0] = speed * np.cos(angle)
-    velocities_np[i, 1] = speed * np.sin(angle)
+    velocities[i, 0] = speed * np.cos(angle)
+    velocities[i, 1] = speed * np.sin(angle)
 
 ###############################################################################
 # Render the scene with matplotlib
@@ -61,6 +62,8 @@ renderer.render(canvas, camera)
 # =============================================================================
 current_time = 0.0
 target_fps = 60
+
+
 def animator_callback() -> list[gsp_sc.core.VisualBase]:
     # Update the time tracking
     global current_time
@@ -68,16 +71,16 @@ def animator_callback() -> list[gsp_sc.core.VisualBase]:
     current_time += delta_time
 
     # update positions with velocities
-    positions_np[:] += velocities_np * delta_time
+    positions[:] += velocities * delta_time
 
     # bounce on the walls
     wall_limit = 1
-    out_of_bounds_x = np.abs(positions_np[:, 0]) > wall_limit
-    out_of_bounds_y = np.abs(positions_np[:, 1]) > wall_limit
-    out_of_bounds_z = np.abs(positions_np[:, 2]) > wall_limit
-    velocities_np[out_of_bounds_x, 0] *= -1
-    velocities_np[out_of_bounds_y, 1] *= -1
-    velocities_np[out_of_bounds_z, 2] *= -1
+    out_of_bounds_x = np.abs(positions[:, 0]) > wall_limit
+    out_of_bounds_y = np.abs(positions[:, 1]) > wall_limit
+    out_of_bounds_z = np.abs(positions[:, 2]) > wall_limit
+    velocities[out_of_bounds_x, 0] *= -1
+    velocities[out_of_bounds_y, 1] *= -1
+    velocities[out_of_bounds_z, 2] *= -1
 
     # Render the scene to update the positions
     # - this is needed because those positions are rotated in 3d space based on the camera position

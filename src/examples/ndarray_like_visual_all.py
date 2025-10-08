@@ -21,9 +21,9 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 gsp_sc.core.Random.set_random_seed(10)
 np.random.seed(10)
 
-###############################################################################
-# Create a GSP scene
-#
+# =============================================================================
+# Create a canvas and a viewport
+# =============================================================================
 canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
 viewport = gsp_sc.core.Viewport(
     origin_x=0,
@@ -34,9 +34,9 @@ viewport = gsp_sc.core.Viewport(
 )
 canvas.add(viewport=viewport)
 
-###############################################################################
-# Add some random points with transformed positions
-#
+# =============================================================================
+# Add some random points with ndarray-like positions
+# =============================================================================
 
 n_points = 300
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
@@ -50,29 +50,6 @@ colors_np = np.array([gsp_sc.Constants.Green])
 pixels = gsp_sc.visuals.Pixels(positions=position_ndarray_like, sizes=sizes_np, colors=colors_np)
 viewport.add(pixels)
 
-# =============================================================================
-# Add an image to viewport
-# =============================================================================
-
-image_path = f"{__dirname__}/images/UV_Grid_Sm.jpg"
-image_data_np = matplotlib.image.imread(image_path)
-image = gsp_sc.visuals.Image(
-    position=np.array([0.5, 0.5, 0.5]),
-    image_extent=(-1, +1, -1, +1),
-    image_data=image_data_np,
-)
-viewport.add(image)
-
-# =============================================================================
-# Add a mesh to viewport
-# =============================================================================
-obj_mesh_path = f"{__dirname__}/data/bunny.obj"
-mesh = gsp_sc.visuals.Mesh.from_obj_file(
-    obj_mesh_path,
-    cmap=matplotlib.pyplot.get_cmap("magma"),
-    edgecolors=(0, 0, 0, 0.25),  # type: ignore
-)
-viewport.add(mesh)
 
 # =============================================================================
 # Export the scene to JSON
