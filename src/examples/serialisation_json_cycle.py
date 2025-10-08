@@ -16,7 +16,7 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 gsp_sc.core.Random.set_random_seed(10)
 np.random.seed(10)
 
-canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
+canvas = gsp_sc.core.Canvas(512, 512, 100)
 
 ###############################################################################
 # Create two viewports
@@ -34,7 +34,7 @@ n_points = 100
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
 colors_np = np.array([[0, 1, 0, 0.5]], dtype=np.float32)
-pixels = gsp_sc.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=colors_np)
+pixels = gsp_sc.visuals.Pixels(positions_np, sizes_np, colors_np)
 viewport1.add(pixels)
 viewport2.add(pixels)
 
@@ -43,11 +43,7 @@ viewport2.add(pixels)
 #
 image_path = f"{__dirname__}/images/UV_Grid_Sm.jpg"
 image_data_np = mpl_img.imread(image_path)
-image = gsp_sc.visuals.Image(
-    position=np.array([0.5, 0.5, 0.5]),
-    image_extent=(-1, +1, -1, +1),
-    image_data=image_data_np,
-)
+image = gsp_sc.visuals.Image(np.array([0.5, 0.5, 0.5]), (-1, +1, -1, +1), image_data_np)
 viewport1.add(image)
 
 ###############################################################################
@@ -55,7 +51,7 @@ viewport1.add(image)
 #
 camera = gsp_sc.core.Camera("perspective")
 matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
-rendered_image_png_data = matplotlib_renderer.render(canvas, camera=camera)
+rendered_image_png_data = matplotlib_renderer.render(canvas, camera)
 
 # save the rendered image to a file
 rendered_image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}_original_image.png"
@@ -86,7 +82,7 @@ canvas_parsed, camera_parsed = json_parser.parse(scene_json)
 # Render the loaded scene with matplotlib to visually verify it was loaded correctly
 #
 matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
-rendered_loaded_image_png_data = matplotlib_renderer.render(canvas=canvas_parsed, camera=camera_parsed)
+rendered_loaded_image_png_data = matplotlib_renderer.render(canvas_parsed, camera_parsed)
 
 # save the rendered loaded image to a file
 rendered_loaded_image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}_parsed_image.png"

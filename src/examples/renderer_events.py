@@ -2,11 +2,14 @@
 Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
 
+# stdlib imports
 import typing
-import matplotlib.image
-import numpy as np
 import os
 
+# pip imports
+import numpy as np
+
+# local imports
 import gsp_sc
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -17,15 +20,9 @@ np.random.seed(10)
 ###############################################################################
 # Create a GSP scene
 #
-canvas = gsp_sc.core.Canvas(width=256, height=256, dpi=100)
-viewport = gsp_sc.core.Viewport(
-    origin_x=0,
-    origin_y=0,
-    width=canvas.width,
-    height=canvas.height,
-    background_color=gsp_sc.Constants.White,
-)
-canvas.add(viewport=viewport)
+canvas = gsp_sc.core.Canvas(256, 256, 100)
+viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
+canvas.add(viewport)
 
 ###############################################################################
 # Add some random points
@@ -35,7 +32,7 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 sizes_np = np.ones((n_points,)).astype(np.float32)
 colors_np = np.random.uniform(0, 1, (n_points, 4)).astype(np.float32)
 colors_np[:, 3] = 1.0
-pixels = gsp_sc.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=colors_np) # type: ignore
+pixels = gsp_sc.visuals.Pixels(positions_np, sizes_np, colors_np)  # type: ignore
 viewport.add(pixels)
 
 
@@ -44,11 +41,7 @@ viewport.add(pixels)
 # - sort pixels by z value after transform to have correct overlapping
 # - change sizes based on z value to have a "perspective" effect
 #
-def on_post_transform(
-    renderer: gsp_sc.renderer.matplotlib.MatplotlibRenderer,
-    camera: gsp_sc.core.Camera,
-    transformed_positions: np.ndarray,
-) -> None:
+def on_post_transform(renderer: gsp_sc.renderer.matplotlib.MatplotlibRenderer, camera: gsp_sc.core.Camera, transformed_positions: np.ndarray) -> None:
     # sort inplace transformed positions by z value (3rd column). Largest z first
     indices = np.argsort(-transformed_positions[:, 2])
     transformed_positions[:] = transformed_positions[indices]
@@ -78,7 +71,7 @@ pixels.post_transform.connect(on_post_transform)
 ###############################################################################
 # Render the scene with matplotlib
 #
-camera = gsp_sc.core.Camera(camera_type="perspective")
+camera = gsp_sc.core.Camera("perspective")
 renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas, camera, interactive=True)
 
