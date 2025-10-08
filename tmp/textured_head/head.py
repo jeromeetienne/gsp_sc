@@ -10,6 +10,7 @@ import numpy as np
 
 
 import os
+
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -18,6 +19,7 @@ import matplotlib.transforms
 import matplotlib.axes
 import matplotlib.path
 import matplotlib.pyplot
+
 # from matplotlib.backend_bases import GraphicsContextBase, RendererBase
 
 
@@ -38,7 +40,7 @@ def obj_read(filename):
     respective indices for faces and texcoords
     """
 
-    V, T, N, Vi, Ti, Ni = [], [], [], [], [], []
+    face_vertices, uvs_normalized, normals_coords, vertices_indices, uv_indices, normals_indices = [], [], [], [], [], []
     with open(filename) as f:
         for line in f.readlines():
             if line.startswith("#"):
@@ -47,16 +49,16 @@ def obj_read(filename):
             if not values:
                 continue
             if values[0] == "v":
-                V.append([float(x) for x in values[1:4]])
+                face_vertices.append([float(x) for x in values[1:4]])
             elif values[0] == "vt":
-                T.append([float(x) for x in values[1:3]])
+                uvs_normalized.append([float(x) for x in values[1:3]])
             elif values[0] == "vn":
-                N.append([float(x) for x in values[1:4]])
+                normals_coords.append([float(x) for x in values[1:4]])
             elif values[0] == "f":
-                Vi.append([int(indices.split("/")[0]) for indices in values[1:]])
-                Ti.append([int(indices.split("/")[1]) for indices in values[1:]])
-                Ni.append([int(indices.split("/")[2]) for indices in values[1:]])
-    return np.array(V), np.array(T), np.array(Vi) - 1, np.array(Ti) - 1
+                vertices_indices.append([int(indices.split("/")[0]) for indices in values[1:]])
+                uv_indices.append([int(indices.split("/")[1]) for indices in values[1:]])
+                normals_indices.append([int(indices.split("/")[2]) for indices in values[1:]])
+    return np.array(face_vertices), np.array(uvs_normalized), np.array(vertices_indices) - 1, np.array(uv_indices) - 1
 
 
 def warp_coordinates(face_coord_1: np.ndarray, face_coord_2: np.ndarray) -> matplotlib.transforms.Affine2D:
@@ -72,8 +74,8 @@ def warp_coordinates(face_coord_1: np.ndarray, face_coord_2: np.ndarray) -> matp
 
     face_coord_1 = np.c_[np.array(face_coord_1), np.ones(3)]
     face_coord_2 = np.c_[np.array(face_coord_2), np.ones(3)]
-    M = np.linalg.inv(face_coord_1) @ face_coord_2
-    return matplotlib.transforms.Affine2D(M.T)
+    matrix = np.linalg.inv(face_coord_1) @ face_coord_2
+    return matplotlib.transforms.Affine2D(matrix.T)
 
 
 def textured_triangle(
@@ -98,19 +100,22 @@ def textured_triangle(
     image_w, image_h = texture.shape[:2]
     uvs_pixel = uvs_normalized * (image_w, image_h)
 
-    xmin = int(np.floor(uvs_pixel[:, 0].min()))
-    xmax = int(np.ceil(uvs_pixel[:, 0].max()))
-    ymin = int(np.floor(uvs_pixel[:, 1].min()))
-    ymax = int(np.ceil(uvs_pixel[:, 1].max()))
+    x_min = int(np.floor(uvs_pixel[:, 0].min()))
+    x_max = int(np.ceil(uvs_pixel[:, 0].max()))
+    y_min = int(np.floor(uvs_pixel[:, 1].min()))
+    y_max = int(np.ceil(uvs_pixel[:, 1].max()))
 
-    texture = (texture[ymin:ymax, xmin:xmax, :] * intensity).astype(np.uint8)
-    extent = xmin / image_w, xmax / image_w, ymin / image_h, ymax / image_h
+    texture = (texture[y_min:y_max, x_min:x_max, :] * intensity).astype(np.uint8)
+    extent = x_min / image_w, x_max / image_w, y_min / image_h, y_max / image_h
+
     transform = warp_coordinates(uvs_normalized, face_vertices) + mpl_axes.transData
+
     path = matplotlib.path.Path(
         [uvs_normalized[0], uvs_normalized[1], uvs_normalized[2], uvs_normalized[0]],
         closed=True,
     )
-    im = mpl_axes.imshow(
+
+    axes_image = mpl_axes.imshow(
         texture,
         interpolation=interpolation,
         origin="lower",
