@@ -5,6 +5,7 @@ Basic example of creating and rendering a simple GSP scene with matplotlib.
 import numpy as np
 import os
 import gsp_sc
+import gsp_matplotlib
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -39,7 +40,7 @@ viewport.add(pixels)
 # Render the canvas with a perspective camera
 # =============================================================================
 camera = gsp_sc.core.Camera(camera_type="perspective")
-renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas, camera, interactive=True)
 
 # Save the rendered image to a file

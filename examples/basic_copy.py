@@ -6,9 +6,9 @@ import numpy as np
 from gsp_sc.core.canvas import Canvas
 from gsp_sc.core.viewport import Viewport
 from gsp_sc.core.camera import Camera
-from gsp_sc.renderer.matplotlib import MatplotlibRenderer
+from gsp_matplotlib import MatplotlibRenderer
 from gsp_sc.renderer.json import JsonRenderer
-from gsp_sc.renderer.network import NetworkRenderer
+from gsp_network import NetworkRenderer
 from gsp_sc.visuals.pixels import Pixels
 
 # Create a GSP scene

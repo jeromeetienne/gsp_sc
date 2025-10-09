@@ -8,9 +8,5 @@ Currently supported renderers are:
 """
 
 from . import json
-from . import matplotlib
-from . import network
 
 from .json import JsonRenderer, JsonParser
-from .matplotlib import MatplotlibRenderer
-from .network import NetworkRenderer

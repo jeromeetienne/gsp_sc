@@ -13,12 +13,12 @@ import matplotlib.image
 import mpl3d.camera
 
 # local imports
-from ...core.canvas import Canvas
-from ...core.viewport import Viewport
-from ...core.camera import Camera
-from ...visuals.pixels import Pixels
-from ...visuals.image import Image
-from ...visuals.mesh import Mesh
+from gsp_sc.core.canvas import Canvas
+from gsp_sc.core.viewport import Viewport
+from gsp_sc.core.camera import Camera
+from gsp_sc.visuals.pixels import Pixels
+from gsp_sc.visuals.image import Image
+from gsp_sc.visuals.mesh import Mesh
 
 
 class MatplotlibRenderer:

@@ -9,8 +9,8 @@ import matplotlib.collections
 import mpl3d.glm
 
 # local imports
-from ...core.camera import Camera
-from ...visuals.mesh import Mesh
+from gsp_sc.core.camera import Camera
+from gsp_sc.visuals.mesh import Mesh
 from .renderer import MatplotlibRenderer
 
 

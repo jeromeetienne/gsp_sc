@@ -10,6 +10,8 @@ import numpy as np
 
 # local imports
 import gsp_sc
+import gsp_network
+import gsp_matplotlib
 from common.transform import TransformChain
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -52,7 +54,7 @@ viewport.add(pixels)
 # Render locally the scene
 # ==============================================================================
 
-matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_data = matplotlib_renderer.render(canvas, camera)
 
 # Save the image to a file
@@ -65,7 +67,7 @@ print(f"Image saved to {local_image_path}")
 # Render the scene using a network renderer
 # ==============================================================================
 camera = gsp_sc.core.Camera("perspective")
-network_renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/")
+network_renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/")
 image_png_data = network_renderer.render(canvas, camera)
 
 # ==============================================================================

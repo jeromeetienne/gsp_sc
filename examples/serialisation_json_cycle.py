@@ -4,6 +4,7 @@ It is rendered before and after to verify the scene serialisation works correctl
 """
 
 import gsp_sc
+import gsp_matplotlib
 import numpy as np
 import matplotlib.image as mpl_img
 
@@ -50,7 +51,7 @@ viewport1.add(image)
 # Save and render the scene to verify it looks correct
 #
 camera = gsp_sc.core.Camera("perspective")
-matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 rendered_image_png_data = matplotlib_renderer.render(canvas, camera)
 
 # save the rendered image to a file
@@ -81,7 +82,7 @@ canvas_parsed, camera_parsed = json_parser.parse(scene_json)
 ###############################################################################
 # Render the loaded scene with matplotlib to visually verify it was loaded correctly
 #
-matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 rendered_loaded_image_png_data = matplotlib_renderer.render(canvas_parsed, camera_parsed)
 
 # save the rendered loaded image to a file

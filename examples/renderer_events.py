@@ -11,6 +11,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
+import gsp_matplotlib
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -41,7 +42,7 @@ viewport.add(pixels)
 # - sort pixels by z value after transform to have correct overlapping
 # - change sizes based on z value to have a "perspective" effect
 #
-def on_post_transform(renderer: gsp_sc.renderer.matplotlib.MatplotlibRenderer, camera: gsp_sc.core.Camera, transformed_positions: np.ndarray) -> None:
+def on_post_transform(renderer: gsp_matplotlib.MatplotlibRenderer, camera: gsp_sc.core.Camera, transformed_positions: np.ndarray) -> None:
     # sort inplace transformed positions by z value (3rd column). Largest z first
     indices = np.argsort(-transformed_positions[:, 2])
     transformed_positions[:] = transformed_positions[indices]
@@ -72,7 +73,7 @@ pixels.post_transform.connect(on_post_transform)
 # Render the scene with matplotlib
 #
 camera = gsp_sc.core.Camera("perspective")
-renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas, camera, interactive=True)
 
 # Save the rendered image to a file

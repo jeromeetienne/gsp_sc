@@ -11,6 +11,7 @@ import matplotlib.animation
 
 # local imports
 import gsp_sc
+import gsp_network
 from gsp_sc.core import canvas
 from .gsp_animator_types import GSPAnimatorFunc
 
@@ -27,7 +28,7 @@ class GspAnimatorNetwork:
 
     def __init__(
         self,
-        network_renderer: gsp_sc.renderer.network.NetworkRenderer,
+        network_renderer: gsp_network.NetworkRenderer,
         target_fps: int = 30,
         video_path: str | None = None,
         video_writer: str | None = None,

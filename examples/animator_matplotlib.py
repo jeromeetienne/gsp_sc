@@ -5,6 +5,8 @@ Basic example of creating and rendering a simple GSP scene with matplotlib.
 import numpy as np
 import os
 import gsp_sc
+import gsp_matplotlib
+
 from common.gsp_animator import GspAnimatorMatplotlib
 from common.fps_monitor import FpsMonitor
 
@@ -41,7 +43,7 @@ viewport.add(pixels)
 # Render the scene with matplotlib
 #
 camera = gsp_sc.core.Camera(camera_type="perspective")
-renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+renderer = gsp_matplotlib.MatplotlibRenderer()
 renderer.render(canvas, camera)
 
 # =============================================================================

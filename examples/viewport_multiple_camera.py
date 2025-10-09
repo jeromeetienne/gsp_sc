@@ -1,10 +1,15 @@
-import matplotlib.pyplot
-import mpl3d.glm
+# stdlib imports
 import os
 
+# pip imports
+import numpy as np
+import matplotlib.pyplot
+import mpl3d.glm
+
+# local imports
 from common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
 import gsp_sc
-import numpy as np
+import gsp_matplotlib
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -65,7 +70,7 @@ camera4.mpl3d_camera.transform = camera4.mpl3d_camera.proj @ camera4.mpl3d_camer
 ###############################################################################
 # Render the scene
 #
-matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 viewports = [viewport1, viewport2, viewport3, viewport4]
 cameras = [camera1, camera2, camera3, camera4]
 image_png_buffer = matplotlib_renderer.render_viewports(canvas, viewports=viewports, cameras=cameras, show_image=True)

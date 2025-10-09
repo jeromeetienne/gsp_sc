@@ -10,6 +10,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
+import gsp_network
 from common.gsp_animator import GspAnimatorNetwork
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -54,7 +55,7 @@ for i in range(n_points):
 # Render the scene with matplotlib
 #
 camera = gsp_sc.core.Camera(camera_type="ortho")
-renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=True)
+renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=True)
 renderer.render(canvas, camera)
 
 # =============================================================================

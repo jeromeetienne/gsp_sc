@@ -6,8 +6,8 @@ import matplotlib.axes
 import mpl3d.glm
 
 # local imports
-from ...core.camera import Camera
-from ...visuals.image import Image
+from gsp_sc.core.camera import Camera
+from gsp_sc.visuals.image import Image
 from .renderer import MatplotlibRenderer
 
 

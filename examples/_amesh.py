@@ -9,6 +9,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
+import gsp_matplotlib
 from common.mesh_parser import MeshParserMeshio, MeshParserObjManual
 
 # Setup __dirname__
@@ -41,7 +42,7 @@ viewport.add(mesh)
 # Render the scene
 # =============================================================================
 camera = gsp_sc.core.Camera(camera_type="perspective")
-renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas, camera, interactive=True)
 
 # Save the rendered image to a file

@@ -12,6 +12,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
+import gsp_network
 from common.fps_monitor import FpsMonitor
 from common.gsp_animator import GspAnimatorNetwork
 
@@ -50,7 +51,7 @@ viewport.add(pixels)
 # Render the scene with matplotlib
 #
 camera = gsp_sc.core.Camera(camera_type="perspective")
-network_renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=False)
+network_renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=False)
 
 # =============================================================================
 # Animate the scene with matplotlib thru the network renderer

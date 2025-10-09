@@ -11,6 +11,7 @@ import mpl3d.glm
 from common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
 from common.scene_examples import SceneExamples
 import gsp_sc
+import gsp_matplotlib
 
 # Setup __dirname__
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -35,7 +36,7 @@ SceneExamples.add_all_visuals(viewport)
 # Render the scene with a perspective camera
 # =============================================================================
 camera = gsp_sc.core.Camera(camera_type="perspective")
-renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas, camera, interactive=True)
 
 # Save the rendered image to a file

@@ -10,7 +10,8 @@ import json
 import numpy as np
 
 # local imports
-import gsp_sc as gsp_sc
+import gsp_sc
+import gsp_matplotlib
 from gsp_sc.types import DiffableNdarray
 from common.transform import TransformChain
 
@@ -65,7 +66,7 @@ canvas_parsed, camera_parsed = json_parser.parse(scene_json)
 # =============================================================================
 # Render the scene with matplotlib
 # =============================================================================
-renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas_parsed, camera_parsed, interactive=True)
 
 # Save the rendered image to a file

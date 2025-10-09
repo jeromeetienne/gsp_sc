@@ -7,6 +7,8 @@ NOTE: This example requires the network server to be running. You can start the 
 
 from matplotlib import colors
 import gsp_sc
+import gsp_matplotlib
+import gsp_network
 import numpy as np
 import matplotlib.pyplot
 import matplotlib.image
@@ -58,7 +60,7 @@ viewport.add(image)
 # Render the scene using the matplotlib renderer to verify it looks correct
 #
 camera = gsp_sc.core.Camera("perspective")
-matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_data = matplotlib_renderer.render(canvas, camera)
 
 # Save the image to a file
@@ -71,7 +73,7 @@ print(f"Image saved to {local_image_path}")
 # Render the scene using a network renderer
 #
 camera = gsp_sc.core.Camera("perspective")
-network_renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/")
+network_renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/")
 image_png_data = network_renderer.render(canvas, camera)
 
 ###############################################################################

@@ -10,6 +10,7 @@ import matplotlib.artist
 
 # local imports
 import gsp_sc
+import gsp_matplotlib
 from .gsp_animator_types import GSPAnimatorFunc
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +23,7 @@ class GspAnimatorMatplotlib:
 
     def __init__(
         self,
-        matplotlib_renderer: gsp_sc.renderer.matplotlib.MatplotlibRenderer,
+        matplotlib_renderer: gsp_matplotlib.MatplotlibRenderer,
         target_fps: int = 30,
         video_path: str | None = None,
         video_writer: str | None = None,

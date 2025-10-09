@@ -16,9 +16,10 @@ import argparse
 
 # local imports
 import gsp_sc
-from gsp_sc.renderer.network import NetworkPayload
+import gsp_matplotlib
 from gsp_sc.core.types import SceneDict
 from gsp_sc.types import DiffableNdarraySerialisationError
+from gsp_network import NetworkPayload
 
 flask_app = Flask(__name__)
 
@@ -72,7 +73,7 @@ def render_scene_json() -> Response:
     ###############################################################################
     # Render the loaded scene with matplotlib
     #
-    matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+    matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
     image_png_data = matplotlib_renderer.render(canvas=canvas_parsed, camera=camera_parsed, show_image=False)
     matplotlib_renderer.close()  # free memory
 

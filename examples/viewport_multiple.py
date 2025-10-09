@@ -1,6 +1,7 @@
 import matplotlib.pyplot
 from common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
 import gsp_sc
+import gsp_matplotlib
 import numpy as np
 import matplotlib.image
 
@@ -61,7 +62,7 @@ viewport3.add(mesh)
 #
 camera = gsp_sc.core.Camera(camera_type="perspective")
 
-matplotlib_renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_buffer = matplotlib_renderer.render_viewports(
     canvas,
     viewports=[viewport1, viewport2, viewport3],

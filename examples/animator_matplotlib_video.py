@@ -10,6 +10,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
+import gsp_matplotlib
 from common.gsp_animator import GspAnimatorMatplotlib
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -49,7 +50,7 @@ for i in range(n_points):
 # Render the canvas with matplotlib
 # =============================================================================
 camera = gsp_sc.core.Camera(camera_type="ortho")
-renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
+renderer = gsp_matplotlib.MatplotlibRenderer()
 renderer.render(canvas, camera)
 
 # =============================================================================

@@ -8,10 +8,10 @@ import uuid
 import jsonpatch
 
 # local imports
-from ...core.canvas import Canvas
-from ...core.camera import Camera
-from ...core.types import SceneDict
-from ..json.renderer import JsonRenderer
+from gsp_sc.core.canvas import Canvas
+from gsp_sc.core.camera import Camera
+from gsp_sc.core.types import SceneDict
+from gsp_sc.renderer.json.renderer import JsonRenderer
 
 
 ###############################################################################
