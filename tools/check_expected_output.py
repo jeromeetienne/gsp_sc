@@ -16,6 +16,9 @@ import numpy as np
 import argparse
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
+examples_folder = os.path.join(__dirname__, "..", "examples")
+expected_folder = os.path.join(__dirname__, "..", "examples", "expected")
+output_folder = os.path.join(__dirname__, "..", "examples", "output")
 
 
 def json_deep_comp(obj_1: object, obj_2: object) -> bool:
@@ -102,9 +105,6 @@ def main() -> None:
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Check the output files against expected files.")
     args = parser.parse_args()
-
-    expected_folder = f"{__dirname__}/../src/examples/expected/"
-    output_folder = f"{__dirname__}/../src/examples/output/"
 
     # get all basename of files in output directory
     expected_basenames = [basename for basename in os.listdir(expected_folder)]

@@ -9,7 +9,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
-from examples.common.mesh_parser import MeshParserMeshio, MeshParserObjManual
+from common.mesh_parser import MeshParserMeshio, MeshParserObjManual
 
 # Setup __dirname__
 __dirname__ = os.path.dirname(os.path.abspath(__file__))

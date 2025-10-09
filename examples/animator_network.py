@@ -12,9 +12,9 @@ import time
 import numpy as np
 
 # local imports
-from examples.common.fps_monitor import FpsMonitor
+from common.fps_monitor import FpsMonitor
 import gsp_sc
-from examples.common.gsp_animator import GspAnimatorNetwork
+from common.gsp_animator import GspAnimatorNetwork
 from gsp_sc.types import DiffableNdarray
 
 

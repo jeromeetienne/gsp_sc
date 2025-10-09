@@ -10,7 +10,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
-from examples.common.gsp_animator import GspAnimatorNetwork
+from common.gsp_animator import GspAnimatorNetwork
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -62,6 +62,8 @@ renderer.render(canvas, camera)
 # =============================================================================
 current_time = 0.0
 target_fps = 60
+
+
 def animator_callback() -> list[gsp_sc.core.VisualBase]:
     # Update the time tracking
     global current_time

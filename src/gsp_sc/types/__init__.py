@@ -1,3 +1,4 @@
 from .diffable_ndarray.diffable_ndarray import DiffableNdarray
 from .diffable_ndarray.diffable_ndarray_serialisation import DiffableNdarraySerialisation, DiffableNdarrayDb, DiffableNdarraySerialisationError
 from .ndarray_like_utils import NdarrayLikeUtils, NdarrayLikeSerializedType
+from .ndarray_like_type import NdarrayLikeType

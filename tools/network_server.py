@@ -12,9 +12,9 @@ import io
 # pip imports
 from flask import Flask, request, send_file, Response
 import jsonpatch
+import argparse
 
 # local imports
-import argparse
 import gsp_sc
 from gsp_sc.renderer.network import NetworkPayload
 from gsp_sc.core.types import SceneDict

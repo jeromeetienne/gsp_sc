@@ -1,5 +1,5 @@
 import matplotlib.pyplot
-from examples.common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
+from common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
 import gsp_sc
 import numpy as np
 import matplotlib.image

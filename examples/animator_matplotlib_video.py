@@ -10,7 +10,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
-from examples.common.gsp_animator import GspAnimatorMatplotlib
+from common.gsp_animator import GspAnimatorMatplotlib
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility

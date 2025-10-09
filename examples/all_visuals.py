@@ -8,8 +8,8 @@ import numpy as np
 import mpl3d.glm
 
 # local imports
-from examples.common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
-from examples.common.scene_examples import SceneExamples
+from common.mesh_parser.mesh_parser_meshio import MeshParserMeshio
+from common.scene_examples import SceneExamples
 import gsp_sc
 
 # Setup __dirname__

@@ -6,7 +6,7 @@ import numpy as np
 
 # local imports
 from gsp_sc.transform.links.link_immediate import TransformLinkImmediate
-from gsp_sc.types import NdarrayLikeVariableType
+from gsp_sc.types import NdarrayLikeType
 from gsp_sc.types import NdarrayLikeUtils
 from gsp_sc.types import DiffableNdarray, DiffableNdarrayDb
 
@@ -20,7 +20,7 @@ def test_ndarray_like_to_from_json_transform() -> None:
     diffable_ndarray_db_from_json = DiffableNdarrayDb()
 
     arr_original = np.array([10, 20, 30])
-    transform: NdarrayLikeVariableType = TransformLinkImmediate(arr_original)
+    transform: NdarrayLikeType = TransformLinkImmediate(arr_original)
     serialized = NdarrayLikeUtils.to_json(transform, diffable_ndarray_db_to_json)
     deserialized_transform = typing.cast(TransformLinkImmediate, NdarrayLikeUtils.from_json(serialized, diffable_ndarray_db_from_json))
     arr_from_deserialized = deserialized_transform.run()
@@ -32,7 +32,7 @@ def test_ndarray_like_to_from_json_diffable_ndarray() -> None:
     diffable_ndarray_db_to_json = DiffableNdarrayDb()
     diffable_ndarray_db_from_json = DiffableNdarrayDb()
 
-    arr: NdarrayLikeVariableType = DiffableNdarray(np.arange(9).reshape(3, 3))
+    arr: NdarrayLikeType = DiffableNdarray(np.arange(9).reshape(3, 3))
     serialized = NdarrayLikeUtils.to_json(arr, diffable_ndarray_db_to_json)
     deserialized_arr = typing.cast(DiffableNdarray, NdarrayLikeUtils.from_json(serialized, diffable_ndarray_db_from_json))
     assert np.array_equal(deserialized_arr, arr), "Deserialized array should match the original"
@@ -43,7 +43,7 @@ def test_ndarray_like_to_from_json_plain_ndarray() -> None:
     diffable_ndarray_db_to_json = DiffableNdarrayDb()
     diffable_ndarray_db_from_json = DiffableNdarrayDb()
 
-    arr: NdarrayLikeVariableType = np.arange(9).reshape(3, 3)
+    arr: NdarrayLikeType = np.arange(9).reshape(3, 3)
     serialized = NdarrayLikeUtils.to_json(arr, diffable_ndarray_db_to_json)
     deserialized_arr = typing.cast(np.ndarray, NdarrayLikeUtils.from_json(serialized, diffable_ndarray_db_from_json))
     assert np.array_equal(deserialized_arr, arr), "Deserialized array should match the original"
@@ -59,7 +59,7 @@ def test_ndarray_like_diffable_ndarray_to_from_json_zero_modification() -> None:
     diffable_ndarray_db_to_json = DiffableNdarrayDb()
     diffable_ndarray_db_from_json = DiffableNdarrayDb()
 
-    arr: NdarrayLikeVariableType = DiffableNdarray(np.arange(9).reshape(3, 3))
+    arr: NdarrayLikeType = DiffableNdarray(np.arange(9).reshape(3, 3))
     arr[2, 2] = 100
 
     # Serialize the original array
@@ -90,7 +90,7 @@ def test_ndarray_like_diffable_ndarray_to_from_json_one_modification() -> None:
     diffable_ndarray_db_to_json = DiffableNdarrayDb()
     diffable_ndarray_db_from_json = DiffableNdarrayDb()
 
-    arr: NdarrayLikeVariableType = DiffableNdarray(np.arange(9).reshape(3, 3))
+    arr: NdarrayLikeType = DiffableNdarray(np.arange(9).reshape(3, 3))
     arr[2, 2] = 100
 
     # Serialize the original array
@@ -122,7 +122,7 @@ def test_ndarray_like_diffable_ndarray_to_from_json_full_modification() -> None:
     diffable_ndarray_db_to_json = DiffableNdarrayDb()
     diffable_ndarray_db_from_json = DiffableNdarrayDb()
 
-    arr: NdarrayLikeVariableType = DiffableNdarray(np.arange(9).reshape(3, 3))
+    arr: NdarrayLikeType = DiffableNdarray(np.arange(9).reshape(3, 3))
     arr[2, 2] = 100
 
     # Serialize the original array

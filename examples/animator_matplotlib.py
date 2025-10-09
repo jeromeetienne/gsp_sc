@@ -5,8 +5,8 @@ Basic example of creating and rendering a simple GSP scene with matplotlib.
 import numpy as np
 import os
 import gsp_sc
-from examples.common.gsp_animator import GspAnimatorMatplotlib
-from examples.common.fps_monitor import FpsMonitor
+from common.gsp_animator import GspAnimatorMatplotlib
+from common.fps_monitor import FpsMonitor
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility

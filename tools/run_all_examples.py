@@ -108,15 +108,17 @@ def main() -> None:
         sys.exit(1)
 
     # get script paths in the examples folder
-    examples_folder = f"{__dirname__}/../src/examples"
+    examples_folder = f"{__dirname__}/../examples"
     basenames = [basename for basename in os.listdir(examples_folder) if os.path.isfile(os.path.join(examples_folder, basename))]
     basenames.sort()
     script_paths = [os.path.abspath(os.path.join(examples_folder, basename)) for basename in basenames if basename.endswith(".py")]
 
+    print(f"Running {len(script_paths)} example scripts to verify they execute without exceptions.")
+
     for script_path in script_paths:
         # display the basename of the script without new line, and flush the output
         basename_script = os.path.basename(script_path)
-        print(f"Running {basename_script} without exceptions... ", end="", flush=True)
+        print(f"Running {basename_script} ... ", end="", flush=True)
 
         # launch the example script
         run_success = launch_example([sys.executable, script_path, *example_args])
