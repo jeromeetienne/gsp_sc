@@ -74,7 +74,7 @@ def obj_read(filename):
 # =============================================================================
 # Affine transform to warp triangles
 # =============================================================================
-def warp_coordinates(face_coord_1: np.ndarray, face_coord_2: np.ndarray) -> matplotlib.transforms.Affine2D:
+def texture_coords_wrap(face_coord_1: np.ndarray, face_coord_2: np.ndarray) -> matplotlib.transforms.Affine2D:
     """
     Return an affine transform that warp triangle T1 into triangle
     T2.
@@ -124,7 +124,7 @@ def render_textured_triangle(
     texture = (texture[y_min:y_max, x_min:x_max, :] * intensity).astype(np.uint8)
     extent = x_min / image_w, x_max / image_w, y_min / image_h, y_max / image_h
 
-    transform = warp_coordinates(face_uvs, face_vertices) + mpl_axes.transData
+    transform = texture_coords_wrap(face_uvs, face_vertices) + mpl_axes.transData
 
     path = matplotlib.path.Path(
         [face_uvs[0], face_uvs[1], face_uvs[2], face_uvs[0]],
