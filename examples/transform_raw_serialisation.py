@@ -2,7 +2,7 @@ import gsp_sc
 import numpy as np
 import os
 import json
-from gsp_sc.transform import TransformChain
+from common.transform import TransformChain
 from gsp_sc.transform import TransformSerialisation
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))

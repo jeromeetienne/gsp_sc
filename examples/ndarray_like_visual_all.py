@@ -8,13 +8,11 @@ import json
 
 # pip imports
 import numpy as np
-import matplotlib.pyplot
-import matplotlib.image
 
 # local imports
 import gsp_sc as gsp_sc
 from gsp_sc.types import DiffableNdarray
-from gsp_sc.transform import TransformChain
+from common.transform import TransformChain
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -45,9 +43,9 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 position_ndarray_like = DiffableNdarray(positions_np)
 
 
-sizes_np = np.array([10])
+sizes_ndarray_like = TransformChain(np.ones([10])).lambdaFunc(lambda x: x * 100).complete()
 colors_np = np.array([gsp_sc.Constants.Green])
-pixels = gsp_sc.visuals.Pixels(positions=position_ndarray_like, sizes=sizes_np, colors=colors_np)
+pixels = gsp_sc.visuals.Pixels(positions=position_ndarray_like, sizes=sizes_ndarray_like, colors=colors_np)
 viewport.add(pixels)
 
 

@@ -10,7 +10,7 @@ import numpy as np
 
 # local imports
 import gsp_sc
-from gsp_sc.transform import TransformChain
+from common.transform import TransformChain
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -41,7 +41,7 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 
 # Use TransformChain to scale and translate positions
 npy_url = f"file://{__dirname__}/data/sample_positions_3d.npy"
-position_chain = TransformChain().load(npy_url).math_op('mul', 1/3).lambdaFunc(lambda x: x + 0.2).complete()
+position_chain = TransformChain().load(npy_url).math_op("mul", 1 / 3).lambdaFunc(lambda x: x + 0.2).complete()
 
 sizes_np = np.array([1])
 colors_np = np.array([gsp_sc.Constants.Green])
@@ -65,9 +65,7 @@ print(f"Image saved to {local_image_path}")
 # Render the scene using a network renderer
 # ==============================================================================
 camera = gsp_sc.core.Camera("perspective")
-network_renderer = gsp_sc.renderer.network.NetworkRenderer(
-    server_url="http://localhost:5000/"
-)
+network_renderer = gsp_sc.renderer.network.NetworkRenderer(server_url="http://localhost:5000/")
 image_png_data = network_renderer.render(canvas, camera)
 
 # ==============================================================================
