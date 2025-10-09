@@ -6,10 +6,10 @@ import numpy as np
 from gsp.core.canvas import Canvas
 from gsp.core.viewport import Viewport
 from gsp.core.camera import Camera
-from gsp_matplotlib import MatplotlibRenderer
 from gsp.renderer.json import JsonRenderer
-from gsp_network import NetworkRenderer
 from gsp.visuals.pixels import Pixels
+from gsp_matplotlib import MatplotlibRenderer
+from gsp_network import NetworkRenderer
 
 # Create a GSP scene
 canvas = Canvas(512, 512, 100)
