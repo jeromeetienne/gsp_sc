@@ -367,6 +367,17 @@ unicode = ["unicodedata2 (>=15.1.0) ; python_version <= \"3.12\""]
 woff = ["brotli (>=1.0.1) ; platform_python_implementation == \"CPython\"", "brotlicffi (>=0.8.0) ; platform_python_implementation != \"CPython\"", "zopfli (>=0.1.4)"]
 
 [[package]]
+name = "http-constants"
+version = "0.5.0"
+description = "The set of standard http constants for headers and statuses"
+optional = false
+python-versions = ">=3.6.0"
+groups = ["main"]
+files = [
+    {file = "http-constants-0.5.0.tar.gz", hash = "sha256:151cb595a0964110ee51e1f5bf09c1b30b025de37f32688f3d0ca58fc8dae43e"},
+]
+
+[[package]]
 name = "idna"
 version = "3.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -1460,4 +1471,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "6760e4d5d943f54bfcc7bebed03c63ea060686181a06948a576248068e4385f2"
+content-hash = "349d439fcb70c96d07d5f37aa8fa63b5e32410643f8d379ead68f382d965e6cd"

@@ -6,6 +6,8 @@ import json
 import requests
 import uuid
 import jsonpatch
+import http_constants.status
+
 
 # local imports
 from gsp.core.canvas import Canvas
@@ -85,8 +87,7 @@ class NetworkRenderer:
 
         # If the server responds with 410, clear json renderer cache and resend as "absolute"
         # - this may happen if the server has lost the previous state
-        gone_status_code = 410  # HTTP status code for "Gone" - https://developer.mozilla.org/fr/docs/Web/HTTP/Reference/Status/410
-        if response.status_code == gone_status_code:
+        if response.status_code == http_constants.status.HttpStatus.GONE:
             # Clear the JSON renderer cache to avoid sending diffs based on old data - typically when using DiffableNdarray
             self.__renderer_json.clear_cache()
             # Rebuild the scene dict from scratch

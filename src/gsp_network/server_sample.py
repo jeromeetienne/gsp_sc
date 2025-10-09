@@ -13,6 +13,7 @@ import io
 from flask import Flask, request, send_file, Response
 import jsonpatch
 import argparse
+import http_constants.status
 
 # local imports
 import gsp
@@ -51,7 +52,8 @@ def render_scene_json() -> Response:
         old_scene_dict = absolute_scenes.get(client_id)
         # If no previous absolute scene exists, return an error
         if old_scene_dict is None:
-            return Response("json_diff resource not found. Resend as 'absolute'.", status=410)
+            # return 410 Gone
+            return Response("json_diff resource not found. Resend as 'absolute'.", status=http_constants.status.HttpStatus.GONE)
         # Reconstruct the absolute scene by applying the diff
         scene_diff = payload["data"]
         scene_dict = jsonpatch.apply_patch(old_scene_dict, scene_diff)
@@ -68,7 +70,8 @@ def render_scene_json() -> Response:
     try:
         canvas_parsed, camera_parsed = json_parser.parse(scene_dict)
     except DiffableNdarraySerialisationError as e:
-        return Response("DiffableNdarray not found.", status=410)
+        # return 410 Gone
+        return Response("DiffableNdarray not found.", status=http_constants.status.HttpStatus.GONE)
 
     ###############################################################################
     # Render the loaded scene with matplotlib
