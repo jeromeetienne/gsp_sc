@@ -16,13 +16,7 @@ from .renderer import MatplotlibRenderer
 
 class MatplotlibRendererMesh:
     @staticmethod
-    def render(
-        renderer: "MatplotlibRenderer",
-        axes: matplotlib.axes.Axes,
-        mesh: Mesh,
-        full_uuid: str,
-        camera: Camera,
-    ) -> None:
+    def render(renderer: "MatplotlibRenderer", axes: matplotlib.axes.Axes, mesh: Mesh, full_uuid: str, camera: Camera) -> None:
         transform = camera.transform
 
         # =============================================================================
