@@ -3,7 +3,6 @@ import os
 
 # pip imports
 import matplotlib.pyplot
-import matplotlib.image
 import mpl3d.glm
 import numpy as np
 
