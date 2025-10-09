@@ -1,10 +1,11 @@
 import numpy as np
 from typing import Literal, Any
 from ..transform_link_base import TransformLinkBase
-from ..transform_link_db import TransformLinkDB
+from ..transform_registry import TransformRegistry
+
 
 class TransformLinkMathOp(TransformLinkBase):
-    def __init__(self, operation: Literal["add", "sub", "mul", "div"], operand: float)  -> None:
+    def __init__(self, operation: Literal["add", "sub", "mul", "div"], operand: float) -> None:
         """
         Perform a math operation on the data.
         Supported operations: add, sub, mul, div
@@ -31,19 +32,16 @@ class TransformLinkMathOp(TransformLinkBase):
             raise ValueError(f"Unsupported operation: {self.__operation}")
 
         return result
-    
+
     def _to_json(self) -> dict[str, Any]:
-        return {
-            "type": "TransformMathOp",
-            "operation": self.__operation,
-            "operand": self.__operand
-        }
-    
+        return {"type": "TransformMathOp", "operation": self.__operation, "operand": self.__operand}
+
     @staticmethod
     def _from_json(json_dict: dict[str, Any]) -> TransformLinkBase:
         operation = json_dict["operation"]
         operand = json_dict["operand"]
         return TransformLinkMathOp(operation, operand)
 
+
 # Register the TransformMathOp class in the TransformLinkDB
-TransformLinkDB.add_link("TransformMathOp", TransformLinkMathOp)
+TransformRegistry.register_link("TransformMathOp", TransformLinkMathOp)

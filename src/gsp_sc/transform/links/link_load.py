@@ -6,7 +6,7 @@ import requests
 import requests_file
 
 from ..transform_link_base import TransformLinkBase
-from ..transform_link_db import TransformLinkDB
+from ..transform_registry import TransformRegistry
 
 
 class TransformLinkLoad(TransformLinkBase):
@@ -29,24 +29,21 @@ class TransformLinkLoad(TransformLinkBase):
 
         # Return the cached data
         np_array = typing.cast(np.ndarray, self.__cached_data)
-        return np_array 
-    
+        return np_array
+
     def _to_json(self) -> dict[str, Any]:
-        return {
-            "type": "TransformLoad",
-            "data_url": self.__data_url
-        }
-    
+        return {"type": "TransformLoad", "data_url": self.__data_url}
+
     @staticmethod
     def _from_json(json_dict: dict[str, Any]) -> TransformLinkBase:
         data_url = json_dict["data_url"]
         return TransformLinkLoad(data_url)
-    
+
     @staticmethod
     def __load_npy_from_url(npy_url: str) -> np.ndarray:
         # Register the file:// adapter to handle local file URLs
         request_session = requests.Session()
-        request_session.mount('file://', requests_file.FileAdapter())
+        request_session.mount("file://", requests_file.FileAdapter())
 
         # Fetch the .npy file from the URL
         response = request_session.get(npy_url)
@@ -63,7 +60,7 @@ class TransformLinkLoad(TransformLinkBase):
 
         # Return the loaded numpy array
         return np_array
-        
+
 
 # Register the TransformLoad class in the TransformLinkDB
-TransformLinkDB.add_link("TransformLoad", TransformLinkLoad)
+TransformRegistry.register_link("TransformLoad", TransformLinkLoad)

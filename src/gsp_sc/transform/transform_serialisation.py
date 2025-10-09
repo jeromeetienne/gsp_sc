@@ -2,7 +2,8 @@ from typing import Any
 import numpy as np
 from .transform_link_base import TransformLinkBase
 
-from .transform_link_db import TransformLinkDB
+from .transform_registry import TransformRegistry
+
 
 class TransformSerialisation:
 
@@ -37,7 +38,6 @@ class TransformSerialisation:
         if not json_array:
             raise ValueError("JSON array MUST NOT be empty")
 
-
         # Create the first transform
         current_transform = TransformSerialisation.__get_link_instance(json_array[0])
 
@@ -64,7 +64,7 @@ class TransformSerialisation:
             raise ValueError("JSON dictionary MUST contain a 'type' field")
 
         # Get the class from the TransformLinkDB
-        link_class = TransformLinkDB.get_link(class_name)
+        link_class = TransformRegistry.get_link(class_name)
         if link_class is None:
             raise ValueError(f"Unknown transform type: {class_name}")
 
