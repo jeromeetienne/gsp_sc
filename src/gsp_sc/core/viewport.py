@@ -1,6 +1,7 @@
 from .visual_base import VisualBase
 from .random import Random
 
+
 class Viewport:
     __slots__ = (
         "uuid",
@@ -54,3 +55,12 @@ class Viewport:
             visual (VisualBase): The visual to add.
         """
         self.visuals.append(visual)
+
+    def remove(self, visual: VisualBase) -> None:
+        """
+        Remove a visual from the viewport.
+
+        Args:
+            visual (VisualBase): The visual to remove.
+        """
+        self.visuals.remove(visual)

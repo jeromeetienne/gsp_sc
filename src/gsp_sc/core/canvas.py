@@ -1,6 +1,7 @@
 from .viewport import Viewport
 from .random import Random
 
+
 class Canvas:
     __slots__ = ("uuid", "width", "height", "dpi", "viewports")
 
@@ -37,3 +38,12 @@ class Canvas:
             viewport (Viewport): The viewport to add.
         """
         self.viewports.append(viewport)
+
+    def remove(self, viewport: Viewport) -> None:
+        """
+        Remove a viewport from the canvas.
+
+        Args:
+            viewport (Viewport): The viewport to remove.
+        """
+        self.viewports.remove(viewport)
