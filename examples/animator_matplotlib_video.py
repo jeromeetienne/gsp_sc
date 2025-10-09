@@ -17,22 +17,17 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # gsp_sc.core.Random.set_random_seed(10)
 # np.random.seed(10)
 
-###############################################################################
-# Create a GSP scene
-#
-canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
-viewport = gsp_sc.core.Viewport(
-    origin_x=0,
-    origin_y=0,
-    width=canvas.width,
-    height=canvas.height,
-    background_color=gsp_sc.Constants.White,
-)
-canvas.add(viewport=viewport)
+# =============================================================================
+# Create a GSP canvas
+# =============================================================================
+canvas = gsp_sc.core.Canvas(512, 512, 100)
+viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
+canvas.add(viewport)
 
-###############################################################################
+
+# =============================================================================
 # Add some random points
-#
+# =============================================================================
 n_points = 10
 positions = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes = np.array([100 for _ in range(n_points)], np.float32)
@@ -50,9 +45,9 @@ for i in range(n_points):
     velocities[i, 0] = speed * np.cos(angle)
     velocities[i, 1] = speed * np.sin(angle)
 
-###############################################################################
-# Render the scene with matplotlib
-#
+# =============================================================================
+# Render the canvas with matplotlib
+# =============================================================================
 camera = gsp_sc.core.Camera(camera_type="ortho")
 renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
 renderer.render(canvas, camera)
@@ -92,7 +87,10 @@ def animator_callback() -> list[gsp_sc.core.VisualBase]:
     return changed_visuals
 
 
+# Save the animation to a video file
 video_path = os.path.join(__dirname__, f"output/{os.path.basename(__file__).replace('.py', '')}.mp4")
 print(f"Saving video to {video_path}")
+
+# Create the animator and start the animation
 animator = GspAnimatorMatplotlib(renderer, target_fps=target_fps, video_path=video_path)
 animator.animate(canvas, camera, [animator_callback])

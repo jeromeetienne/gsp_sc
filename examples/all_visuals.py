@@ -21,22 +21,15 @@ np.random.seed(10)
 # =============================================================================
 # Create a canvas and a viewport
 # =============================================================================
-canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
-viewport = gsp_sc.core.Viewport(
-    origin_x=0,
-    origin_y=0,
-    width=canvas.width,
-    height=canvas.height,
-    background_color=gsp_sc.Constants.White,
-)
-canvas.add(viewport=viewport)
+canvas = gsp_sc.core.Canvas(512, 512, 100)
+viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
+canvas.add(viewport)
 
 # =============================================================================
 # Add all visuals to the viewport
 # =============================================================================
 
 SceneExamples.add_all_visuals(viewport)
-
 
 # =============================================================================
 # Render the scene with a perspective camera

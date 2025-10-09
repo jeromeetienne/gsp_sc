@@ -3,6 +3,10 @@ import numpy as np
 
 
 class MeshParserMeshio:
+    """
+    Mesh parser using the meshio library
+    """
+
     @staticmethod
     def parse_obj_file(
         file_path: str,

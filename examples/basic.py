@@ -11,9 +11,9 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 gsp_sc.core.Random.set_random_seed(10)
 np.random.seed(10)
 
-###############################################################################
-# Create a GSP scene
-#
+# =============================================================================
+# Create a canvas and a viewport
+# =============================================================================
 canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
 viewport = gsp_sc.core.Viewport(
     origin_x=0,
@@ -24,9 +24,9 @@ viewport = gsp_sc.core.Viewport(
 )
 canvas.add(viewport=viewport)
 
-###############################################################################
+# =============================================================================
 # Add some random points
-#
+# =============================================================================
 n_points = 300
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
@@ -35,9 +35,9 @@ pixels = gsp_sc.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=co
 viewport.add(pixels)
 
 
-###############################################################################
-# Render the scene with matplotlib
-#
+# =============================================================================
+# Render the canvas with a perspective camera
+# =============================================================================
 camera = gsp_sc.core.Camera(camera_type="perspective")
 renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas, camera, interactive=True)

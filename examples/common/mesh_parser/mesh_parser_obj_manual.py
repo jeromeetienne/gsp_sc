@@ -2,6 +2,10 @@ import numpy as np
 
 
 class MeshParserObjManual:
+    """
+    Manual Wavefront .obj file parser
+    """
+
     @staticmethod
     def parse_obj_file(
         file_path: str,

@@ -22,15 +22,9 @@ np.random.seed(10)
 # =============================================================================
 # Create a canvas and a viewport
 # =============================================================================
-canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
-viewport = gsp_sc.core.Viewport(
-    origin_x=0,
-    origin_y=0,
-    width=canvas.width,
-    height=canvas.height,
-    background_color=gsp_sc.Constants.White,
-)
-canvas.add(viewport=viewport)
+canvas = gsp_sc.core.Canvas(512, 512, 100)
+viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
+canvas.add(viewport)
 
 # =============================================================================
 # Add some random points with ndarray-like positions
@@ -42,12 +36,10 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 # position_ndarray_like = TransformChain(positions_np).math_op("mul", 1 / 3).math_op("add", 0.2).complete()
 position_ndarray_like = DiffableNdarray(positions_np)
 
-
-sizes_ndarray_like = TransformChain(np.ones([10])).lambdaFunc(lambda x: x * 100).complete()
+sizes_ndarray_like = TransformChain(np.ones((n_points,))).lambdaFunc(lambda x: x * 100).complete()
 colors_np = np.array([gsp_sc.Constants.Green])
-pixels = gsp_sc.visuals.Pixels(positions=position_ndarray_like, sizes=sizes_ndarray_like, colors=colors_np)
+pixels = gsp_sc.visuals.Pixels(position_ndarray_like, sizes_ndarray_like, colors_np)
 viewport.add(pixels)
-
 
 # =============================================================================
 # Export the scene to JSON
@@ -64,16 +56,15 @@ with open(json_output_path, "w") as file_writer:
 
 print(f"Scene exported to JSON and saved to {json_output_path}. length={len(scene_json)}")
 
-###############################################################################
+# =============================================================================
 # Import the scene from JSON
-#
-
+# =============================================================================
 json_parser = gsp_sc.renderer.JsonParser()
 canvas_parsed, camera_parsed = json_parser.parse(scene_json)
 
-###############################################################################
+# =============================================================================
 # Render the scene with matplotlib
-#
+# =============================================================================
 renderer = gsp_sc.renderer.matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas_parsed, camera_parsed, interactive=True)
 
