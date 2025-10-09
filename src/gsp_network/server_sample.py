@@ -4,6 +4,7 @@ Server example using Flask to render a scene from JSON input.
 
 - use Flask to create a simple web server
 - render with matplotlib
+- it is able to handle delta encoding of the scene using jsonpatch
 """
 
 # stdlib imports
