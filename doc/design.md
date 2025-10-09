@@ -14,7 +14,7 @@
 
 There are three main design goals for GSP:
 - **Portability**: the protocol should be usable in different contexts and with different rendering backends
-- **Support for remote data**: the protocol should support referencing data that is not local to the developer machine
+- **Support for remote data**: the protocol should support referencing data that is not local to the developer machine. GRPD compliance is a key aspect of this goal.
 - **Maintainability**: the protocol should be simple enough to be easily understood and modified
 
 ## Portable 
