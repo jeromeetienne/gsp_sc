@@ -28,15 +28,18 @@ lint_examples: ## Run pyright type checker on ./examples
 
 ##########################################################################
 
-network_server_dev: ## Run the network server in development mode
+network_server_dev: network_server_kill ## Run the network server in development mode
 	watchmedo auto-restart -d ./src -d ./tools -p="*.py" -R  -- python ./tools/network_server.py
 
-network_server: ## Run the network server
+network_server_kill: ## Kill any process using port 5000 (commonly used for network servers)
+	./tools/network_server_kill.sh
+
+network_server: network_server_kill ## Run the network server
 	python ./tools/network_server.py
 
 ##############################################################################
 
-run_all_examples: ## Run all examples to check they run without error
+run_all_examples: network_server_kill ## Run all examples to check they run without error
 	python tools/run_all_examples.py
 
 check_expected_output: ## Check that the output files match the expected output files
