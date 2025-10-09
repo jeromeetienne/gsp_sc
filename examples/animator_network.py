@@ -6,16 +6,14 @@ Basic example of creating and rendering a simple GSP scene with matplotlib.
 
 # stdlib imports
 import os
-import time
 
 # pip imports
 import numpy as np
 
 # local imports
-from common.fps_monitor import FpsMonitor
 import gsp_sc
+from common.fps_monitor import FpsMonitor
 from common.gsp_animator import GspAnimatorNetwork
-from gsp_sc.types import DiffableNdarray
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -40,9 +38,9 @@ positions = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes = np.array([50 for _ in range(n_points)], np.float32)
 colors = np.array([gsp_sc.Constants.Green for _ in range(n_points)], np.float32)
 
-positions = DiffableNdarray(positions)
-sizes = DiffableNdarray(sizes)
-colors = DiffableNdarray(colors)
+positions = gsp_sc.types.DiffableNdarray(positions)
+sizes = gsp_sc.types.DiffableNdarray(sizes)
+colors = gsp_sc.types.DiffableNdarray(colors)
 
 pixels = gsp_sc.visuals.Pixels(positions, sizes, colors)
 viewport.add(pixels)
