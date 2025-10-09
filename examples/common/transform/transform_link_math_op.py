@@ -1,9 +1,11 @@
 import numpy as np
 from typing import Literal, Any
-from ..transform_link_base import TransformLinkBase
-from ..transform_registry import TransformRegistry
+from gsp_sc.transform import TransformLinkBase, TransformRegistry
 
 
+# =============================================================================
+# Example of a user-defined TransformLink that performs a math operation
+# =============================================================================
 class TransformLinkMathOp(TransformLinkBase):
     def __init__(self, operation: Literal["add", "sub", "mul", "div"], operand: float) -> None:
         """

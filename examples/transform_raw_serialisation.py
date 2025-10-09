@@ -2,8 +2,10 @@ import gsp_sc
 import numpy as np
 import os
 import json
-from common.transform import TransformChain
-from gsp_sc.transform import TransformSerialisation
+from gsp_sc.transform import TransformSerialisation, TransformLinkAssertShape, TransformLinkLambda, TransformLinkImmediate
+
+# import a user-defined TransformLink
+from common.transform import TransformLinkMathOp
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 
@@ -11,8 +13,14 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Create a Transform chain and serialize it
 #
 
-# Create a Transform chain
-transform_chain = TransformChain([1, 2, 3]).assert_shape((3,)).math_op("mul", 10).lambdaFunc(lambda x: x + 1).complete()
+# Create a Transform chain using only TransformLinks
+transform_chain = (
+    TransformLinkImmediate(np.array([1, 2, 3]))
+    .chain(TransformLinkAssertShape((3,)))
+    .chain(TransformLinkMathOp("mul", 10))
+    .chain(TransformLinkLambda(lambda x: x + 1))
+)
+
 print(f"transform_chain: {transform_chain}")
 
 # Convert to JSON

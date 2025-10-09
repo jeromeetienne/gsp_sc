@@ -11,9 +11,9 @@ from gsp_sc.transform.links import (
     TransformLinkImmediate,
     TransformLinkLambda,
     TransformLinkLoad,
-    TransformLinkMathOp,
 )
 from gsp_sc.transform.transform_link_base import TransformLinkBase
+from .transform_link_math_op import TransformLinkMathOp
 
 
 class TransformChain:
