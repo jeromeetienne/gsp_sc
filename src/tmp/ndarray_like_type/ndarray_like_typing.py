@@ -62,7 +62,7 @@ class NdarrayLikeDType:
         return hash(self.dtype)
 
 
-class _NdarrayLikeTypeMeta(type):
+class _NdarrayLikeTypingMeta(type):
     """Metaclass implementing ``isinstance(obj, SuperType)`` as a runtime union with optional shape/dtype checks."""
 
     _allowed_types = (np.ndarray, DiffableNdarray, TransformLinkBase)
@@ -163,7 +163,7 @@ class _NdarrayLikeTypeMeta(type):
         return shape, dtype
 
 
-class NdarrayLikeType_(metaclass=_NdarrayLikeTypeMeta):
+class NdarrayLikeTyping_(metaclass=_NdarrayLikeTypingMeta):
     """Runtime type that behaves like ``np.ndarray | DiffableNdarray | TransformLinkBase`` with optional shape."""
 
     _shape: tuple[int, ...] | None = None
@@ -172,17 +172,17 @@ class NdarrayLikeType_(metaclass=_NdarrayLikeTypeMeta):
 
 
 # =============================================================================
-# Typing support for NdarrayLikeType
+# Typing support for NdarrayLikeTyping
 # =============================================================================
 if typing.TYPE_CHECKING:
 
     @typing.runtime_checkable
-    class NdarrayLikeType(typing.Protocol):
+    class NdarrayLikeTyping(typing.Protocol):
         @classmethod
-        def __class_getitem__(cls, params: typing.Any) -> type["NdarrayLikeType"]: ...
+        def __class_getitem__(cls, params: typing.Any) -> type["NdarrayLikeTyping"]: ...
 
 else:
-    NdarrayLikeType = NdarrayLikeType_
+    NdarrayLikeTyping = NdarrayLikeTyping_
 
 # =============================================================================
 # Example usage and tests
@@ -195,9 +195,9 @@ if __name__ == "__main__":
     # Create some example instances
     # =============================================================================
 
-    diffable_any: NdarrayLikeType = DiffableNdarray(np.arange(4).reshape(2, 2))
-    ndarray_any: NdarrayLikeType = np.arange(3)
-    transform_any: NdarrayLikeType = TransformLinkBase()
+    diffable_any: NdarrayLikeTyping = DiffableNdarray(np.arange(4).reshape(2, 2))
+    ndarray_any: NdarrayLikeTyping = np.arange(3)
+    transform_any: NdarrayLikeTyping = TransformLinkBase()
 
     # =============================================================================
     # Check isinstance with various parametrizations
@@ -206,18 +206,18 @@ if __name__ == "__main__":
     shaped_diffable = DiffableNdarray(np.arange(6, dtype=float).reshape(2, 3))
     shaped_diffable_f32 = DiffableNdarray(np.arange(6, dtype=np.float32).reshape(2, 3))
 
-    assert isinstance(diffable_any, NdarrayLikeType)
-    assert isinstance(ndarray_any, NdarrayLikeType)
-    assert isinstance(transform_any, NdarrayLikeType)
-    assert not isinstance(object(), NdarrayLikeType)
+    assert isinstance(diffable_any, NdarrayLikeTyping)
+    assert isinstance(ndarray_any, NdarrayLikeTyping)
+    assert isinstance(transform_any, NdarrayLikeTyping)
+    assert not isinstance(object(), NdarrayLikeTyping)
 
-    assert isinstance(shaped_diffable, NdarrayLikeType[Shape(2, 3)])
-    assert isinstance(shaped_diffable, NdarrayLikeType[(2, 3)])
-    assert isinstance(shaped_diffable, NdarrayLikeType[DType(float)])
-    assert isinstance(shaped_diffable, NdarrayLikeType[Shape(2, 3), float])
-    assert isinstance(shaped_diffable_f32, NdarrayLikeType[Shape(2, 3), DType(np.float32)])
-    assert not isinstance(shaped_diffable_f32, NdarrayLikeType[Shape(3, 2)])
-    assert not isinstance(shaped_diffable_f32, NdarrayLikeType[DType(np.float64)])
+    assert isinstance(shaped_diffable, NdarrayLikeTyping[Shape(2, 3)])
+    assert isinstance(shaped_diffable, NdarrayLikeTyping[(2, 3)])
+    assert isinstance(shaped_diffable, NdarrayLikeTyping[DType(float)])
+    assert isinstance(shaped_diffable, NdarrayLikeTyping[Shape(2, 3), float])
+    assert isinstance(shaped_diffable_f32, NdarrayLikeTyping[Shape(2, 3), DType(np.float32)])
+    assert not isinstance(shaped_diffable_f32, NdarrayLikeTyping[Shape(3, 2)])
+    assert not isinstance(shaped_diffable_f32, NdarrayLikeTyping[DType(np.float64)])
 
     print("All SuperType isinstance checks passed.")
 
@@ -225,25 +225,25 @@ if __name__ == "__main__":
     # Additional checks with functions
     # =============================================================================
 
-    def accepts_shaped_float(arr: NdarrayLikeType[Shape(2, 3), float]) -> NdarrayLikeType[Shape(2, 3)]:
+    def accepts_shaped_float(arr: NdarrayLikeTyping[Shape(2, 3), float]) -> NdarrayLikeTyping[Shape(2, 3)]:
         print("accepts_shaped_float:", arr)
         return arr
 
-    def accepts_any(arr: NdarrayLikeType) -> NdarrayLikeType:
+    def accepts_any(arr: NdarrayLikeTyping) -> NdarrayLikeTyping:
         print("accepts_any:", arr)
         return arr
 
-    def accepts_transform(arr: NdarrayLikeType[TransformLinkBase]) -> NdarrayLikeType[TransformLinkBase]:
+    def accepts_transform(arr: NdarrayLikeTyping[TransformLinkBase]) -> NdarrayLikeTyping[TransformLinkBase]:
         print("accepts_transform:", arr)
         return arr
 
-    def returns_shaped_float() -> NdarrayLikeType[Shape(2, 3), float]:
+    def returns_shaped_float() -> NdarrayLikeTyping[Shape(2, 3), float]:
         result = DiffableNdarray(np.arange(6, dtype=float).reshape(2, 3))
         print("returns_shaped_float:", result)
         return result
 
     foo_result = accepts_shaped_float(shaped_diffable)
-    assert isinstance(foo_result, NdarrayLikeType[Shape(2, 3)])
+    assert isinstance(foo_result, NdarrayLikeTyping[Shape(2, 3)])
 
     accepts_any(shaped_diffable)
     accepts_any(transform_any)
@@ -251,4 +251,4 @@ if __name__ == "__main__":
     accepts_transform(transform_any)
 
     returned = returns_shaped_float()
-    assert isinstance(returned, NdarrayLikeType[Shape(2, 3), float])
+    assert isinstance(returned, NdarrayLikeTyping[Shape(2, 3), float])

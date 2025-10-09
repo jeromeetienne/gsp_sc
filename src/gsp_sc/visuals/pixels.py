@@ -2,7 +2,7 @@ from typing import TypeAlias
 import numpy as np
 
 from ..core.visual_base import VisualBase
-from ..types.ndarray_like import NdarrayLikeVariableType
+from ..types.ndarray_like_type import NdarrayLikeType
 
 
 class Pixels(VisualBase):
@@ -10,17 +10,17 @@ class Pixels(VisualBase):
 
     def __init__(
         self,
-        positions: NdarrayLikeVariableType,
-        sizes: NdarrayLikeVariableType,
-        colors: NdarrayLikeVariableType,
+        positions: NdarrayLikeType,
+        sizes: NdarrayLikeType,
+        colors: NdarrayLikeType,
     ) -> None:
         """
         Initialize a Pixels visual.
 
         Args:
-            positions (NdarrayLikeVariableType): Array of shape (N, 3) representing the 3D positions of the pixels.
-            sizes (NdarrayLikeVariableType): Array of shape (N,) representing the sizes of the pixels.
-            colors (NdarrayLikeVariableType): Array of shape (4,) representing the RGBA color of the pixels.
+            positions (NdarrayLikeType): Array of shape (N, 3) representing the 3D positions of the pixels.
+            sizes (NdarrayLikeType): Array of shape (N,) representing the sizes of the pixels.
+            colors (NdarrayLikeType): Array of shape (4,) representing the RGBA color of the pixels.
 
         Raises:
             AssertionError: If input arrays do not have the expected shapes.

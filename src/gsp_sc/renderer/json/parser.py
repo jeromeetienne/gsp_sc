@@ -7,14 +7,14 @@ import numpy as np
 import matplotlib.pyplot
 
 # local imports
-from ...core.canvas import Canvas
-from ...core.viewport import Viewport
-from ...core.camera import Camera
-from ...core.types import SceneDict
-from ...visuals.pixels import Pixels
-from ...visuals.image import Image
-from ...visuals.mesh import Mesh
-from ...types.ndarray_like import NdarrayLikeUtils, DiffableNdarrayDb
+from ...core import Canvas
+from ...core import Viewport
+from ...core import Camera
+from ...core import SceneDict
+from ...visuals import Pixels
+from ...visuals import Image
+from ...visuals import Mesh
+from ...types import NdarrayLikeUtils, DiffableNdarrayDb
 
 
 class JsonParser:

@@ -11,10 +11,10 @@ from ..transform.transform_link_base import TransformLinkBase
 from ..transform import TransformLinkImmediate, TransformLinkLambda
 from .diffable_ndarray.diffable_ndarray import DiffableNdarray
 from .diffable_ndarray.diffable_ndarray_serialisation import DiffableNdarraySerialisation, DiffableNdarrayDb
-
-NdarrayLikeVariableType = TransformLinkBase | DiffableNdarray | np.ndarray
+from .ndarray_like_type import NdarrayLikeType
 
 NdarrayLikeSerializedType = dict[str, Any]
+
 
 class NdarrayLikeUtils:
     """
@@ -25,7 +25,7 @@ class NdarrayLikeUtils:
     """
 
     @staticmethod
-    def to_json(data: NdarrayLikeVariableType, diffable_ndarray_db: DiffableNdarrayDb) -> NdarrayLikeSerializedType:
+    def to_json(data: NdarrayLikeType, diffable_ndarray_db: DiffableNdarrayDb) -> NdarrayLikeSerializedType:
         """
         Convert the input data to a JSON-serializable format.
         """
@@ -45,7 +45,7 @@ class NdarrayLikeUtils:
             raise TypeError("Input must be either a numpy ndarray or a TransformLinkBase instance.")
 
     @staticmethod
-    def from_json(serialized_data: NdarrayLikeSerializedType, diffable_ndarray_db: DiffableNdarrayDb) -> NdarrayLikeVariableType:
+    def from_json(serialized_data: NdarrayLikeSerializedType, diffable_ndarray_db: DiffableNdarrayDb) -> NdarrayLikeType:
         """
         Convert a JSON-serializable format to either a TransformLinkBase or a numpy ndarray.
 
@@ -70,7 +70,7 @@ class NdarrayLikeUtils:
             raise TypeError("Input list elements must be either dicts or numeric types.")
 
     @staticmethod
-    def to_numpy(data: NdarrayLikeVariableType) -> np.ndarray:
+    def to_numpy(data: NdarrayLikeType) -> np.ndarray:
         """
         Convert the input data to a numpy ndarray.
         """
@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     # Example 1: Using a numpy ndarray
     arr = np.array([[1, 2, 3], [4, 5, 6]])
-    assert isinstance(arr, NdarrayLikeVariableType), "np.ndarray should be a valid NdarrayLikeVariableType"
+    assert isinstance(arr, NdarrayLikeType), "np.ndarray should be a valid NdarrayLikeType"
     serialized_arr = NdarrayLikeUtils.to_json(arr, diffable_ndarray_db=diffable_ndarray_db)
     print("Serialized ndarray:", serialized_arr)
     deserialized_arr = NdarrayLikeUtils.from_json(serialized_arr, diffable_ndarray_db=diffable_ndarray_db)
@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     # Example 2: Using DeltaNdarray
     delta = DiffableNdarray([[10, 20], [30, 40]])
-    assert isinstance(delta, NdarrayLikeVariableType), "DeltaNdarray should be a valid NdarrayLikeVariableType"
+    assert isinstance(delta, NdarrayLikeType), "DeltaNdarray should be a valid NdarrayLikeType"
     serialized_delta = NdarrayLikeUtils.to_json(delta, diffable_ndarray_db=diffable_ndarray_db)
     print("Serialized DeltaNdarray:", serialized_delta)
     deserialized_delta = NdarrayLikeUtils.from_json(serialized_delta, diffable_ndarray_db=diffable_ndarray_db)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
     # Example 3: Using TransformLinkBase chain
     transformLinks = TransformLinkImmediate(np.array([[1, 2, 3], [4, 5, 6]])).chain(TransformLinkLambda(lambda x: x * 10))
-    assert isinstance(transformLinks, NdarrayLikeVariableType), "TransformLinkBase should be a valid NdarrayLikeVariableType"
+    assert isinstance(transformLinks, NdarrayLikeType), "TransformLinkBase should be a valid NdarrayLikeType"
     serialized_transform = NdarrayLikeUtils.to_json(transformLinks, diffable_ndarray_db=diffable_ndarray_db)
     print("Serialized TransformLinkBase:", serialized_transform)
     deserialized_transform = typing.cast(TransformLinkBase, NdarrayLikeUtils.from_json(serialized_transform, diffable_ndarray_db=diffable_ndarray_db))
