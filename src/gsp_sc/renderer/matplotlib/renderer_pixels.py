@@ -8,7 +8,7 @@ import mpl3d.glm
 # local imports
 from ...core.camera import Camera
 from ...visuals.pixels import Pixels
-from ...types.ndarray_like import NdarrayLikeVariableType, NdarrayLikeSerializedType, NdarrayLikeUtils
+from ...types.ndarray_like import NdarrayLikeSerializedType, NdarrayLikeUtils
 from .renderer import MatplotlibRenderer
 
 
