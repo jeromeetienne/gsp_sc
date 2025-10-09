@@ -23,7 +23,7 @@ class GspAnimatorNetwork:
     Animator for GSP scenes using a network renderer and matplotlib for display.
 
     Note: this requires a running GSP server. See the README for instructions.
-    Note: it uses pip matplotlib, not the GSP matplotlib renderer.
+    IMPORTANT: it DOES NOT depends on GSP matplotlib renderer, it only uses pip matplotlib to display
     """
 
     def __init__(
