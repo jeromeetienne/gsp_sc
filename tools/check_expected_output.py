@@ -114,8 +114,8 @@ def main() -> None:
 
     for basename_file in expected_basenames:
 
-        expected_path = f"{expected_folder}{basename_file}"
-        output_path = f"{output_folder}{basename_file}"
+        expected_path = os.path.join(expected_folder, basename_file)
+        output_path = os.path.join(output_folder, basename_file)
 
         # display the basename of the file without new line, and flush the output
         print(f"Checking {basename_file} ... ", end="", flush=True)
@@ -123,7 +123,7 @@ def main() -> None:
         # check if the file exists in the output folder
         if not os.path.exists(output_path):
             print("\033[91mFAILED\033[0m")  # Red "FAILED"
-            print(f"File {basename_file} does not exist in output folder.")
+            print(f"File {basename_file} does not exist in output folder. output_path={output_path}")
             sys.exit(1)
 
         # verify the content of the file
