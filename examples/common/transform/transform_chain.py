@@ -6,24 +6,26 @@ import typing
 import numpy as np
 
 # local imports
-from .links import (
+from gsp_sc.transform.links import (
     TransformLinkAssertShape,
     TransformLinkImmediate,
     TransformLinkLambda,
     TransformLinkLoad,
     TransformLinkMathOp,
 )
-from .transform_link_base import TransformLinkBase
+from gsp_sc.transform.transform_link_base import TransformLinkBase
+
 
 class TransformChain:
     """
     Helper class to build and manage a chain of transformations on numpy arrays.
 
     Only eye-candy to make it easier for the user to build a chain of transformations.
-    
+
     MUST NOT be used in the library
     """
-    def __init__(self, np_array: np.ndarray | list| None = None) -> None:
+
+    def __init__(self, np_array: np.ndarray | list | None = None) -> None:
         """
         Initialize the TransformHelper with an optional initial numpy array.
         """
@@ -41,7 +43,7 @@ class TransformChain:
         if self._link_head is None:
             raise ValueError("No transformation chain defined.")
         return self._link_head
-    
+
     def complete(self) -> TransformLinkBase:
         """
         Complete the transformation chain and return the head link.
@@ -70,7 +72,7 @@ class TransformChain:
 
         # return the re
         return np_array
-    
+
     def __chain(self, new_link: TransformLinkBase) -> "TransformChain":
         """
         Chain a new transformation to the existing transformation chain.
@@ -88,7 +90,7 @@ class TransformChain:
 
         return self
 
-	#####################################################################################
+    #####################################################################################
     # Transformation methods
     # FIXME those hardcoded strings are error-prone and should be avoided - have that to be dynamic - similar in transform_helper.py
     #
@@ -98,7 +100,7 @@ class TransformChain:
         Ensure the input array has the specified shape.
         """
         new_transform = TransformLinkAssertShape(expected_shape)
-        
+
         return self.__chain(new_transform)
 
     def immediate(self, np_array: np.ndarray) -> "TransformChain":
@@ -108,7 +110,7 @@ class TransformChain:
         new_transform = TransformLinkImmediate(np_array)
 
         return self.__chain(new_transform)
-    
+
     def lambdaFunc(self, lambda_func: typing.Callable[[np.ndarray], np.ndarray] | str) -> "TransformChain":
         """
         Define a lambda function to apply to the numpy array
@@ -127,16 +129,13 @@ class TransformChain:
         Load a numpy array from the specified .npy file URL.
         """
         new_transform = TransformLinkLoad(data_url)
-        
+
         return self.__chain(new_transform)
 
-    def math_op(
-        self, operation: Literal["add", "sub", "mul", "div"], operand: float
-    ) -> "TransformChain":
+    def math_op(self, operation: Literal["add", "sub", "mul", "div"], operand: float) -> "TransformChain":
         """
         Perform a math operation on the data.
         """
         new_transform = TransformLinkMathOp(operation, operand)
 
         return self.__chain(new_transform)
-
