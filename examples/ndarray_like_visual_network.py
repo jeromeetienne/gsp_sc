@@ -9,28 +9,28 @@ import os
 import numpy as np
 
 # local imports
-import gsp_sc
+import gsp
 import gsp_network
 import gsp_matplotlib
 from common.transform import TransformChain
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
-gsp_sc.core.Random.set_random_seed(10)
+gsp.core.Random.set_random_seed(10)
 np.random.seed(10)
 
 # =============================================================================
 # Create a GSP scene
 # =============================================================================
-canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
-camera = gsp_sc.core.Camera("perspective")
+canvas = gsp.core.Canvas(width=512, height=512, dpi=100)
+camera = gsp.core.Camera("perspective")
 
-viewport = gsp_sc.core.Viewport(
+viewport = gsp.core.Viewport(
     origin_x=0,
     origin_y=0,
     width=canvas.width,
     height=canvas.height,
-    background_color=gsp_sc.Constants.White,
+    background_color=gsp.Constants.White,
 )
 canvas.add(viewport=viewport)
 
@@ -43,11 +43,11 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 
 # Use TransformChain to scale and translate positions
 npy_url = f"file://{__dirname__}/data/sample_positions_3d.npy"
-position_chain = TransformChain().load(npy_url).math_op("mul", 1 / 3).lambdaFunc(lambda x: x + 0.2).complete()
+position_chain = TransformChain().load(npy_url).lambdaFunc(lambda x: x + 0.2).complete()
 
 sizes_np = np.array([1])
-colors_np = np.array([gsp_sc.Constants.Green])
-pixels = gsp_sc.visuals.Pixels(positions=position_chain, sizes=sizes_np, colors=colors_np)
+colors_np = np.array([gsp.Constants.Green])
+pixels = gsp.visuals.Pixels(positions=position_chain, sizes=sizes_np, colors=colors_np)
 viewport.add(pixels)
 
 # ==============================================================================
@@ -66,7 +66,7 @@ print(f"Image saved to {local_image_path}")
 # ==============================================================================
 # Render the scene using a network renderer
 # ==============================================================================
-camera = gsp_sc.core.Camera("perspective")
+camera = gsp.core.Camera("perspective")
 network_renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/")
 image_png_data = network_renderer.render(canvas, camera)
 

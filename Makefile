@@ -5,7 +5,7 @@ clean_output: ## Remove all generated output files
 	rm -f ./examples/output/*
 
 validate_json: ## Validate all .gsp.json files against the gsp.schema.json
-	python tools/validate_gsp_schema.py
+	python tools/validate_gsphema.py
 
 ###############################################################################
 
@@ -21,7 +21,7 @@ pytest_verbose: ## Run pytest in verbose mode on the tests/ directory
 lint: lint_src lint_examples ## Run pyright type checker on src and examples
 
 lint_src: ## Run pyright type checker on ./src
-	pyright src/gsp_sc/
+	pyright src/gsp/
 
 lint_examples: ## Run pyright type checker on ./examples
 	pyright ./examples/

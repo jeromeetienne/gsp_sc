@@ -1,5 +1,5 @@
 import numpy as np
-from gsp_sc.types.diffable_ndarray.diffable_ndarray import DiffableNdarray
+from gsp.types.diffable_ndarray.diffable_ndarray import DiffableNdarray
 
 
 def test_diffable_ndarray_setitem_and_diff_tracking() -> None:

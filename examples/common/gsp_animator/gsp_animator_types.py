@@ -2,8 +2,8 @@
 from typing import Callable
 
 # local imports
-import gsp_sc
+import gsp
 
 
-GSPAnimatorFunc = Callable[[], list[gsp_sc.core.VisualBase]]
+GSPAnimatorFunc = Callable[[], list[gsp.core.VisualBase]]
 """Type alias for a GSP animator function."""

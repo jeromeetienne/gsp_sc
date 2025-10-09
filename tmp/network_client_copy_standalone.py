@@ -10,31 +10,32 @@ import os
 
 # pip imports
 import numpy as np
+
 # import jsondiff
 import json
 import jsonpatch
 
 
 # local imports
-import gsp_sc
+import gsp
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
-gsp_sc.core.Random.set_random_seed(10)
+gsp.core.Random.set_random_seed(10)
 np.random.seed(10)
 
 ###############################################################################
 # Create a GSP scene
 #
-camera = gsp_sc.core.Camera("perspective")
-canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
-viewport = gsp_sc.core.Viewport(
+camera = gsp.core.Camera("perspective")
+canvas = gsp.core.Canvas(width=512, height=512, dpi=100)
+viewport = gsp.core.Viewport(
     origin_x=0,
     origin_y=0,
     width=canvas.width,
     height=canvas.height,
-    background_color=gsp_sc.Constants.White,
+    background_color=gsp.Constants.White,
 )
 canvas.add(viewport=viewport)
 
@@ -42,15 +43,15 @@ canvas.add(viewport=viewport)
 n_points = 10
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
-colors_np = np.array([gsp_sc.Constants.Green])
-pixels = gsp_sc.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=colors_np)
+colors_np = np.array([gsp.Constants.Green])
+pixels = gsp.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=colors_np)
 viewport.add(pixels)
 
 
 ###############################################################################
 #   Render the scene in JSON format
 #
-json_renderer = gsp_sc.renderer.json.JsonRenderer()
+json_renderer = gsp.renderer.json.JsonRenderer()
 scene_dict1 = json_renderer.render(canvas, camera)
 # print(f"Initial scene JSON:\n{scene_dict}")
 
@@ -64,7 +65,7 @@ pixels.sizes = sizes_np
 ###############################################################################
 #   Render the scene in JSON format again
 #
-json_renderer = gsp_sc.renderer.json.JsonRenderer()
+json_renderer = gsp.renderer.json.JsonRenderer()
 scene_dict2 = json_renderer.render(canvas, camera)
 # print(f"Initial scene JSON:\n{scene_dict}")
 

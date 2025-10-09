@@ -55,12 +55,17 @@ class TransformLinkLambda(TransformLinkBase):
     def __extract_lambda_from_sourcelines(code_string: str) -> str:
         """
         Parses a string containing a Python call to extract a lambda function.
-        Super black magic.
+        WARNING: Super black magic.
 
         This function finds the 'lambda' keyword and then scans the string,
         balancing parentheses to correctly identify the end of the lambda
         expression, even with nested structures.
         """
+        # watchdog to ensure only one lambda is present in this line
+        # - in this case, we would not be able to determine which one to extract
+        if code_string.count("lambda ") != 1:
+            raise ValueError("TransformLinkLambda: The code line MUST NOT contains 'lambda' expression. please pass the lambda function as a string.")
+
         # Find the starting position of the 'lambda' keyword.
         start_index = code_string.index("lambda ")
 

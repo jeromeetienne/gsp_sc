@@ -9,7 +9,7 @@ import matplotlib.animation
 import matplotlib.artist
 
 # local imports
-import gsp_sc
+import gsp
 import gsp_matplotlib
 from .gsp_animator_types import GSPAnimatorFunc
 
@@ -46,7 +46,7 @@ class GspAnimatorMatplotlib:
                 else:
                     raise ValueError(f"Unsupported video format: {video_ext}")
 
-    def animate(self, canvas: gsp_sc.core.Canvas, camera: gsp_sc.core.Camera, animator_callbacks: list[GSPAnimatorFunc]):
+    def animate(self, canvas: gsp.core.Canvas, camera: gsp.core.Camera, animator_callbacks: list[GSPAnimatorFunc]):
         """
         Animate the given canvas and camera using the provided callbacks to update visuals.
         """
@@ -55,7 +55,7 @@ class GspAnimatorMatplotlib:
 
         def mpl_animate(frame_index: int) -> list[matplotlib.artist.Artist]:
             # notify all animator callbacks
-            changed_visuals: list[gsp_sc.core.VisualBase] = []
+            changed_visuals: list[gsp.core.VisualBase] = []
             for callback in animator_callbacks:
                 _changed_visuals = callback()
                 changed_visuals.extend(_changed_visuals)
@@ -100,7 +100,7 @@ class GspAnimatorMatplotlib:
         matplotlib.pyplot.show()
 
     # TODO move that in the matplotlib renderer?
-    def _get_mpl_artists(self, canvas: gsp_sc.core.Canvas, visual_base: gsp_sc.core.VisualBase) -> matplotlib.artist.Artist:
+    def _get_mpl_artists(self, canvas: gsp.core.Canvas, visual_base: gsp.core.VisualBase) -> matplotlib.artist.Artist:
         """
         Get the matplotlib artists corresponding to a given visual in the canvas.
         This is needed for the matplotlib FuncAnimation to update only the relevant artists.
@@ -112,8 +112,8 @@ class GspAnimatorMatplotlib:
                     continue
 
                 # get the mpl artist corresponding to the visual
-                if isinstance(visual, gsp_sc.visuals.Pixels):
-                    pixels: gsp_sc.visuals.Pixels = visual
+                if isinstance(visual, gsp.visuals.Pixels):
+                    pixels: gsp.visuals.Pixels = visual
                     patchCollections = self._matplotlib_renderer._pathCollections[pixels.uuid + viewport.uuid]
                     mpl_artist = patchCollections
                     return mpl_artist

@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 # from gsp_sc.types import NdarrayLikeVariableType
-from gsp_sc.types import DiffableNdarray
-from gsp_sc.transform import TransformLinkImmediate, TransformLinkBase
+from gsp.types import DiffableNdarray
+from gsp.transform import TransformLinkImmediate, TransformLinkBase
 import numpy as np
 
 

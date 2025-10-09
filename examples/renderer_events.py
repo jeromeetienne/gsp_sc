@@ -10,19 +10,19 @@ import os
 import numpy as np
 
 # local imports
-import gsp_sc
+import gsp
 import gsp_matplotlib
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
-gsp_sc.core.Random.set_random_seed(10)
+gsp.core.Random.set_random_seed(10)
 np.random.seed(10)
 
 ###############################################################################
 # Create a GSP scene
 #
-canvas = gsp_sc.core.Canvas(256, 256, 100)
-viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
+canvas = gsp.core.Canvas(256, 256, 100)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
 canvas.add(viewport)
 
 ###############################################################################
@@ -33,7 +33,7 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 sizes_np = np.ones((n_points,)).astype(np.float32)
 colors_np = np.random.uniform(0, 1, (n_points, 4)).astype(np.float32)
 colors_np[:, 3] = 1.0
-pixels = gsp_sc.visuals.Pixels(positions_np, sizes_np, colors_np)  # type: ignore
+pixels = gsp.visuals.Pixels(positions_np, sizes_np, colors_np)  # type: ignore
 viewport.add(pixels)
 
 
@@ -42,7 +42,7 @@ viewport.add(pixels)
 # - sort pixels by z value after transform to have correct overlapping
 # - change sizes based on z value to have a "perspective" effect
 #
-def on_post_transform(renderer: gsp_matplotlib.MatplotlibRenderer, camera: gsp_sc.core.Camera, transformed_positions: np.ndarray) -> None:
+def on_post_transform(renderer: gsp_matplotlib.MatplotlibRenderer, camera: gsp.core.Camera, transformed_positions: np.ndarray) -> None:
     # sort inplace transformed positions by z value (3rd column). Largest z first
     indices = np.argsort(-transformed_positions[:, 2])
     transformed_positions[:] = transformed_positions[indices]
@@ -72,7 +72,7 @@ pixels.post_transform.connect(on_post_transform)
 ###############################################################################
 # Render the scene with matplotlib
 #
-camera = gsp_sc.core.Camera("perspective")
+camera = gsp.core.Camera("perspective")
 renderer = gsp_matplotlib.MatplotlibRenderer()
 image_png_buffer = renderer.render(canvas, camera, interactive=True)
 

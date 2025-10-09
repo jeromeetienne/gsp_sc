@@ -4,8 +4,8 @@ import typing
 
 import numpy as np
 
-from gsp_sc.transform.transform_link_base import TransformLinkBase
-from gsp_sc.types.diffable_ndarray.diffable_ndarray import DiffableNdarray
+from gsp.transform.transform_link_base import TransformLinkBase
+from gsp.types.diffable_ndarray.diffable_ndarray import DiffableNdarray
 
 
 class Shape:

@@ -3,7 +3,7 @@ Example of serialising a scene to JSON and loading it back.
 It is rendered before and after to verify the scene serialisation works correctly.
 """
 
-import gsp_sc
+import gsp
 import gsp_matplotlib
 import numpy as np
 import matplotlib.image as mpl_img
@@ -14,18 +14,18 @@ import json
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
-gsp_sc.core.Random.set_random_seed(10)
+gsp.core.Random.set_random_seed(10)
 np.random.seed(10)
 
-canvas = gsp_sc.core.Canvas(512, 512, 100)
+canvas = gsp.core.Canvas(512, 512, 100)
 
 ###############################################################################
 # Create two viewports
 #
-viewport1 = gsp_sc.core.Viewport(0, 0, 256, 256, gsp_sc.Constants.White)
+viewport1 = gsp.core.Viewport(0, 0, 256, 256, gsp.Constants.White)
 canvas.add(viewport1)
 
-viewport2 = gsp_sc.core.Viewport(256, 0, 256, 256, gsp_sc.Constants.White)
+viewport2 = gsp.core.Viewport(256, 0, 256, 256, gsp.Constants.White)
 canvas.add(viewport2)
 
 ###############################################################################
@@ -35,7 +35,7 @@ n_points = 100
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
 colors_np = np.array([[0, 1, 0, 0.5]], dtype=np.float32)
-pixels = gsp_sc.visuals.Pixels(positions_np, sizes_np, colors_np)
+pixels = gsp.visuals.Pixels(positions_np, sizes_np, colors_np)
 viewport1.add(pixels)
 viewport2.add(pixels)
 
@@ -44,13 +44,13 @@ viewport2.add(pixels)
 #
 image_path = f"{__dirname__}/images/UV_Grid_Sm.jpg"
 image_data_np = mpl_img.imread(image_path)
-image = gsp_sc.visuals.Image(np.array([0.5, 0.5, 0.5]), (-1, +1, -1, +1), image_data_np)
+image = gsp.visuals.Image(np.array([0.5, 0.5, 0.5]), (-1, +1, -1, +1), image_data_np)
 viewport1.add(image)
 
 ###############################################################################
 # Save and render the scene to verify it looks correct
 #
-camera = gsp_sc.core.Camera("perspective")
+camera = gsp.core.Camera("perspective")
 matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 rendered_image_png_data = matplotlib_renderer.render(canvas, camera)
 
@@ -64,7 +64,7 @@ print(f"original Rendered image saved to: {rendered_image_path}")
 ###############################################################################
 # Export the scene to JSON
 #
-json_renderer = gsp_sc.renderer.json.JsonRenderer()
+json_renderer = gsp.renderer.json.JsonRenderer()
 scene_dict = json_renderer.render(canvas, camera)
 scene_json = json.dumps(scene_dict, indent=4)
 
@@ -76,7 +76,7 @@ print(f"Scene exported to JSON and saved to {json_output_path}")
 ###############################################################################
 # Load the scene from JSON
 #
-json_parser = gsp_sc.renderer.json.JsonParser()
+json_parser = gsp.renderer.json.JsonParser()
 canvas_parsed, camera_parsed = json_parser.parse(scene_json)
 
 ###############################################################################

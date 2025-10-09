@@ -6,9 +6,9 @@ import matplotlib.axes
 import mpl3d.glm
 
 # local imports
-from gsp_sc.core.camera import Camera
-from gsp_sc.visuals.pixels import Pixels
-from gsp_sc.types.ndarray_like_utils import NdarrayLikeUtils
+from gsp.core.camera import Camera
+from gsp.visuals.pixels import Pixels
+from gsp.types.ndarray_like_utils import NdarrayLikeUtils
 from .renderer import MatplotlibRenderer
 
 

@@ -1,5 +1,5 @@
-from gsp_sc.types.diffable_ndarray import DiffableNdarray
-from gsp_sc.types.diffable_ndarray_serialisation import DiffableNdarraySerialisation
+from gsp.types.diffable_ndarray import DiffableNdarray
+from gsp.types.diffable_ndarray_serialisation import DiffableNdarraySerialisation
 import numpy as np
 
 

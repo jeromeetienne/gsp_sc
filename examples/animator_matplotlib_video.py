@@ -9,7 +9,7 @@ import os
 import numpy as np
 
 # local imports
-import gsp_sc
+import gsp
 import gsp_matplotlib
 from common.gsp_animator import GspAnimatorMatplotlib
 
@@ -21,8 +21,8 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # =============================================================================
 # Create a GSP canvas
 # =============================================================================
-canvas = gsp_sc.core.Canvas(512, 512, 100)
-viewport = gsp_sc.core.Viewport(0, 0, canvas.width, canvas.height, gsp_sc.Constants.White)
+canvas = gsp.core.Canvas(512, 512, 100)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
 canvas.add(viewport)
 
 
@@ -32,8 +32,8 @@ canvas.add(viewport)
 n_points = 10
 positions = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes = np.array([100 for _ in range(n_points)], np.float32)
-colors = np.array([gsp_sc.Constants.Green for _ in range(n_points)], np.float32)
-pixels = gsp_sc.visuals.Pixels(positions, sizes, colors)
+colors = np.array([gsp.Constants.Green for _ in range(n_points)], np.float32)
+pixels = gsp.visuals.Pixels(positions, sizes, colors)
 viewport.add(pixels)
 
 # =============================================================================
@@ -49,7 +49,7 @@ for i in range(n_points):
 # =============================================================================
 # Render the canvas with matplotlib
 # =============================================================================
-camera = gsp_sc.core.Camera(camera_type="ortho")
+camera = gsp.core.Camera(camera_type="ortho")
 renderer = gsp_matplotlib.MatplotlibRenderer()
 renderer.render(canvas, camera)
 
@@ -60,7 +60,7 @@ current_time = 0.0
 target_fps = 60
 
 
-def animator_callback() -> list[gsp_sc.core.VisualBase]:
+def animator_callback() -> list[gsp.core.VisualBase]:
     # Update the time tracking
     global current_time
     delta_time = 1.0 / target_fps
@@ -84,7 +84,7 @@ def animator_callback() -> list[gsp_sc.core.VisualBase]:
     # - this is not needed when the scene is rendered via network renderer
     renderer.render(canvas, camera)
 
-    changed_visuals: list[gsp_sc.core.VisualBase] = [pixels]
+    changed_visuals: list[gsp.core.VisualBase] = [pixels]
     return changed_visuals
 
 

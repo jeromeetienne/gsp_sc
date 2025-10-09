@@ -1,8 +1,8 @@
-import gsp_sc
+import gsp
 import numpy as np
 import os
 import json
-from gsp_sc.transform import TransformSerialisation, TransformLinkAssertShape, TransformLinkLambda, TransformLinkImmediate
+from gsp.transform import TransformSerialisation, TransformLinkAssertShape, TransformLinkLambda, TransformLinkImmediate
 
 # import a user-defined TransformLink
 from common.transform import TransformLinkMathOp

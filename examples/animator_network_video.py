@@ -9,7 +9,7 @@ import os
 import numpy as np
 
 # local imports
-import gsp_sc
+import gsp
 import gsp_network
 from common.gsp_animator import GspAnimatorNetwork
 
@@ -21,13 +21,13 @@ __dirname__ = os.path.dirname(os.path.abspath(__file__))
 ###############################################################################
 # Create a GSP scene
 #
-canvas = gsp_sc.core.Canvas(width=512, height=512, dpi=100)
-viewport = gsp_sc.core.Viewport(
+canvas = gsp.core.Canvas(width=512, height=512, dpi=100)
+viewport = gsp.core.Viewport(
     origin_x=0,
     origin_y=0,
     width=canvas.width,
     height=canvas.height,
-    background_color=gsp_sc.Constants.White,
+    background_color=gsp.Constants.White,
 )
 canvas.add(viewport=viewport)
 
@@ -37,8 +37,8 @@ canvas.add(viewport=viewport)
 n_points = 10
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.array([100 for _ in range(n_points)], np.float32)
-colors_np = np.array([gsp_sc.Constants.Green for _ in range(n_points)], np.float32)
-pixels = gsp_sc.visuals.Pixels(positions_np, sizes_np, colors_np)
+colors_np = np.array([gsp.Constants.Green for _ in range(n_points)], np.float32)
+pixels = gsp.visuals.Pixels(positions_np, sizes_np, colors_np)
 viewport.add(pixels)
 
 # =============================================================================
@@ -54,7 +54,7 @@ for i in range(n_points):
 ###############################################################################
 # Render the scene with matplotlib
 #
-camera = gsp_sc.core.Camera(camera_type="ortho")
+camera = gsp.core.Camera(camera_type="ortho")
 renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=True)
 renderer.render(canvas, camera)
 
@@ -65,7 +65,7 @@ current_time = 0.0
 target_fps = 60
 
 
-def animator_callback() -> list[gsp_sc.core.VisualBase]:
+def animator_callback() -> list[gsp.core.VisualBase]:
     # Update the time tracking
     global current_time
     delta_time = 1.0 / target_fps
@@ -83,7 +83,7 @@ def animator_callback() -> list[gsp_sc.core.VisualBase]:
     velocities_np[out_of_bounds_y, 1] *= -1
     velocities_np[out_of_bounds_z, 2] *= -1
 
-    changed_visuals: list[gsp_sc.core.VisualBase] = [pixels]
+    changed_visuals: list[gsp.core.VisualBase] = [pixels]
     return changed_visuals
 
 

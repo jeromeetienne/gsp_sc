@@ -3,13 +3,13 @@ Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
 
 import numpy as np
-from gsp_sc.core.canvas import Canvas
-from gsp_sc.core.viewport import Viewport
-from gsp_sc.core.camera import Camera
+from gsp.core.canvas import Canvas
+from gsp.core.viewport import Viewport
+from gsp.core.camera import Camera
 from gsp_matplotlib import MatplotlibRenderer
-from gsp_sc.renderer.json import JsonRenderer
+from gsp.renderer.json import JsonRenderer
 from gsp_network import NetworkRenderer
-from gsp_sc.visuals.pixels import Pixels
+from gsp.visuals.pixels import Pixels
 
 # Create a GSP scene
 canvas = Canvas(512, 512, 100)

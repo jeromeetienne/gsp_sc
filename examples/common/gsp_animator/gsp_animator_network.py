@@ -10,9 +10,9 @@ import matplotlib.image
 import matplotlib.animation
 
 # local imports
-import gsp_sc
+import gsp
 import gsp_network
-from gsp_sc.core import canvas
+from gsp.core import canvas
 from .gsp_animator_types import GSPAnimatorFunc
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -51,7 +51,7 @@ class GspAnimatorNetwork:
                 else:
                     raise ValueError(f"Unsupported video format: {video_ext}")
 
-    def animate(self, canvas: gsp_sc.core.Canvas, camera: gsp_sc.core.Camera, animator_callbacks: list[GSPAnimatorFunc]):
+    def animate(self, canvas: gsp.core.Canvas, camera: gsp.core.Camera, animator_callbacks: list[GSPAnimatorFunc]):
         """
         Animate the given canvas and camera using the provided callbacks to update visuals.
         """
@@ -75,7 +75,7 @@ class GspAnimatorNetwork:
         gsp_sc_interactive = "GSP_SC_INTERACTIVE" not in os.environ or os.environ["GSP_SC_INTERACTIVE"] != "False"
         if gsp_sc_interactive is False:
             # notify all animator callbacks
-            changed_visuals: list[gsp_sc.core.VisualBase] = []
+            changed_visuals: list[gsp.core.VisualBase] = []
             for animator_callback in animator_callbacks:
                 _changed_visuals = animator_callback()
                 changed_visuals.extend(_changed_visuals)
@@ -102,7 +102,7 @@ class GspAnimatorNetwork:
         # function called at each animation frame
         def mpl_animate(frame_index: int):
             # notify all animator callbacks
-            changed_visuals: list[gsp_sc.core.VisualBase] = []
+            changed_visuals: list[gsp.core.VisualBase] = []
             for animator_callback in animator_callbacks:
                 _changed_visuals = animator_callback()
                 changed_visuals.extend(_changed_visuals)

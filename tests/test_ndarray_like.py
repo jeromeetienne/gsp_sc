@@ -5,10 +5,10 @@ import typing
 import numpy as np
 
 # local imports
-from gsp_sc.transform.links.link_immediate import TransformLinkImmediate
-from gsp_sc.types import NdarrayLikeType
-from gsp_sc.types import NdarrayLikeUtils
-from gsp_sc.types import DiffableNdarray, DiffableNdarrayDb
+from gsp.transform.links.link_immediate import TransformLinkImmediate
+from gsp.types import NdarrayLikeType
+from gsp.types import NdarrayLikeUtils
+from gsp.types import DiffableNdarray, DiffableNdarrayDb
 
 
 # =============================================================================

@@ -15,10 +15,10 @@ import jsonpatch
 import argparse
 
 # local imports
-import gsp_sc
+import gsp
 import gsp_matplotlib
-from gsp_sc.core.types import SceneDict
-from gsp_sc.types import DiffableNdarraySerialisationError
+from gsp.core.types import SceneDict
+from gsp.types import DiffableNdarraySerialisationError
 from gsp_network import NetworkPayload
 
 flask_app = Flask(__name__)
@@ -27,7 +27,7 @@ flask_app = Flask(__name__)
 absolute_scenes: dict[str, SceneDict] = {}
 """Dictionary mapping client IDs to their last absolute scene data."""
 
-json_parser = gsp_sc.renderer.json.JsonParser()
+json_parser = gsp.renderer.json.JsonParser()
 
 
 @flask_app.route("/render_scene", methods=["POST"])

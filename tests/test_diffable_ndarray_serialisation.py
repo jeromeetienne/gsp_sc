@@ -5,15 +5,14 @@ import typing
 import numpy as np
 
 # local imports
-from gsp_sc.types import DiffableNdarray
-from gsp_sc.types import DiffableNdarraySerialisation, DiffableNdarrayDb
+from gsp.types import DiffableNdarray
+from gsp.types import DiffableNdarraySerialisation, DiffableNdarrayDb
 
 
 def test_diffable_ndarray_to_from_json_zero_modification() -> None:
     diffable_ndarray_db = DiffableNdarrayDb()
     arr = DiffableNdarray(np.arange(9).reshape(3, 3))
     arr[2, 2] = 100
-
 
     # Serialize the original array
     serialized1 = DiffableNdarraySerialisation.to_json(arr, diffable_ndarray_db)
@@ -36,6 +35,7 @@ def test_diffable_ndarray_to_from_json_zero_modification() -> None:
     assert np.array_equal(deserialized_arr_2, arr), "Deserialized array should match the modified original"
     assert deserialized_arr_2.get_uuid() != arr.get_uuid(), "UUIDs should not match after deserialization"
     assert deserialized_arr_2.get_uuid() == deserialized1.get_uuid(), "UUIDs should match the first deserialized array"
+
 
 def test_diffable_ndarray_to_from_json_one_modification() -> None:
     diffable_ndarray_db = DiffableNdarrayDb()
@@ -65,6 +65,7 @@ def test_diffable_ndarray_to_from_json_one_modification() -> None:
     assert deserialized_arr_2.get_uuid() != arr.get_uuid(), "UUIDs should not match after deserialization"
     assert deserialized_arr_2.get_uuid() == deserialized1.get_uuid(), "UUIDs should match the first deserialized array"
 
+
 def test_diffable_ndarray_to_from_json_full_modification() -> None:
     diffable_ndarray_db = DiffableNdarrayDb()
     arr = DiffableNdarray(np.arange(9).reshape(3, 3))
@@ -80,7 +81,7 @@ def test_diffable_ndarray_to_from_json_full_modification() -> None:
     assert np.array_equal(deserialized1, arr), "Deserialized array should match the original"
 
     # Modify the original array completly
-    arr[:] = np.arange(100, 109).reshape(3, 3) 
+    arr[:] = np.arange(100, 109).reshape(3, 3)
     assert arr.is_modified() == True, "Array should be marked as modified"
 
     # Serialize the modified array

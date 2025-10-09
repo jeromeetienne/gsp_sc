@@ -6,13 +6,13 @@ import typing
 import numpy as np
 
 # local imports
-from gsp_sc.transform.links import (
+from gsp.transform.links import (
     TransformLinkAssertShape,
     TransformLinkImmediate,
     TransformLinkLambda,
     TransformLinkLoad,
 )
-from gsp_sc.transform.transform_link_base import TransformLinkBase
+from gsp.transform.transform_link_base import TransformLinkBase
 from .transform_link_math_op import TransformLinkMathOp
 
 

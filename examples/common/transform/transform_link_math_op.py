@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Literal, Any
-from gsp_sc.transform import TransformLinkBase, TransformRegistry
+from gsp.transform import TransformLinkBase, TransformRegistry
 
 
 # =============================================================================

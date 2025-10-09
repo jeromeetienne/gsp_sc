@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from gsp_sc.transform import TransformLinkLoad, TransformLinkImmediate, TransformLinkLambda, TransformLinkAssertShape
+from gsp.transform import TransformLinkLoad, TransformLinkImmediate, TransformLinkLambda, TransformLinkAssertShape
 
 # import a user-defined TransformLink
 from common.transform import TransformLinkMathOp

@@ -2,18 +2,20 @@ import os
 import json
 import numpy as np
 import pytest
-from gsp_sc.transform import TransformSerialisation, TransformLinkLoad, TransformLinkMathOp, TransformLinkImmediate, TransformLinkLambda
+from gsp.transform import TransformSerialisation, TransformLinkLoad, TransformLinkImmediate, TransformLinkLambda
 
 
 def test_transform_serialisation_roundtrip(tmp_path):
     # Create a Transform chain
-    chain = TransformLinkImmediate(np.array([4, 5, 6])).chain(TransformLinkMathOp("add", 2)).chain(TransformLinkMathOp("mul", 3))
+    chain = TransformLinkImmediate(np.array([4, 5, 6])).chain(TransformLinkLambda(lambda x: x + 2))
+    chain = chain.chain(TransformLinkLambda(lambda x: x * 3))
     # Serialize to JSON
     json_array = TransformSerialisation.to_json(chain)
     # Deserialize from JSON
     chain_deserialized = TransformSerialisation.from_json(json_array)
     # Run and check result
     result = chain_deserialized.run()
+    print("Result:", result)
     expected = np.array([(4 + 2) * 3, (5 + 2) * 3, (6 + 2) * 3])
     assert np.array_equal(result, expected)
 
