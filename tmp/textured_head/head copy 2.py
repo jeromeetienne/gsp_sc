@@ -5,26 +5,39 @@
 # import matplotlib
 # matplotlib.use("module://mplcairo.macosx")
 
-# stdlib imports
+import types
+import numpy as np
+
+
 import os
 
+__dirname__ = os.path.dirname(os.path.abspath(__file__))
 
-# pip imports
-import numpy as np
-import matplotlib.transforms
+
 import imageio.v3 as imageio
-import matplotlib.animation
+import matplotlib.transforms
 import matplotlib.axes
 import matplotlib.path
 import matplotlib.pyplot
 
-__dirname__ = os.path.dirname(os.path.abspath(__file__))
+# from matplotlib.backend_bases import GraphicsContextBase, RendererBase
+
+
+# class GC(GraphicsContextBase):
+#     def __init__(self):
+#         super().__init__()
+#         self._antialias = False
+
+# def custom_new_gc(self):
+#     return GC()
+
+# RendererBase.new_gc = types.MethodType(custom_new_gc, RendererBase)
 
 
 # =============================================================================
 # OBJ file reader
 # =============================================================================
-def parse_model_obj(filename):
+def obj_read(filename):
     """
     Read a wavefront filename and returns vertices, texcoords and
     respective indices for faces and texcoords
@@ -127,8 +140,6 @@ def render_textured_triangle(
         clip_path=(path, transform),
     )
 
-    return axes_image
-
 
 # =============================================================================
 # init matplotlib figure
@@ -146,8 +157,7 @@ mpl_axes.set_yticks([])
 model_path = os.path.join(__dirname__, "head.obj")
 texture_path = os.path.join(__dirname__, "uv-grid.png")
 
-vertices_coords, uvs_coords, normals_coords, faces_vertice_indices, face_uv_indices, face_normal_indices = parse_model_obj(model_path)
-# texture = matplotlib.pyplot.imread(texture_path)
+vertices_coords, uvs_coords, normals_coords, faces_vertice_indices, face_uv_indices, face_normal_indices = obj_read(model_path)
 texture = imageio.imread(texture_path)[::-1, ::1, :3]
 faces_vertices = vertices_coords[faces_vertice_indices]
 faces_uvs = uvs_coords[face_uv_indices]
@@ -172,7 +182,6 @@ camera_cosines: np.ndarray = np.dot(faces_normals_unit, camera_direction)
 # back face culling
 faces_vertices = faces_vertices[camera_cosines > 0]
 faces_uvs = faces_uvs[camera_cosines > 0]
-faces_normals_unit = faces_normals_unit[camera_cosines > 0]
 
 # =============================================================================
 # Lighting
@@ -191,7 +200,6 @@ faces_vertices = faces_vertices[depth_sorted_indices][..., :2]
 faces_uvs = faces_uvs[depth_sorted_indices][..., :2]
 light_intensities = light_intensities[depth_sorted_indices]
 
-
 # =============================================================================
 # Loop over faces and draw them
 # =============================================================================
@@ -201,9 +209,10 @@ for face_vertices, face_uvs, light_intensity in zip(faces_vertices, faces_uvs, l
     except np.linalg.LinAlgError:
         pass
 
-
 # =============================================================================
 # Save or show figure
 # =============================================================================
-
+# plt.savefig("head.pdf")
+# plt.savefig("head.png")
+# plt.savefig("head.svg")
 matplotlib.pyplot.show()
