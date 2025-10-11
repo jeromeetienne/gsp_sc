@@ -43,7 +43,7 @@ viewport2.add(pixels)
 image_path = f"{__dirname__}/images/UV_Grid_Sm.jpg"
 image_data_np = matplotlib.image.imread(image_path)
 image_position = np.array([0, 0, 0])
-image = gsp.visuals.Image(position=image_position, image_extent=(-1, +1, -1, +1), image_data=image_data_np)
+image = gsp.visuals.Image(vertices=image_position, image_extent=(-1, +1, -1, +1), image_data=image_data_np)
 viewport2.add(image)
 
 # =============================================================================

@@ -62,7 +62,7 @@ class JsonRenderer:
                     visual_dict = {
                         "type": "Image",
                         "uuid": image.uuid,
-                        "position": image.position.tolist(),
+                        "position": image.vertices.tolist(),
                         "bounds": image.image_extent,
                         "image_data_shape": image.image_data.shape,
                         "image_data": image.image_data.tolist(),

@@ -65,7 +65,7 @@ class JsonParser:
                     image_data_shape = tuple(visual_info["image_data_shape"])
                     image_data = np.array(visual_info["image_data"]).reshape(image_data_shape)
                     image = Image(
-                        position=np.array(visual_info["position"]),
+                        vertices=np.array(visual_info["position"]),
                         image_extent=visual_info["bounds"],
                         image_data=image_data,
                     )

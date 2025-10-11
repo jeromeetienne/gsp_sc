@@ -47,7 +47,7 @@ class MatplotlibRendererImage:
         # )
         # axes_image.set_extent(transformed_extent)
 
-        positions = np.array([image.position])
+        positions = np.array([image.vertices])
         transformed_positions: np.ndarray = mpl3d.glm.transform(positions, camera.transform)
         # FIXME should be divided by W after rotation
         # but there is nothing to compensate for the camera z
