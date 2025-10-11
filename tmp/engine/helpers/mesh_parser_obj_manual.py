@@ -29,16 +29,30 @@ class MeshParserObjManual:
         # Sanity checks - a valid .obj file should have at least vertices and faces
         assert len(vertices_coords) > 0, "No vertices found in the .obj file."
         assert len(faces_vertex_indices) > 0, "No faces found in the .obj file."
+        # TODO add more checks
 
-        vertices_coords = vertices_coords
+        # TODO process the data to ensure len(vertices) == len(uvs) == len(normals)
+
         faces_indices = faces_vertex_indices
-        faces_uvs = uvs_coords[faces_uv_indices] if len(uvs_coords) > 0 and len(faces_uv_indices) > 0 else None
-        faces_normals = normals_coords[faces_normal_indices] if len(normals_coords) > 0 and len(faces_normal_indices) > 0 else None
+        vertices_coords = vertices_coords
+        uvs_coords = uvs_coords
+        normals_coords = normals_coords
 
-        return vertices_coords, faces_indices, faces_uvs, faces_normals
+        # sanity checks
+        assert len(faces_indices) > 0, "No indices found after processing the .obj file."
+        assert len(vertices_coords) > 0, "No vertices found after processing the .obj file."
+        assert uvs_coords is None or len(vertices_coords) == len(
+            uvs_coords
+        ), f"vertex coords count is different than uv coords count. got vertex count {len(vertices_coords)} and uv count {len(uvs_coords)}"
+        assert normals_coords is None or len(vertices_coords) == len(
+            normals_coords
+        ), f"vertex coords count is different than normal coords count. got vertex count {len(vertices_coords)} and normal count {len(normals_coords)}"
+
+        # return the values
+        return faces_indices, vertices_coords, uvs_coords, normals_coords
 
     @staticmethod
-    def parse_raw(filename: str) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    def parse_raw(filename: str) -> tuple[np.ndarray, np.ndarray | None, np.ndarray | None, np.ndarray, np.ndarray | None, np.ndarray | None]:
         """
         Read a wavefront filename and returns vertices, texcoords and
         respective indices for faces and texcoords
@@ -59,11 +73,16 @@ class MeshParserObjManual:
         vertices_coords, uvs_coords, normals_coords, faces_vertex_indices, faces_uv_indices, faces_normal_indices = [], [], [], [], [], []
         with open(filename) as f:
             for line in f.readlines():
+                line = line.strip()
+                # skip empty lines
+                if len(line) == 0:
+                    continue
+                # skip comments
                 if line.startswith("#"):
                     continue
+                # split the line into values
                 values = line.split()
-                if not values:
-                    continue
+                # parse the values
                 if values[0] == "v":
                     vertices_coords.append([float(x) for x in values[1:4]])
                 elif values[0] == "vt":
@@ -71,14 +90,35 @@ class MeshParserObjManual:
                 elif values[0] == "vn":
                     normals_coords.append([float(x) for x in values[1:4]])
                 elif values[0] == "f":
-                    faces_vertex_indices.append([int(indices.split("/")[0]) for indices in values[1:]])
-                    faces_uv_indices.append([int(indices.split("/")[1]) for indices in values[1:]])
-                    faces_normal_indices.append([int(indices.split("/")[2]) for indices in values[1:]])
-        return (
-            np.array(vertices_coords),
-            np.array(uvs_coords),
-            np.array(normals_coords),
-            np.array(faces_vertex_indices) - 1,
-            np.array(faces_uv_indices) - 1,
-            np.array(faces_normal_indices) - 1,
-        )
+                    face_vertices = values[1:]
+                    assert len(face_vertices) == 3, "Only triangular faces are supported in this parser"
+                    splitted_indices = [vertex_indices.split("/") for vertex_indices in face_vertices]
+                    if len(splitted_indices[0]) >= 1:
+                        # vertex indices
+                        faces_vertex_indices.append([index for index in splitted_indices[0]])
+                    if len(splitted_indices[1]) >= 2:
+                        # vertex indice / uv indice
+                        faces_uv_indices.append([index for index in splitted_indices[1]])
+                    if len(splitted_indices[2]) >= 3:
+                        # vertex indice / uv indice / normal indice
+                        faces_normal_indices.append([index for index in splitted_indices[2]])
+
+        # sanity checks
+        assert len(vertices_coords) > 0, "No vertices found in the .obj file"
+
+        # convert to numpy arrays or None
+        vertices_coords = np.array(vertices_coords, dtype=np.float32)
+        uvs_coords = np.array(uvs_coords, dtype=np.float32) if len(uvs_coords) > 0 else None
+        normals_coords = np.array(normals_coords, dtype=np.float32) if len(normals_coords) > 0 else None
+        faces_vertex_indices = np.array(faces_vertex_indices, dtype=np.int32)
+        faces_uv_indices = np.array(faces_uv_indices, dtype=np.int32) if len(faces_uv_indices) > 0 else None
+        faces_normal_indices = np.array(faces_normal_indices, dtype=np.int32) if len(faces_normal_indices) > 0 else None
+
+        assert np.max(faces_vertex_indices) <= len(vertices_coords), "Face vertex index out of range"
+        if faces_uv_indices is not None and uvs_coords is not None:
+            assert np.max(faces_uv_indices) <= len(uvs_coords), "Face uv index out of range"
+        if faces_normal_indices is not None and normals_coords is not None:
+            assert np.max(faces_normal_indices) <= len(normals_coords), "Face normal index out of range"
+
+        # return the values
+        return vertices_coords, uvs_coords, normals_coords, faces_vertex_indices, faces_uv_indices, faces_normal_indices

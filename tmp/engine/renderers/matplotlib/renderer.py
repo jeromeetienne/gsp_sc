@@ -10,12 +10,9 @@ from cameras.camera_base import CameraBase
 
 
 class RendererMatplotlib:
-    def __init__(self):
+    def __init__(self, figure_w: int = 100, figure_h: int = 100, dpi: int = 100):
         # Create a figure of 512x512 pixels
-        figure_width_pixel = 512
-        figure_height_pixel = 512
-        figure_dpi = 100
-        self._figure = matplotlib.pyplot.figure(figsize=(figure_width_pixel / figure_dpi, figure_height_pixel / figure_dpi), dpi=figure_dpi)
+        self._figure = matplotlib.pyplot.figure(figsize=(figure_w / dpi, figure_h / dpi), dpi=dpi)
 
         # Create an axis that fills the whole figure
         self._axis = self._figure.add_axes((0, 0, 1, 1), frameon=False)

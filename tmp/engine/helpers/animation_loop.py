@@ -1,4 +1,5 @@
 import typing
+import time
 import matplotlib.animation
 import matplotlib.artist
 import matplotlib.pyplot
@@ -7,7 +8,13 @@ from cameras.camera_base import CameraBase
 from renderers.matplotlib.renderer import RendererMatplotlib
 
 # do a callback type for the animation loop
-AnimationLoopCallbackType = typing.Callable[[], None]
+AnimationLoopCallbackType = typing.Callable[[float, float], None]
+"""A simple animation loop manager for matplotlib rendering.
+
+Arguments:
+    delta_time (float): Time elapsed since the last frame in milliseconds.
+    timestamp (float): Total time elapsed since the start of the animation in milliseconds.
+"""
 
 
 class AnimationLoop:
@@ -16,10 +23,19 @@ class AnimationLoop:
         self._renderer = renderer
 
     def start(self, scene: Object3D, camera: CameraBase):
+        time_start = time.time()
+        time_last = time_start
+
         # define a animation function for matplotlib
         def update_scene(frame) -> list[matplotlib.artist.Artist]:
+            nonlocal time_last, time_start
+            present = time.time()
+            timestamp = present - time_start
+            delta_time = timestamp - time_last
+            time_last = present
+
             for callback in self._callbacks:
-                callback()
+                callback(delta_time, timestamp)
 
             changed_artists = self._renderer.render(scene, camera)
             print(f"  Number of changed artists: {len(changed_artists)}")
