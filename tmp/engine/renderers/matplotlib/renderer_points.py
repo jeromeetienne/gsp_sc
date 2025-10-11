@@ -39,9 +39,9 @@ class MatplotlibRendererPoints:
 
         # full_transform = points.get_world_matrix()
         full_transform = TransformUtils.compute_full_transform(camera, points)
-        vertices_transformed = TransformUtils.apply_transform(points.vertices, full_transform)
+        vertices = TransformUtils.apply_transform(points.vertices, full_transform)
 
-        vertices_2d = vertices_transformed[:, :2]  # drop z for 2D rendering
+        vertices_2d = vertices[:, :2]  # drop z for 2D rendering
 
         # =============================================================================
         # Update the matplotlib artists data

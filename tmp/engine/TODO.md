@@ -1,0 +1,14 @@
+- find a good API for the various materials
+  - Q. do you do a Material class like in three.js ?
+- bug in transform
+  - how to fix it ?
+  - find a test and ask AI to fix it
+- find a good API for the various materials
+  - Q. do you do a Material class like in three.js ?
+- Do you implement geometry classes
+  - you already got the .vertices in (n, 3) array
+  - move that in a Geometry class ?
+- Material copied from three.js
+  - lighting per face
+  - normal material
+  - Wireframe

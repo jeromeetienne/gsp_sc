@@ -13,6 +13,7 @@ from core.constants import Constants
 from core.transform_utils import TransformUtils
 from objects.textured_mesh import TexturedMesh
 from helpers.animation_loop import AnimationLoop
+from objects.polygons import Polygons
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -22,6 +23,21 @@ images_path = os.path.join(data_path, "images")
 
 
 class SceneExamples:
+
+    @staticmethod
+    def polygons_from_obj(file_path: str) -> Polygons:
+        faces_indices, vertices_coords, uvs_coords, normals_coords = MeshParserObjManual.parse_obj_file(file_path)
+
+        vertices_coords = TransformUtils.normalize_vertices_to_unit_cube(vertices_coords)
+
+        vertices = vertices_coords[faces_indices]
+        polygon_count = vertices.shape[0]
+        vertices_per_polygon = vertices.shape[1]
+        vertices = vertices.reshape(polygon_count * vertices_per_polygon, 3)
+        polygons = Polygons(vertices, polygon_count, vertices_per_polygon)
+
+        # polygons = Points(vertices)
+        return polygons
 
     @staticmethod
     def addAnimatedModels(model_root: Object3D, animation_loop: AnimationLoop) -> None:
@@ -43,9 +59,10 @@ class SceneExamples:
         head_points.position[0] = 0
         head_points.position[1] = -3
 
-        def update_model_root(delta_time: float, timestamp: float) -> None:
+        def update_model_root(delta_time: float, timestamp: float) -> list[Object3D]:
             range = np.sin(timestamp) * 1 + 2
             bunny_points.position[1] = np.abs(np.cos(timestamp * 5) * range)
+            return [bunny_points]
 
         animation_loop.add_callback(update_model_root)
 

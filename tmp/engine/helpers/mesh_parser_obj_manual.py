@@ -1,4 +1,9 @@
+# pip imports
 import numpy as np
+
+# local imports
+from objects.polygons import Polygons
+from core.transform_utils import TransformUtils
 
 
 class MeshParserObjManual:
@@ -92,16 +97,16 @@ class MeshParserObjManual:
                 elif values[0] == "f":
                     face_vertices = values[1:]
                     assert len(face_vertices) == 3, "Only triangular faces are supported in this parser"
-                    splitted_indices = [vertex_indices.split("/") for vertex_indices in face_vertices]
-                    if len(splitted_indices[0]) >= 1:
+                    face_splitted_indices = [indices.split("/") for indices in face_vertices]
+                    if len(face_splitted_indices[0]) >= 1:
                         # vertex indices
-                        faces_vertex_indices.append([index for index in splitted_indices[0]])
-                    if len(splitted_indices[1]) >= 2:
+                        faces_vertex_indices.append([face_splitted_indices[index][0] for index in range(3)])
+                    if len(face_splitted_indices[1]) >= 2:
                         # vertex indice / uv indice
-                        faces_uv_indices.append([index for index in splitted_indices[1]])
-                    if len(splitted_indices[2]) >= 3:
+                        faces_uv_indices.append([face_splitted_indices[index][1] for index in range(3)])
+                    if len(face_splitted_indices[2]) >= 3:
                         # vertex indice / uv indice / normal indice
-                        faces_normal_indices.append([index for index in splitted_indices[2]])
+                        faces_normal_indices.append([face_splitted_indices[index][2] for index in range(3)])
 
         # sanity checks
         assert len(vertices_coords) > 0, "No vertices found in the .obj file"
@@ -110,9 +115,9 @@ class MeshParserObjManual:
         vertices_coords = np.array(vertices_coords, dtype=np.float32)
         uvs_coords = np.array(uvs_coords, dtype=np.float32) if len(uvs_coords) > 0 else None
         normals_coords = np.array(normals_coords, dtype=np.float32) if len(normals_coords) > 0 else None
-        faces_vertex_indices = np.array(faces_vertex_indices, dtype=np.int32)
-        faces_uv_indices = np.array(faces_uv_indices, dtype=np.int32) if len(faces_uv_indices) > 0 else None
-        faces_normal_indices = np.array(faces_normal_indices, dtype=np.int32) if len(faces_normal_indices) > 0 else None
+        faces_vertex_indices = np.array(faces_vertex_indices, dtype=np.int32) - 1
+        faces_uv_indices = (np.array(faces_uv_indices, dtype=np.int32) - 1) if len(faces_uv_indices) > 0 else None
+        faces_normal_indices = (np.array(faces_normal_indices, dtype=np.int32) - 1) if len(faces_normal_indices) > 0 else None
 
         assert np.max(faces_vertex_indices) <= len(vertices_coords), "Face vertex index out of range"
         if faces_uv_indices is not None and uvs_coords is not None:

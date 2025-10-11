@@ -20,7 +20,7 @@ class MatplotlibRendererLines:
         assert line_count * 2 == len(lines.vertices), "Lines vertices length must be even"
 
         # =============================================================================
-        # Create the artists if needed
+        # Create artists if needed
         # =============================================================================
         if lines.uuid not in renderer._artists:
             mpl_line_collection = matplotlib.collections.LineCollection([])
@@ -39,11 +39,12 @@ class MatplotlibRendererLines:
         # Apply full transform the vertices
         # =============================================================================
 
-        # full_transform = points.get_world_matrix()
+        # full_transform = lines.get_world_matrix()
         full_transform = TransformUtils.compute_full_transform(camera, lines)
         vertices = TransformUtils.apply_transform(lines.vertices, full_transform)
 
         vertices_2d = vertices[:, :2]  # drop z for 2D rendering
+
         vertices_2d = vertices_2d.reshape((line_count, 2, 2))  # reshape to (line_count, 2 endpoints, 2 coords)
         segments = vertices_2d.tolist()
         mpl_line_collection.set_segments(segments)

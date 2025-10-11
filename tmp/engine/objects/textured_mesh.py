@@ -9,7 +9,7 @@ from core.object_3d import Object3D
 
 class TexturedMesh(Object3D):
 
-    def __init__(self, faces_indices, vertices_coords, uvs_coords, texture: np.ndarray):
+    def __init__(self, faces_indices: np.ndarray, vertices_coords: np.ndarray, uvs_coords: np.ndarray, texture: np.ndarray):
         super().__init__()
 
         # sanity check - make sure we have triangular faces
@@ -20,6 +20,8 @@ class TexturedMesh(Object3D):
         assert texture.ndim == 3 and texture.shape[2] in [3, 4], "texture should be of shape [H, W, 3] or [H, W, 4]"
 
         # copy the arguments
+        # TODO to change in .triangle_count  and reshape vertices to (M, 3, 3)
+        # - store .vertices and .uvs as (N, 3) and (N, 2)
         self.faces_vertices = vertices_coords[faces_indices]
         self.faces_uvs = uvs_coords[faces_indices]
         self.texture = texture

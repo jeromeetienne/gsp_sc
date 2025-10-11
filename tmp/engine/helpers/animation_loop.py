@@ -8,7 +8,7 @@ from cameras.camera_base import CameraBase
 from renderers.matplotlib.renderer import RendererMatplotlib
 
 # do a callback type for the animation loop
-AnimationLoopCallbackType = typing.Callable[[float, float], None]
+AnimationLoopCallbackType = typing.Callable[[float, float], list[Object3D]]
 """A simple animation loop manager for matplotlib rendering.
 
 Arguments:
@@ -26,6 +26,9 @@ class AnimationLoop:
         time_start = time.time()
         time_last = time_start
 
+        # initial render
+        self._renderer.render(scene, camera)
+
         # define a animation function for matplotlib
         def update_scene(frame) -> list[matplotlib.artist.Artist]:
             nonlocal time_last, time_start
@@ -34,14 +37,20 @@ class AnimationLoop:
             delta_time = timestamp - time_last
             time_last = present
 
+            changed_objects: list[Object3D] = []
             for callback in self._callbacks:
-                callback(delta_time, timestamp)
+                _changed_objects = callback(delta_time, timestamp)
+                changed_objects.extend(_changed_objects)
 
-            changed_artists = self._renderer.render(scene, camera)
-            print(f"  Number of changed artists: {len(changed_artists)}")
+            changed_artists: list[matplotlib.artist.Artist] = []
+            for object in changed_objects:
+                _changed_artists = self._renderer.render_object(object, camera)
+                changed_artists.extend(_changed_artists)
+
+            # print(f"  Number of changed artists: {len(changed_artists)}")
             return changed_artists
 
-        ani = matplotlib.animation.FuncAnimation(self._renderer._figure, update_scene, frames=100, interval=1000 / 60, blit=True)
+        ani = matplotlib.animation.FuncAnimation(self._renderer._figure, update_scene, frames=100, interval=1000 / 60)
 
         matplotlib.pyplot.show()
 

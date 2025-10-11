@@ -1,10 +1,12 @@
-import typing
+# pip imports
 import matplotlib.pyplot
-import matplotlib.patches
 import matplotlib.artist
+
+# local imports
 from core.object_3d import Object3D
 from objects.points import Points
 from objects.lines import Lines
+from objects.polygons import Polygons
 from objects.textured_mesh import TexturedMesh
 from cameras.camera_orthographic import CameraOrthographic
 from cameras.camera_base import CameraBase
@@ -42,6 +44,16 @@ class RendererMatplotlib:
 
         return changed_artists
 
+    def render_object(self, object3d: Object3D, camera: CameraBase) -> list[matplotlib.artist.Artist]:
+        # update world matrices
+        object3d.update_world_matrix()
+
+        changed_artists: list[matplotlib.artist.Artist] = self._render_object(object3d, camera)
+        return changed_artists
+
+    # =============================================================================
+    # Private functions
+    # =============================================================================
     def _render_object(self, object3d: Object3D, camera: CameraBase) -> list[matplotlib.artist.Artist]:
         if isinstance(object3d, Points):
             from renderers.matplotlib.renderer_points import MatplotlibRendererPoints
@@ -51,6 +63,10 @@ class RendererMatplotlib:
             from renderers.matplotlib.renderer_lines import MatplotlibRendererLines
 
             return MatplotlibRendererLines.render(self, object3d, camera)
+        elif isinstance(object3d, Polygons):
+            from renderers.matplotlib.renderer_polygons import MatplotlibRendererPolygons
+
+            return MatplotlibRendererPolygons.render(self, object3d, camera)
         elif isinstance(object3d, TexturedMesh):
             from renderers.matplotlib.renderer_textured_mesh import MatplotlibRendererTexturedMesh
 
