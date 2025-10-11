@@ -31,6 +31,7 @@ class MatplotlibRendererTexturedMesh:
             fake_texture = np.zeros((1, 1, 3), dtype=np.uint8)
             for face_index in range(faces_count):
                 axes_image = renderer._axis.imshow(fake_texture, origin="lower", extent=(0, 0, 0, 0))
+                axes_image.set_visible(False)  # hide until properly positioned and sized
                 face_uuid = f"{textured_mesh.uuid}_face_{face_index}"
                 renderer._artists[face_uuid] = axes_image
 
@@ -47,7 +48,9 @@ class MatplotlibRendererTexturedMesh:
 
         # full_transform = points.get_world_matrix()
         full_transform = TransformUtils.compute_full_transform(camera, textured_mesh)
+        face_count = len(faces_vertices)
         vertices_transformed = TransformUtils.apply_transform(faces_vertices.reshape(-1, 3), full_transform)
+        faces_vertices = vertices_transformed.reshape((face_count, 3, 3))
 
         # # =============================================================================
         # # World transform
@@ -71,7 +74,7 @@ class MatplotlibRendererTexturedMesh:
 
         # camera_cosines is the cosine of the angle between the normal and the camera
         camera_direction = (0, 0, -1)
-        # camera_direction = camera_position - mesh_position
+        # camera_direction = camera.position - textured_mesh.position
         camera_cosines: np.ndarray = np.dot(faces_normals_unit, camera_direction)
 
         faces_hidden = camera_cosines <= 0
@@ -103,11 +106,18 @@ class MatplotlibRendererTexturedMesh:
         # =============================================================================
         # Loop over faces and draw them
         # =============================================================================
+        changed_artists: list[matplotlib.artist.Artist] = []
         for face_index, (face_vertices, face_uvs, light_intensity, face_hidden) in enumerate(zip(faces_vertices, faces_uvs, light_intensities, faces_hidden)):
-            if face_hidden:
-                continue
             face_uuid = f"{textured_mesh.uuid}_face_{face_index}"
-            axes_image = typing.cast(matplotlib.image.AxesImage, renderer._artists[face_uuid])
+            changed_artist = renderer._artists[face_uuid]
+            changed_artists.append(changed_artist)
+
+            if face_hidden:
+                changed_artist.set_visible(False)  # make sure it's not visible
+                continue
+
+            changed_artist.set_visible(True)  # make sure it's visible
+            axes_image = typing.cast(matplotlib.image.AxesImage, changed_artist)
             MatplotlibRendererTexturedMesh.update_textured_triangle(
                 mpl_axes=renderer._axis,
                 axes_image=axes_image,
@@ -117,7 +127,6 @@ class MatplotlibRendererTexturedMesh:
                 intensity=light_intensity,
             )
 
-        changed_artists: list[matplotlib.artist.Artist] = []
         return changed_artists
 
     @staticmethod
