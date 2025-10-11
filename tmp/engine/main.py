@@ -13,10 +13,15 @@ from pyrr import vector3
 
 # local imports
 from core.object_3d import Object3D
+from core.constants import Constants
+from helpers.mesh_parser_meshio import MeshParserMeshio
+from helpers.mesh_parser_obj_manual import MeshParserObjManual
 from objects.points import Points
+from objects.textured_mesh import TexturedMesh
 from cameras.camera_orthographic import CameraOrthographic
 from renderers.matplotlib.renderer import RendererMatplotlib
 from cameras.camera_perspective import CameraPerspective
+from helpers.transform_utils import TransformUtils
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 
@@ -25,8 +30,8 @@ def main():
     scene = Object3D()
     scene.name = "Scene"
 
-    # camera = OrthographicCamera()
-    camera = CameraPerspective()
+    camera = CameraOrthographic()
+    # camera = CameraPerspective()
     camera.name = "Camera"
     scene.add_child(camera)
     camera.position[2] = 5.0
@@ -38,58 +43,62 @@ def main():
     grand_child = Object3D()
     grand_child.name = "GrandChild"
     child.add_child(grand_child)
+    grand_child.position[2] = 10.0
 
-    vertices = np.array([[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]], dtype=np.float32)
-    points = Points(vertices)
-    grand_child.add_child(points)
+    # =============================================================================
+    # Load a model
+    # =============================================================================
 
-    scene.update_world_matrix()
+    model_root = Object3D()
+    model_root.name = "ModelRoot"
+    model_root.scale[:] = 0.5
+    scene.add_child(model_root)
 
+    vertices_coords, _, _, _ = MeshParserMeshio.parse_obj_file(os.path.join(__dirname__, "data", "models", "head_meshio.obj"))
+    vertices_coords = TransformUtils.normalize_vertices_to_unit_cube(vertices_coords)
+    points_head = Points(vertices_coords, color=Constants.PURPLE)
+    model_root.add_child(points_head)
+
+    vertices_coords, _, _, _ = MeshParserMeshio.parse_obj_file(os.path.join(__dirname__, "data", "models", "bunny.obj"))
+    vertices_coords = TransformUtils.normalize_vertices_to_unit_cube(vertices_coords)
+    points_bunny = Points(vertices_coords, color=Constants.CYAN)
+    model_root.add_child(points_bunny)
+
+    # =============================================================================
+    # Textured mesh
+    # =============================================================================
+
+    obj_path = os.path.join(__dirname__, "data", "models", "cube.obj")
+    texture_path = os.path.join(__dirname__, "data", "images", "uv-grid.png")
+    print(f"Loading .obj file from {obj_path}")
+    print(f"Loading texture image from {texture_path}")
+    vertices_coords, faces_indices, faces_uvs, faces_normals = MeshParserObjManual.parse_obj_file(obj_path)
+    assert faces_uvs is not None, "The .obj file must contain texture coordinates (vt)"
+    faces_vertices = vertices_coords[faces_indices]
+    texture = MeshParserMeshio.load_texture(texture_path)
+    textured_mesh = TexturedMesh(faces_vertices, faces_uvs, texture)
+    scene.add_child(textured_mesh)
+
+    # =============================================================================
+    #
+    # =============================================================================
     renderer = RendererMatplotlib()
 
-    while True:
-        # grand_child.rotation_euler[:] += 0.1
-        # points.rotation_euler[2] = time.time() * 0.2
-        # points.position[0] = 0.5 * np.sin(time.time())
-        # points.position[1] = 0.5 * np.cos(time.time())
-        # grand_child.scale[:] = 1 + 0.5 * np.sin(2 * time.time())
-        # points.position[1] = 0.5 * np.sin(time.time())
+    # define a animation function for matplotlib
+    def update_scene(frame) -> list[matplotlib.artist.Artist]:
+        # points.scale[:] = 1 + np.sin(time.time() * 5) * 0.5
+        points_head.position[0] = np.sin(time.time() * 2)
+        points_head.position[1] = np.cos(time.time() * 2)
 
-        renderer.render(scene, camera)
-        matplotlib.pyplot.pause(0.1)
+        points_bunny.position[0] = -np.sin(time.time() * 2)
+        points_bunny.position[1] = -np.cos(time.time() * 2)
 
-    # print("Scene graph:")
+        changed_artists = renderer.render(scene, camera)
+        return changed_artists
 
-    # while True:
-    #     for object in scene.traverse():
-    #         print(f" - {object.name}: pos={object.get_world_position()} scl={object.get_world_scale()} rot={object.get_world_rotation_euler()}")
+    ani = matplotlib.animation.FuncAnimation(renderer._figure, update_scene, frames=100, interval=1, blit=True)
 
-    #     child.position[0] += 0.1
-    #     # grand_child.position[2] += 0.1
-    #     # child.rotation_euler[1] += 0.1
-    #     child.scale[:] += 0.1
-
-    #     scene.update_world_matrix()
-
-    #     # clear the figure
-    #     matplotlib.pyplot.clf()
-
-    #     # display the scene graph
-    #     ax = matplotlib.pyplot.gca()
-    #     ax.set_title("Scene Graph")
-    #     ax.set_xlabel("X")
-    #     ax.set_ylabel("Y")
-    #     ax.set_xlim(-5, 5)
-    #     ax.set_ylim(-5, 5)
-    #     ax.grid(True, linestyle="--", alpha=0.4)
-    #     ax.set_aspect("equal")
-
-    #     for obj in scene.traverse():
-    #         pos = obj.get_world_position()
-    #         ax.scatter(pos[0], pos[1], s=100, label=obj.name)
-    #         ax.text(pos[0], pos[1], obj.name, fontsize=8, ha="center", va="bottom")
-
-    #     matplotlib.pyplot.pause(1.0)
+    matplotlib.pyplot.show()
 
 
 if __name__ == "__main__":

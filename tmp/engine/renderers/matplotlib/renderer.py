@@ -11,9 +11,20 @@ from cameras.camera_base import CameraBase
 
 class RendererMatplotlib:
     def __init__(self):
-        # init a matplotlib figure and axis
-        self._figure = matplotlib.pyplot.figure(figsize=(2, 2), dpi=100)
+        # Create a figure of 512x512 pixels
+        figure_width_pixel = 512
+        figure_height_pixel = 512
+        figure_dpi = 100
+        self._figure = matplotlib.pyplot.figure(figsize=(figure_width_pixel / figure_dpi, figure_height_pixel / figure_dpi), dpi=figure_dpi)
+
+        # Create an axis that fills the whole figure
         self._axis = self._figure.add_axes((0, 0, 1, 1), frameon=False)
+
+        # this should be -1 to 1
+        # for perspective camera - BUG BUG
+        self._axis.set_xlim(-3, 3)
+        self._axis.set_ylim(-3, 3)
+        # for orthographic camera - BUG BUG
         self._axis.set_xlim(-1, 1)
         self._axis.set_ylim(-1, 1)
         self._artists: dict[str, matplotlib.artist.Artist] = {}
@@ -30,8 +41,6 @@ class RendererMatplotlib:
         for object3d in scene.traverse():
             _changed_artists = self._render_object(object3d, camera)
             changed_artists.extend(_changed_artists)
-
-        matplotlib.pyplot.draw()
 
         return changed_artists
 

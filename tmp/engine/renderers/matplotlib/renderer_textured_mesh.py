@@ -14,6 +14,7 @@ from objects.textured_mesh import TexturedMesh
 from cameras.camera_orthographic import CameraOrthographic
 from renderers.matplotlib.renderer import RendererMatplotlib
 from cameras.camera_base import CameraBase
+from helpers.transform_utils import TransformUtils
 
 
 class MatplotlibRendererTexturedMesh:
@@ -41,11 +42,19 @@ class MatplotlibRendererTexturedMesh:
         texture = textured_mesh.texture
 
         # =============================================================================
-        # World transform
+        # Apply full transform the vertices
         # =============================================================================
 
-        position_world = textured_mesh.get_world_position()
-        faces_vertices += position_world
+        # full_transform = points.get_world_matrix()
+        full_transform = TransformUtils.compute_full_transform(camera, textured_mesh)
+        vertices_transformed = TransformUtils.apply_transform(faces_vertices.reshape(-1, 3), full_transform)
+
+        # # =============================================================================
+        # # World transform
+        # # =============================================================================
+
+        # position_world = textured_mesh.get_world_position()
+        # faces_vertices += position_world
 
         # =============================================================================
         # Compute face normals - needed for lighting and back-face culling

@@ -10,3 +10,7 @@ class CameraBase(ABC):
     @abstractmethod
     def get_view_matrix(self) -> np.ndarray:
         pass
+
+    @abstractmethod
+    def get_world_position(self) -> np.ndarray:
+        pass

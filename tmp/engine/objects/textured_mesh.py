@@ -1,4 +1,5 @@
 # pip imports
+from typing_extensions import deprecated
 import numpy as np
 import matplotlib.pyplot
 
@@ -14,6 +15,9 @@ class TexturedMesh(Object3D):
         self.faces_uvs = faces_uvs
         self.texture = texture
 
+        # remove the alpha channel if any
+        texture = texture[::-1, ::1, :3]
+
         assert faces_vertices.ndim == 3 and faces_vertices.shape[1:] == (3, 3)
         assert faces_uvs.ndim == 3 and faces_uvs.shape[1:] == (3, 2)
         assert texture.ndim == 3 and texture.shape[2] == 3
@@ -21,6 +25,7 @@ class TexturedMesh(Object3D):
         assert len(faces_vertices) == len(faces_uvs)
 
     @staticmethod
+    @deprecated("Use MeshParserObjManual or MeshParserMeshio instead and load texture")
     def from_obj(model_path: str, texture_path: str) -> "TexturedMesh":
         vertices_coords, uvs_coords, normals_coords, faces_vertice_indices, face_uv_indices, face_normal_indices = TexturedMesh.parse_model_obj(model_path)
         faces_vertices = vertices_coords[faces_vertice_indices]
@@ -36,6 +41,7 @@ class TexturedMesh(Object3D):
     # OBJ file reader
     # =============================================================================
     @staticmethod
+    @deprecated("Use MeshParserObjManual or MeshParserMeshio instead")
     def parse_model_obj(filename):
         """
         Read a wavefront filename and returns vertices, texcoords and
