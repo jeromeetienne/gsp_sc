@@ -39,7 +39,7 @@ class MatplotlibRendererPolygons:
         # Apply full transform the vertices
         # =============================================================================
 
-        # full_transform = lines.get_world_matrix()
+        # full_transform = polygons.get_world_matrix()
         full_transform = TransformUtils.compute_full_transform(camera, polygons)
 
         vertices_transformed = TransformUtils.apply_transform(polygons.vertices, full_transform)

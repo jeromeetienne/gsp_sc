@@ -53,6 +53,7 @@ class Object3D:
 
         if parent_world_matrix is not None:
             self._world_matrix = self._local_matrix @ parent_world_matrix
+            # self._world_matrix = parent_world_matrix @ self._local_matrix
         else:
             self._world_matrix = self._local_matrix
 

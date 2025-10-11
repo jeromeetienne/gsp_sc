@@ -1,5 +1,9 @@
 - find a good API for the various materials
   - Q. do you do a Material class like in three.js ?
+- Code various camera controller
+  - awsd camera 
+  - orbit camera
+  - first person camera
 - bug in transform
   - how to fix it ?
   - find a test and ask AI to fix it

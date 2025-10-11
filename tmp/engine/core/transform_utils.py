@@ -43,6 +43,7 @@ class TransformUtils:
         vertices_hom = np.hstack([vertices, np.ones((vertices.shape[0], 1), dtype=vertices.dtype)])  # [N, 4]
         # apply full transform to vertices
         vertices_world_hom = vertices_hom @ transform  # [N, 4]
+        # vertices_world_hom = vertices_hom @ transform  # [N, 4]
         # drop w for clip space
         vertices_clip = vertices_world_hom[:, :3]  # [N, 3]
         # Perform perspective divide to get normalized device coordinates (NDC)
