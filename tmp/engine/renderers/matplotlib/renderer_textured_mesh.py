@@ -14,7 +14,7 @@ from objects.textured_mesh import TexturedMesh
 from cameras.camera_orthographic import CameraOrthographic
 from renderers.matplotlib.renderer import RendererMatplotlib
 from cameras.camera_base import CameraBase
-from helpers.transform_utils import TransformUtils
+from core.transform_utils import TransformUtils
 
 
 class MatplotlibRendererTexturedMesh:

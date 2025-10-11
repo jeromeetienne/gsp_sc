@@ -4,6 +4,7 @@ import matplotlib.patches
 import matplotlib.artist
 from core.object_3d import Object3D
 from objects.points import Points
+from objects.lines import Lines
 from objects.textured_mesh import TexturedMesh
 from cameras.camera_orthographic import CameraOrthographic
 from cameras.camera_base import CameraBase
@@ -46,6 +47,10 @@ class RendererMatplotlib:
             from renderers.matplotlib.renderer_points import MatplotlibRendererPoints
 
             return MatplotlibRendererPoints.render(self, object3d, camera)
+        elif isinstance(object3d, Lines):
+            from renderers.matplotlib.renderer_lines import MatplotlibRendererLines
+
+            return MatplotlibRendererLines.render(self, object3d, camera)
         elif isinstance(object3d, TexturedMesh):
             from renderers.matplotlib.renderer_textured_mesh import MatplotlibRendererTexturedMesh
 

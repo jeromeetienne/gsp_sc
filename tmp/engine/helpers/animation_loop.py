@@ -48,8 +48,8 @@ class AnimationLoop:
     def stop(self):
         raise NotImplementedError()
 
-    def add(self, func: AnimationLoopCallbackType):
+    def add_callback(self, func: AnimationLoopCallbackType):
         self._callbacks.append(func)
 
-    def remove(self, func: AnimationLoopCallbackType):
+    def remove_callback(self, func: AnimationLoopCallbackType):
         self._callbacks.remove(func)

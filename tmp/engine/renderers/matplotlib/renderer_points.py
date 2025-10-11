@@ -9,7 +9,7 @@ import matplotlib.collections
 from objects.points import Points
 from renderers.matplotlib.renderer import RendererMatplotlib
 from cameras.camera_base import CameraBase
-from helpers.transform_utils import TransformUtils
+from core.transform_utils import TransformUtils
 
 
 class MatplotlibRendererPoints:

@@ -10,7 +10,7 @@ from core.object_3d import Object3D
 from cameras.camera_orthographic import CameraOrthographic
 from renderers.matplotlib.renderer import RendererMatplotlib
 from helpers.animation_loop import AnimationLoop
-from helpers.scene_examples import SceneExamples
+from objects.lines import Lines
 
 
 def main():
@@ -32,13 +32,16 @@ def main():
     # Load a model
     # =============================================================================
 
-    random_points = SceneExamples.addRandomPoints(1000)
-    random_points.scale[:] = 0.5
-    scene.add_child(random_points)
+    num_lines = 10
+    vertices = np.random.uniform(-1, 1, size=(num_lines * 2, 3)).astype(np.float32)
 
-    def update(delta_time: float, timestamp: float) -> None:
-        random_points.position[0] = np.cos(timestamp * 5)
-        random_points.position[1] = np.sin(timestamp * 1.75)
+    lines = Lines(vertices)
+    scene.add_child(lines)
+
+    def update(delta_time: float, time_stamp: float) -> None:
+        lines.vertices = np.random.uniform(-1, 1, size=(num_lines * 2, 3)).astype(np.float32)
+        # lines.rotation_euler[1] += delta_time * 0.5
+        # lines.rotation_euler[0] += delta_time * 0.25
 
     animation_loop.add_callback(update)
 

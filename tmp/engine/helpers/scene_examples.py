@@ -10,7 +10,7 @@ from helpers.mesh_parser_obj_manual import MeshParserObjManual
 from objects.points import Points
 from core.object_3d import Object3D
 from core.constants import Constants
-from helpers.transform_utils import TransformUtils
+from core.transform_utils import TransformUtils
 from objects.textured_mesh import TexturedMesh
 from helpers.animation_loop import AnimationLoop
 
@@ -47,7 +47,7 @@ class SceneExamples:
             range = np.sin(timestamp) * 1 + 2
             bunny_points.position[1] = np.abs(np.cos(timestamp * 5) * range)
 
-        animation_loop.add(update_model_root)
+        animation_loop.add_callback(update_model_root)
 
     @staticmethod
     def addRandomPoints(point_count: int = 1000) -> Points:
