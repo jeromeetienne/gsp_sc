@@ -1,12 +1,12 @@
 from core.object_3d import Object3D
-from pyrr import Vector3
+from pyrr import vector3
 import numpy as np
 
 
 class Points(Object3D):
-    def __init__(self, vertices: list[Vector3] = []):
+    def __init__(self, vertices: np.ndarray = vector3.create()) -> None:
         super().__init__()
 
-        assert all(isinstance(v, Vector3) for v in vertices), "Vertices must be a list of Vector3 objects"
+        assert vertices.ndim == 2 and vertices.shape[1] == 3, "Vertices must be a Nx3 array"
 
-        self.vertices: list[Vector3] = vertices
+        self.vertices: np.ndarray = vertices

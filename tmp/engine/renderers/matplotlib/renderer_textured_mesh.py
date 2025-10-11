@@ -11,13 +11,14 @@ import numpy as np
 
 # local imports
 from objects.textured_mesh import TexturedMesh
-from cameras.orthographic_camera import OrthographicCamera
+from cameras.camera_orthographic import CameraOrthographic
 from renderers.matplotlib.renderer import RendererMatplotlib
+from cameras.camera_base import CameraBase
 
 
 class MatplotlibRendererTexturedMesh:
     @staticmethod
-    def render(renderer: "RendererMatplotlib", textured_mesh: TexturedMesh, camera: "OrthographicCamera") -> list[matplotlib.artist.Artist]:
+    def render(renderer: "RendererMatplotlib", textured_mesh: TexturedMesh, camera: CameraBase) -> list[matplotlib.artist.Artist]:
 
         # =============================================================================
         # Create the artists if needed
