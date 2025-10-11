@@ -17,7 +17,7 @@ from objects.polygons import Polygons
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(__dirname__, "../data")
+data_path = os.path.join(__dirname__, "../assets")
 models_path = os.path.join(data_path, "models")
 images_path = os.path.join(data_path, "images")
 
