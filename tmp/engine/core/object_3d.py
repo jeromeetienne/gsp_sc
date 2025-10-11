@@ -1,10 +1,8 @@
 # pip imports
-from typing import Callable
-
-from pyrr import vector3, matrix44, quaternion
-from math import atan2, asin
+from pyrr import vector3, matrix44
+from math import atan2
 import numpy as np
-from core.my_random import Random
+from core.random import Random
 
 
 class Object3D:

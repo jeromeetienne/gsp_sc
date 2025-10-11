@@ -18,13 +18,14 @@ def main():
     # Setup the scene
     # =============================================================================
     scene = Object3D()
+    scene.name = "Scene"
 
     camera = CameraOrthographic()
     scene.add_child(camera)
     camera.position[2] = 5.0
 
     # Create a renderer
-    renderer = RendererMatplotlib(512, 512)
+    renderer = RendererMatplotlib()
     # Create an animation loop
     animation_loop = AnimationLoop(renderer)
 
@@ -32,15 +33,11 @@ def main():
     # Load a model
     # =============================================================================
 
-    random_points = SceneExamples.addRandomPoints(1000)
-    random_points.scale[:] = 0.5
-    scene.add_child(random_points)
+    model_root = Object3D()
+    # model_root.scale[:] = 0.1
+    scene.add_child(model_root)
 
-    def update_model_root(delta_time: float, timestamp: float) -> None:
-        random_points.position[0] = np.cos(timestamp * 5)
-        random_points.position[1] = np.sin(timestamp * 1.75)
-
-    animation_loop.add(update_model_root)
+    SceneExamples.addAnimatedModels(model_root, animation_loop)
 
     # =============================================================================
     # Start the animation loop

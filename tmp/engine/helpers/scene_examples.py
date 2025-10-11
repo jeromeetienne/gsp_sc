@@ -12,7 +12,7 @@ from core.object_3d import Object3D
 from core.constants import Constants
 from helpers.transform_utils import TransformUtils
 from objects.textured_mesh import TexturedMesh
-from helpers.mesh_parser_meshio import MeshParserMeshio
+from helpers.animation_loop import AnimationLoop
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
@@ -22,6 +22,41 @@ images_path = os.path.join(data_path, "images")
 
 
 class SceneExamples:
+
+    @staticmethod
+    def addAnimatedModels(model_root: Object3D, animation_loop: AnimationLoop) -> None:
+        cube_points = SceneExamples.getCubePoints()
+        model_root.add_child(cube_points)
+        cube_points.scale[:] = 0.1
+        cube_points.position[0] = -3
+        cube_points.position[1] = 3
+
+        bunny_points = SceneExamples.getBunnyPoints()
+        model_root.add_child(bunny_points)
+        bunny_points.scale[:] = 0.2
+        bunny_points.position[0] = 3
+        bunny_points.position[1] = 3
+
+        head_points = SceneExamples.getHeadPoints()
+        model_root.add_child(head_points)
+        head_points.scale[:] = 0.1
+        head_points.position[0] = 0
+        head_points.position[1] = -3
+
+        def update_model_root(delta_time: float, timestamp: float) -> None:
+            range = np.sin(timestamp) * 1 + 2
+            bunny_points.position[1] = np.abs(np.cos(timestamp * 5) * range)
+
+        animation_loop.add(update_model_root)
+
+    @staticmethod
+    def addRandomPoints(point_count: int = 1000) -> Points:
+        points = np.random.uniform(-1, 1, (point_count, 3))
+        colors = np.random.uniform(0, 1, (point_count, 4))
+        colors[:, 3] = 1.0  # set alpha to 1
+        random_points = Points(points, color=colors)
+        return random_points
+
     @staticmethod
     def getBunnyPoints() -> Points:
         face_indices, vertex_coords, uv_coords, normal_coords = MeshParserObjManual.parse_obj_file(os.path.join(models_path, "bunny.obj"))
