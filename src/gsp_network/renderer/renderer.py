@@ -24,8 +24,8 @@ class NetworkPayload(TypedDict):
     """Unique client ID for the server to identify the client."""
     type: Literal["absolute", "json_diff"]  # or other literal string values if any
     """Type of rendering to perform. "absolute" to always render the full scene, "json_diff" to only render changes since last call."""
-    data: SceneDict | Any  # or a more specific type if you know the structure of scene_json
-    """The scene data in JSON format."""
+    data: SceneDict | str
+    """The scene data in JSON format. `SceneDict` for 'absolute', `str` (JSON Patch) for 'json_diff'"""
 
 
 ###############################################################################

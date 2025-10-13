@@ -44,8 +44,8 @@ viewport.add(pixels)
 #
 def on_post_transform(renderer: gsp_matplotlib.MatplotlibRenderer, camera: gsp.core.Camera, transformed_positions: np.ndarray) -> None:
     # sort inplace transformed positions by z value (3rd column). Largest z first
-    indices = np.argsort(-transformed_positions[:, 2])
-    transformed_positions[:] = transformed_positions[indices]
+    sorted_indices = np.argsort(-transformed_positions[:, 2])
+    transformed_positions[:] = transformed_positions[sorted_indices]
 
     # NOTE: Trick to force the static typing of pixels.positions/sizes/colors to np.ndarray (and never TransformChain)
     pixels.positions = typing.cast(np.ndarray, pixels.positions)
@@ -53,8 +53,8 @@ def on_post_transform(renderer: gsp_matplotlib.MatplotlibRenderer, camera: gsp.c
     pixels.colors = typing.cast(np.ndarray, pixels.colors)
 
     # apply same sorting to pixels.positions and pixels.colors
-    pixels.positions[:] = pixels.positions[indices]
-    pixels.colors[:] = pixels.colors[indices]
+    pixels.positions[:] = pixels.positions[sorted_indices]
+    pixels.colors[:] = pixels.colors[sorted_indices]
 
     # Normalize z values to range 0-1
     z_coordinates = transformed_positions[:, 2] + camera.mpl3d_camera.zoom
