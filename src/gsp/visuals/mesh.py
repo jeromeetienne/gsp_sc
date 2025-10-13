@@ -1,8 +1,6 @@
 from typing_extensions import Literal
 import mpl3d.glm
 import numpy as np
-import nptyping
-
 import meshio
 
 from ..core.visual_base import VisualBase
@@ -24,8 +22,8 @@ class Mesh(VisualBase):
 
     def __init__(
         self,
-        vertices_coords: nptyping.NDArray[nptyping.Shape["*, 3"], nptyping.Float],
-        faces_indices: nptyping.NDArray[nptyping.Shape["*, 3"], nptyping.Int],
+        vertices_coords: np.ndarray,
+        faces_indices: np.ndarray,
         cmap=None,
         facecolors="white",
         edgecolors="black",
