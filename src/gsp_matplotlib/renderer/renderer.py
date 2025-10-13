@@ -52,6 +52,7 @@ class MatplotlibRenderer:
         return_image: bool = True,
         interactive: bool = False,
     ) -> bytes:
+        """Render the given canvas with the given camera."""
         result = self.render_viewports(
             canvas,
             viewports=canvas.viewports,

@@ -3,6 +3,8 @@ from .random import Random
 
 
 class Canvas:
+    """A Canvas is a 2D area where Viewports can be placed."""
+
     __slots__ = ("uuid", "width", "height", "dpi", "viewports")
 
     def __init__(self, width: int, height: int, dpi: float = 100.0) -> None:

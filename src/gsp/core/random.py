@@ -2,6 +2,8 @@ import numpy as np
 
 
 class Random:
+    """Utility class for generating random numbers and UUIDs."""
+
     __np_random_generator = np.random.default_rng()
 
     @staticmethod
@@ -37,12 +39,6 @@ class Random:
         # Set variant to RFC 4122
         bytes[8] = (bytes[8] & 0x3F) | 0x80
         # Format as a UUID string
-        uuid_str = (
-            '{:02x}{:02x}{:02x}{:02x}-'
-            '{:02x}{:02x}-'
-            '{:02x}{:02x}-'
-            '{:02x}{:02x}-'
-            '{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}'
-        ).format(*bytes)
+        uuid_str = ("{:02x}{:02x}{:02x}{:02x}-" "{:02x}{:02x}-" "{:02x}{:02x}-" "{:02x}{:02x}-" "{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}").format(*bytes)
 
         return uuid_str
