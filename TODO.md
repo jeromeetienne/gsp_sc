@@ -1,5 +1,4 @@
 # TODO
-- move transform_chain to ./examples/common
 - make a type for ndarray like nptyping
   - thus you can specify the shape of the array
 - make all visual accept TransformChain
@@ -11,6 +10,7 @@
   - https://github.com/beartype/beartype
 
 ---
+- DONE move transform_chain to ./examples/common
 - DONE the image is blank when interactive mode is on
   - because plt.savefig is not called ?
   - need to call it in the interactive loop ?
