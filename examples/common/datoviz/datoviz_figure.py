@@ -13,7 +13,7 @@ class DatovizFigure:
     # Creators
     # =============================================================================
 
-    def panel(self):
+    def panel(self, **kwargs):
         panel = DatovizPanel()
         self.add_panel(panel)
         return panel

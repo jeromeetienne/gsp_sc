@@ -24,9 +24,13 @@
   - Q. can we say 'viewport are in ndc' ?
   - if the user express it in pixel, we do the conversion as soon as we receive the coordinates
   - thus the conversion is done in the constructor (or any user facing function), and internally we handle it as ndc
-- `ShapeCollection` ? why not an array of meshes
+- `ShapeCollection` ? why not an array of meshes ?
   - [link](https://github.com/datoviz/datoviz/blob/4ca6c6e94e46b336b2834487017c5628f613f063/examples/visuals/mesh.py#L16C10-L21)
   - to renamed `Shapes`
+- `shapeCollection.add_obj(file_path)` -> `shapes.add(Mesh(...))`
+  - should receive a geometry + material, not a file
+  - if file parsing is needed do it outside
+  -
 
 ## Method Changes
 

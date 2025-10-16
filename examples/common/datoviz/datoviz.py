@@ -5,6 +5,7 @@ import numpy as np
 # local imports
 from .datoviz_app import DatovizApp
 from ..asset_downloader import download_data
+from .datoviz_mesh import DatovizMesh
 
 
 class datoviz:
@@ -23,4 +24,10 @@ class datoviz:
 
     @staticmethod
     def download_data(rel_path: str, force_download: bool = False):
+        """Download data from the gsp_sc repository."""
         return download_data(rel_path, force_download)
+
+    @staticmethod
+    def mesh(shape_collection, **kwargs):
+        dvz_mesh = DatovizMesh()
+        return dvz_mesh

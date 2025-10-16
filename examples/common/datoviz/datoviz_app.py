@@ -8,9 +8,10 @@ import gsp_matplotlib
 from ..gsp_animator import GspAnimatorMatplotlib
 
 from .datoviz_figure import DatovizFigure
-from .datoviz_panel import DatovizPanel
 from .datoviz_points import DatovizPoints
 from .datoviz_images import DatovizImages
+from .datoviz_shape_collection import DatovizShapeCollection
+from .datoviz_mesh import DatovizMesh
 
 
 class DatovizApp:
@@ -53,3 +54,7 @@ class DatovizApp:
     def texture_2D(self, image: np.ndarray, **kwargs):
         dvz_texture = DatovizTexture(image=image)
         return dvz_texture
+
+    def mesh(self, shapeCollection: DatovizShapeCollection, **kwargs) -> DatovizMesh:
+        dvz_mesh = DatovizMesh(shapeCollection=shapeCollection)
+        return dvz_mesh

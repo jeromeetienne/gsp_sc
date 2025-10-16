@@ -36,7 +36,6 @@ image_position = np.array([0, 0, 0])
 image = gsp.visuals.Image(position=image_position, image_extent=(-1, +1, -1, +1), texture=texture)
 viewport.add(image)
 
-
 # =============================================================================
 # Render the canvas with a perspective camera
 # =============================================================================

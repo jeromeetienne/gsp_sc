@@ -2,6 +2,7 @@ import gsp
 from gsp.core import canvas
 from .datoviz_points import DatovizPoints
 from .datoviz_images import DatovizImages
+from .datoviz_mesh import DatovizMesh
 
 
 class DatovizPanel:
@@ -9,11 +10,13 @@ class DatovizPanel:
         # self._gsp_viewport = gsp.core.Viewport(width=512, height=512, dpi=100)
         self._gsp_viewport = gsp.core.Viewport(origin_x=0, origin_y=0, width=512, height=512, background_color=gsp.Constants.Black)
 
-    def add(self, visual: DatovizPoints | DatovizImages) -> None:
+    def add(self, visual: DatovizPoints | DatovizImages | DatovizMesh) -> None:
         if isinstance(visual, DatovizPoints):
             self._gsp_viewport.add(visual._gsp_pixels)
         elif isinstance(visual, DatovizImages):
             self._gsp_viewport.add(visual._gsp_image)
+        elif isinstance(visual, DatovizMesh):
+            self._gsp_viewport.add(visual._gsp_mesh)
         else:
             raise TypeError("Expected a Visual instance.")
 
@@ -21,4 +24,13 @@ class DatovizPanel:
     # Creators
     # =============================================================================
     def panzoom(self) -> None:
+        pass
+
+    def orbit(self, **kwargs) -> None:
+        pass
+
+    def camera(self, **kwargs) -> None:
+        pass
+
+    def horizontal_grid(self, **kwargs) -> None:
         pass
