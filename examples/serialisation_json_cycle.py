@@ -6,7 +6,7 @@ It is rendered before and after to verify the scene serialisation works correctl
 import gsp
 import gsp_matplotlib
 import numpy as np
-import matplotlib.image as mpl_img
+import matplotlib.image
 
 import os
 import json
@@ -42,9 +42,11 @@ viewport2.add(pixels)
 ###############################################################################
 # Add an image to viewport1
 #
+
 image_path = f"{__dirname__}/images/UV_Grid_Sm.jpg"
-image_data_np = mpl_img.imread(image_path)
-image = gsp.visuals.Image(np.array([0.5, 0.5, 0.5]), (-1, +1, -1, +1), image_data_np)
+image_data_np = matplotlib.image.imread(image_path)
+texture = gsp.core.Texture(image_data=image_data_np)
+image = gsp.visuals.Image(np.array([0.5, 0.5, 0.5]), (-1, +1, -1, +1), texture)
 viewport1.add(image)
 
 ###############################################################################

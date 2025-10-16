@@ -7,8 +7,6 @@ import __main__
 import matplotlib.pyplot
 import matplotlib.animation
 import matplotlib.artist
-import mpl3d
-import mpl3d.camera
 
 # local imports
 import gsp
