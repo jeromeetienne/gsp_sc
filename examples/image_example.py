@@ -41,7 +41,7 @@ viewport.add(image)
 # =============================================================================
 camera = gsp.core.Camera(camera_type="perspective")
 renderer = gsp_matplotlib.MatplotlibRenderer()
-image_png_buffer = renderer.render(canvas, camera, interactive=True)
+image_png_buffer = renderer.render(canvas, [viewport], [camera], interactive=True)
 
 # Save the rendered image to a file
 image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}.png"

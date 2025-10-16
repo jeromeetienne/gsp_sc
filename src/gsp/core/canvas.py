@@ -1,4 +1,6 @@
-from .viewport import Viewport
+from __future__ import annotations
+
+# from .viewport import Viewport
 from .random import Random
 
 
@@ -29,23 +31,28 @@ class Canvas:
         self.dpi = dpi
         """The DPI (dots per inch) of the canvas"""
 
-        self.viewports: list[Viewport] = []
+        self.viewports: list["Viewport"] = []  # type: ignore[valid-type]
         """List of viewports associated with this canvas"""
 
-    def add(self, viewport: Viewport) -> None:
+    # =============================================================================
+    # .add/.remove viewport
+    # =============================================================================
+    def add(self, viewport: "Viewport") -> None:  # type: ignore[valid-type]
         """
         Add a viewport to the canvas.
 
         Args:
-            viewport (Viewport): The viewport to add.
+            viewport ("Viewport"): The viewport to add.
         """
         self.viewports.append(viewport)
+        viewport.set_canvas(self)
 
-    def remove(self, viewport: Viewport) -> None:
+    def remove(self, viewport: "Viewport") -> None:  # type: ignore[valid-type]
         """
         Remove a viewport from the canvas.
 
         Args:
-            viewport (Viewport): The viewport to remove.
+            viewport ("Viewport"): The viewport to remove.
         """
         self.viewports.remove(viewport)
+        viewport.set_canvas(None)

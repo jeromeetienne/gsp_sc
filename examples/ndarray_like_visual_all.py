@@ -47,7 +47,7 @@ viewport.add(pixels)
 # =============================================================================
 camera = gsp.core.Camera("perspective")
 json_renderer = gsp.renderer.JsonRenderer()
-scene_dict = json_renderer.render(canvas, camera)
+scene_dict = json_renderer.render(canvas, [viewport], [camera])
 scene_json = json.dumps(scene_dict, indent=4)
 
 # save to file as json
@@ -61,13 +61,13 @@ print(f"Scene exported to JSON and saved to {json_output_path}. length={len(scen
 # Import the scene from JSON
 # =============================================================================
 json_parser = gsp.renderer.JsonParser()
-canvas_parsed, camera_parsed = json_parser.parse(scene_json)
+canvas_parsed, viewports_parsed, cameras_parsed = json_parser.parse(scene_json)
 
 # =============================================================================
 # Render the scene with matplotlib
 # =============================================================================
 renderer = gsp_matplotlib.MatplotlibRenderer()
-image_png_buffer = renderer.render(canvas_parsed, camera_parsed, interactive=True)
+image_png_buffer = renderer.render(canvas_parsed, viewports_parsed, cameras_parsed, interactive=True)
 
 # Save the rendered image to a file
 image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}.png"

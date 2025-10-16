@@ -51,7 +51,7 @@ for i in range(n_points):
 # =============================================================================
 camera = gsp.core.Camera(camera_type="ortho")
 renderer = gsp_matplotlib.MatplotlibRenderer()
-renderer.render(canvas, camera)
+renderer.render(canvas, [viewport], [camera])
 
 # =============================================================================
 # Animate the scene with matplotlib
@@ -82,7 +82,7 @@ def animator_callback() -> list[gsp.core.VisualBase]:
     # - this is needed because those positions are rotated in 3d space based on the camera position
     # - this is not needed when the data is going directly to matplotlib (e.g. sizes, colors)
     # - this is not needed when the scene is rendered via network renderer
-    renderer.render(canvas, camera)
+    renderer.render(canvas, [viewport], [camera])
 
     changed_visuals: list[gsp.core.VisualBase] = [pixels]
     return changed_visuals
@@ -94,4 +94,4 @@ print(f"Saving video to {video_path}")
 
 # Create the animator and start the animation
 animator = GspAnimatorMatplotlib(renderer, target_fps=target_fps, video_path=video_path)
-animator.animate(canvas, camera, [animator_callback])
+animator.animate(canvas, [viewport], [camera], [animator_callback])

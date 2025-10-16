@@ -56,7 +56,7 @@ viewport.add(mesh)
 #
 camera = gsp.core.Camera(camera_type="perspective")
 renderer = gsp_matplotlib.MatplotlibRenderer()
-renderer.render(canvas, camera)
+renderer.render(canvas, [viewport], [camera])
 
 # =============================================================================
 # Animate the scene with matplotlib
@@ -77,4 +77,4 @@ def animator_callback() -> list[gsp.core.VisualBase]:
 
 
 animator_matplotlib = GspAnimatorMatplotlib(renderer)
-animator_matplotlib.animate(canvas, camera, [animator_callback])
+animator_matplotlib.animate(canvas, [viewport], [camera], [animator_callback])

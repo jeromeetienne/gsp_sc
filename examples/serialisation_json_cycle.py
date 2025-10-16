@@ -54,7 +54,7 @@ viewport1.add(image)
 #
 camera = gsp.core.Camera("perspective")
 matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
-rendered_image_png_data = matplotlib_renderer.render(canvas, camera)
+rendered_image_png_data = matplotlib_renderer.render(canvas, [viewport1, viewport2], [camera, camera])
 
 # save the rendered image to a file
 rendered_image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}_original_image.png"
@@ -67,7 +67,7 @@ print(f"original Rendered image saved to: {rendered_image_path}")
 # Export the scene to JSON
 #
 json_renderer = gsp.renderer.json.JsonRenderer()
-scene_dict = json_renderer.render(canvas, camera)
+scene_dict = json_renderer.render(canvas, [viewport1, viewport2], [camera, camera])
 scene_json = json.dumps(scene_dict, indent=4)
 
 json_output_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}.gsp.json"
@@ -79,13 +79,13 @@ print(f"Scene exported to JSON and saved to {json_output_path}")
 # Load the scene from JSON
 #
 json_parser = gsp.renderer.json.JsonParser()
-canvas_parsed, camera_parsed = json_parser.parse(scene_json)
+canvas_parsed, viewports_parsed, cameras_parsed = json_parser.parse(scene_json)
 
 ###############################################################################
 # Render the loaded scene with matplotlib to visually verify it was loaded correctly
 #
 matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
-rendered_loaded_image_png_data = matplotlib_renderer.render(canvas_parsed, camera_parsed)
+rendered_loaded_image_png_data = matplotlib_renderer.render(canvas_parsed, viewports_parsed, cameras_parsed)
 
 # save the rendered loaded image to a file
 rendered_loaded_image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}_parsed_image.png"

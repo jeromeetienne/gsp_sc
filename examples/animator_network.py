@@ -71,4 +71,4 @@ def animate() -> list[gsp.core.VisualBase]:
 
 
 gsp_animator = GspAnimatorNetwork(network_renderer)
-gsp_animator.animate(canvas, camera, [animate])
+gsp_animator.animate(canvas, [viewport], [camera], [animate])

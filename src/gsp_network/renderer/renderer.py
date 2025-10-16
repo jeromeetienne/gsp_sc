@@ -11,6 +11,7 @@ import http_constants.status
 
 # local imports
 from gsp.core.canvas import Canvas
+from gsp.core.viewport import Viewport
 from gsp.core.camera import Camera
 from gsp.core.types import SceneDict
 from gsp.renderer.json.renderer import JsonRenderer
@@ -58,9 +59,16 @@ class NetworkRenderer:
         self.__renderer_json = JsonRenderer()
         """JSON renderer to convert the scene to JSON format."""
 
-    def render(self, canvas: Canvas, camera: Camera) -> bytes:
+    # =============================================================================
+    # .render()
+    # =============================================================================
+    def render(self, canvas: Canvas, viewports: list[Viewport], cameras: list[Camera]) -> bytes:
+
+        # sanity checks
+        assert len(viewports) == len(cameras), "Number of viewports must match number of cameras"
+
         # Convert the canvas to JSON
-        scene_dict = self.__renderer_json.render(canvas, camera)
+        scene_dict = self.__renderer_json.render(canvas, viewports, cameras)
 
         # Build the payload
         if self.__jsondiff_allowed and self.__absolute_scene is not None:
@@ -91,7 +99,7 @@ class NetworkRenderer:
             # Clear the JSON renderer cache to avoid sending diffs based on old data - typically when using DiffableNdarray
             self.__renderer_json.clear_cache()
             # Rebuild the scene dict from scratch
-            scene_dict = self.__renderer_json.render(canvas, camera)
+            scene_dict = self.__renderer_json.render(canvas, viewports, cameras)
             # rebuild the payload as absolute rendering
             payload: NetworkPayload = {
                 "client_id": self.__client_id,

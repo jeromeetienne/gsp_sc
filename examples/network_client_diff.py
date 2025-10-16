@@ -42,7 +42,7 @@ viewport.add(pixels)
 # Render the scene using the matplotlib renderer to verify it looks correct
 #
 matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
-image_png_data = matplotlib_renderer.render(canvas, camera)
+image_png_data = matplotlib_renderer.render(canvas, [viewport], [camera])
 
 # Save the image to a file
 local_image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}_local_image_pre_diff.png"
@@ -57,7 +57,7 @@ network_renderer = gsp_network.NetworkRenderer(
     server_url="http://localhost:5000/",
     jsondiff_allowed=True,
 )
-image_png_data = network_renderer.render(canvas, camera)
+image_png_data = network_renderer.render(canvas, [viewport], [camera])
 
 ###############################################################################
 # Save the image to a file
@@ -76,7 +76,7 @@ pixels.sizes = sizes_np
 ###############################################################################
 # Render the scene using the matplotlib renderer to verify it looks correct
 #
-image_png_data = matplotlib_renderer.render(canvas, camera)
+image_png_data = matplotlib_renderer.render(canvas, [viewport], [camera])
 
 # Save the image to a file
 local_image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}_local_image_post_diff.png"
@@ -87,7 +87,7 @@ print(f"Image saved to {local_image_path}")
 ###############################################################################
 # Render the scene using a network renderer
 #
-image_png_data = network_renderer.render(canvas, camera)
+image_png_data = network_renderer.render(canvas, [viewport], [camera])
 
 ###############################################################################
 # Save the image to a file

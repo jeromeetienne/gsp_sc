@@ -62,7 +62,7 @@ viewport.add(image)
 #
 camera = gsp.core.Camera("perspective")
 matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
-image_png_data = matplotlib_renderer.render(canvas, camera)
+image_png_data = matplotlib_renderer.render(canvas, [viewport], [camera])
 
 # Save the image to a file
 local_image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}_local_image.png"
@@ -75,7 +75,7 @@ print(f"Image saved to {local_image_path}")
 #
 camera = gsp.core.Camera("perspective")
 network_renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/")
-image_png_data = network_renderer.render(canvas, camera)
+image_png_data = network_renderer.render(canvas, [viewport], [camera])
 
 ###############################################################################
 # Save the image to a file

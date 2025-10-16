@@ -1,5 +1,9 @@
 # TODO
 
+- fix the multiple viewports
+  - one camera per viewport
+  - how to handle camera in the scene ?
+- multi viewort in json is broken
 - support collection for all visuals
   - may create alias for the single case, which forwards to the collection case
   - pixels is already done
@@ -7,9 +11,6 @@
 - change the renderer to support multiple viewports
   - DONE for MatplotlibRendererDelta
   - TODO for MatplotlibRenderer
-- fix the multiple viewports
-  - one camera per viewport
-  - how to handle camera in the scene ?
 - handle multiple matplotlib renderers at the same time ?
   - how to handle multiple canvas ?
   - how to handle multiple viewport

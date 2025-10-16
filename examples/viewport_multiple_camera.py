@@ -73,7 +73,7 @@ camera4.mpl3d_camera.transform = camera4.mpl3d_camera.proj @ camera4.mpl3d_camer
 matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
 viewports = [viewport1, viewport2, viewport3, viewport4]
 cameras = [camera1, camera2, camera3, camera4]
-image_png_buffer = matplotlib_renderer.render_viewports(canvas, viewports=viewports, cameras=cameras, show_image=True)
+image_png_buffer = matplotlib_renderer.render(canvas, viewports, cameras, interactive=True)
 
 # Save the rendered image to a file
 image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}.png"

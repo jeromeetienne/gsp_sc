@@ -64,12 +64,7 @@ viewport3.add(mesh)
 camera = gsp.core.Camera(camera_type="perspective")
 
 matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
-image_png_buffer = matplotlib_renderer.render_viewports(
-    canvas,
-    viewports=[viewport1, viewport2, viewport3],
-    cameras=[camera, camera, camera],
-    show_image=True,
-)
+image_png_buffer = matplotlib_renderer.render(canvas, viewports=[viewport1, viewport2, viewport3], cameras=[camera, camera, camera], show_image=True)
 
 # Save the rendered image to a file
 image_path = f"{__dirname__}/output/viewport_multiple.png"

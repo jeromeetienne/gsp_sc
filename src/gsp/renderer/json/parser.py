@@ -26,21 +26,49 @@ class JsonParser:
     def __init__(self) -> None:
         self._diffable_ndarray_db = DiffableNdarrayDb()
 
-    def parse(self, _scene: str | SceneDict) -> tuple[Canvas, Camera]:
+    # =============================================================================
+    # .parse()
+    # =============================================================================
+
+    def parse(self, _scene: str | SceneDict) -> tuple[Canvas, list[Viewport], list[Camera]]:
         if isinstance(_scene, dict):
             scene_dict: SceneDict = _scene
         else:
             scene_dict: SceneDict = json.loads(_scene)
 
-        camera_info = scene_dict["camera"]
-        camera = Camera(camera_info["type"])
-        camera.uuid = camera_info["uuid"]  # restore the original uuid
-
+        # =============================================================================
+        # parse canvas_info
+        # =============================================================================
         canvas_info = scene_dict["canvas"]
         canvas = Canvas(canvas_info["width"], canvas_info["height"], canvas_info["dpi"])
         canvas.uuid = canvas_info["uuid"]  # restore the original uuid
 
-        for viewport_info in canvas_info["viewports"]:
+        # =============================================================================
+        # sanity check
+        # =============================================================================
+        camera_count = len(canvas_info["cameras"])
+        viewport_count = len(canvas_info["viewports"])
+        assert (
+            camera_count == viewport_count
+        ), f"The number of cameras must match the number of viewports. got {camera_count} cameras and {viewport_count} viewports."
+
+        # =============================================================================
+        # parse camera_info and viewport_info
+        # =============================================================================
+        cameras: list[Camera] = []
+        viewports: list[Viewport] = []
+        for camera_info, viewport_info in zip(canvas_info["cameras"], canvas_info["viewports"]):
+
+            # =============================================================================
+            # parse camera_info
+            # =============================================================================
+
+            camera = Camera(camera_info["type"])
+            camera.uuid = camera_info["uuid"]  # restore the original uuid
+            cameras.append(camera)
+            # =============================================================================
+            # parse viewport_info
+            # =============================================================================
             viewport = Viewport(
                 origin_x=viewport_info["origin_x"],
                 origin_y=viewport_info["origin_y"],
@@ -51,6 +79,7 @@ class JsonParser:
             # restore the original uuid
             viewport.uuid = viewport_info["uuid"]
             canvas.add(viewport)
+            viewports.append(viewport)
 
             for visual_info in viewport_info["visuals"]:
                 if visual_info["type"] == "Pixels":
@@ -87,7 +116,11 @@ class JsonParser:
 
                 viewport.add(visual)
 
-        return canvas, camera
+        # =============================================================================
+        # return canvas, viewports, cameras
+        # =============================================================================
+
+        return canvas, viewports, cameras
 
     @staticmethod
     def texture_from_json(texture_dict: dict[str, Any]) -> Texture:

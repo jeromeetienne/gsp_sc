@@ -51,7 +51,10 @@ class GspAnimatorNetwork:
                 else:
                     raise ValueError(f"Unsupported video format: {video_ext}")
 
-    def animate(self, canvas: gsp.core.Canvas, camera: gsp.core.Camera, animator_callbacks: list[GSPAnimatorFunc]):
+    # =============================================================================
+    # .animate
+    # =============================================================================
+    def animate(self, canvas: gsp.core.Canvas, viewports: list[gsp.core.Viewport], cameras: list[gsp.core.Camera], animator_callbacks: list[GSPAnimatorFunc]):
         """
         Animate the given canvas and camera using the provided callbacks to update visuals.
         """
@@ -81,7 +84,7 @@ class GspAnimatorNetwork:
                 changed_visuals.extend(_changed_visuals)
 
             # render the scene to get the new image
-            image_png_data = self._network_renderer.render(canvas, camera)
+            image_png_data = self._network_renderer.render(canvas, canvas.viewports, cameras)
             # get the main script name
             main_script_name = os.path.basename(__main__.__file__) if hasattr(__main__, "__file__") else "interactive"
             main_script_basename = os.path.splitext(main_script_name)[0]
@@ -108,7 +111,7 @@ class GspAnimatorNetwork:
                 changed_visuals.extend(_changed_visuals)
 
             # render the scene to get the new image
-            image_png_data = self._network_renderer.render(canvas, camera)
+            image_png_data = self._network_renderer.render(canvas, viewports, cameras)
             image_data_io = io.BytesIO(image_png_data)
             image_data_np = matplotlib.image.imread(image_data_io, format="png")
 

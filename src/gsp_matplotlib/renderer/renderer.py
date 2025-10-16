@@ -44,33 +44,12 @@ class MatplotlibRenderer:
         self._polyCollections.clear()
         self._axesImages.clear()
 
-    def render(
-        self,
-        canvas: Canvas,
-        camera: Camera,
-        show_image: bool = False,
-        return_image: bool = True,
-        interactive: bool = False,
-    ) -> bytes:
-        """Render the given canvas with the given camera."""
-        result = self.render_viewports(
-            canvas,
-            viewports=canvas.viewports,
-            cameras=[camera for _ in canvas.viewports],
-            show_image=show_image,
-            return_image=return_image,
-            interactive=interactive,
-        )
-        return result
+    # =============================================================================
+    # .render()
+    # =============================================================================
 
-    def render_viewports(
-        self,
-        canvas: Canvas,
-        viewports: list[Viewport],
-        cameras: list[Camera],
-        show_image: bool = False,
-        return_image: bool = True,
-        interactive: bool = False,
+    def render(
+        self, canvas: Canvas, viewports: list[Viewport], cameras: list[Camera], show_image: bool = False, return_image: bool = True, interactive: bool = False
     ) -> bytes:
 
         self.__render(canvas, viewports=viewports, cameras=cameras)
@@ -121,12 +100,7 @@ class MatplotlibRenderer:
     ###########################################################################
     ###########################################################################
 
-    def __render(
-        self,
-        canvas: Canvas,
-        viewports: list[Viewport],
-        cameras: list[Camera],
-    ) -> None:
+    def __render(self, canvas: Canvas, viewports: list[Viewport], cameras: list[Camera]) -> None:
 
         # Create the matplotlib figure from the canvas if it does not exist yet
         if canvas.uuid in self._figures:

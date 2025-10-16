@@ -37,7 +37,7 @@ viewport.add(pixels)
 #
 camera = gsp.core.Camera("perspective")
 json_renderer = gsp.renderer.json.JsonRenderer()
-scene_dict = json_renderer.render(canvas, camera)
+scene_dict = json_renderer.render(canvas, [viewport], [camera])
 scene_json = json.dumps(scene_dict, indent=4)
 
 

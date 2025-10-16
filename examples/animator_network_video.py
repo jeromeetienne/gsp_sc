@@ -56,7 +56,7 @@ for i in range(n_points):
 #
 camera = gsp.core.Camera(camera_type="ortho")
 renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=True)
-renderer.render(canvas, camera)
+renderer.render(canvas, [viewport], [camera])
 
 # =============================================================================
 # Animate the scene with matplotlib
@@ -90,4 +90,4 @@ def animator_callback() -> list[gsp.core.VisualBase]:
 video_path = os.path.join(__dirname__, f"output/{os.path.basename(__file__).replace('.py', '')}.mp4")
 print(f"Saving video to {video_path}")
 animator = GspAnimatorNetwork(renderer, target_fps=target_fps, video_path=video_path)
-animator.animate(canvas, camera, [animator_callback])
+animator.animate(canvas, [viewport], [camera], [animator_callback])

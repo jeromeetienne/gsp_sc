@@ -15,6 +15,7 @@ from flask import Flask, request, send_file, Response
 import jsonpatch
 import argparse
 import http_constants.status
+import colorama
 
 # local imports
 import gsp
@@ -32,12 +33,30 @@ absolute_scenes: dict[str, SceneDict] = {}
 json_parser = gsp.renderer.json.JsonParser()
 
 
+# =============================================================================
+# Colorama alias
+# =============================================================================
+def text_cyan(text: str) -> str:
+    return colorama.Fore.CYAN + text + colorama.Style.RESET_ALL
+
+
+def text_green(text: str) -> str:
+    return colorama.Fore.GREEN + text + colorama.Style.RESET_ALL
+
+
+def text_red(text: str) -> str:
+    return colorama.Fore.RED + text + colorama.Style.RESET_ALL
+
+
+# =============================================================================
+# flask callback
+# =============================================================================
 @flask_app.route("/render_scene", methods=["POST"])
 def render_scene_json() -> Response:
     payload: NetworkPayload = request.get_json()
 
     # Log the received payload for debugging
-    print(f"Received payload: client_id={payload.get('client_id')}, type={payload.get('type')}")
+    print(f"Received payload: client_id={text_cyan(payload.get('client_id'))}, type={text_cyan(payload.get('type'))}")
 
     ###############################################################################
     #   Parse the payload
@@ -48,7 +67,7 @@ def render_scene_json() -> Response:
         absolute_scenes[client_id] = payload["data"]
         scene_dict: SceneDict = payload["data"]
         # log the operation
-        print(f"Rendering absolute scene for client_id={client_id}. Scene size: {len(str(scene_dict))} bytes")
+        print(f"Rendering scene for client_id={client_id}. {text_green('Absolute')} Scene size: {text_cyan(str(len(str(scene_dict))))} bytes")
     elif payload["type"] == "json_diff":
         old_scene_dict = absolute_scenes.get(client_id)
         # If no previous absolute scene exists, return an error
@@ -61,7 +80,9 @@ def render_scene_json() -> Response:
         # Update the stored absolute scene
         absolute_scenes[client_id] = scene_dict
         # log the operation
-        print(f"Rendering diff scene for client_id={client_id}. Diff size: {len(str(scene_diff))} bytes, Full scene size: {len(str(scene_dict))} bytes")
+        print(
+            f"Rendering scene for client_id={client_id}. {text_green('Diff')} size: {text_cyan(str(len(str(scene_diff))))} bytes, Full scene size: {text_cyan(str(len(str(scene_dict))))} bytes"
+        )
     else:
         assert False, f"Unknown rendering type: {payload['type']}"
 
@@ -69,7 +90,7 @@ def render_scene_json() -> Response:
     # Load the scene from JSON
     #
     try:
-        canvas_parsed, camera_parsed = json_parser.parse(scene_dict)
+        canvas_parsed, viewports_parsed, cameras_parsed = json_parser.parse(scene_dict)
     except DiffableNdarraySerialisationError as e:
         # return 410 Gone
         return Response("DiffableNdarray not found.", status=http_constants.status.HttpStatus.GONE)
@@ -78,10 +99,10 @@ def render_scene_json() -> Response:
     # Render the loaded scene with matplotlib
     #
     matplotlib_renderer = gsp_matplotlib.MatplotlibRenderer()
-    image_png_data = matplotlib_renderer.render(canvas=canvas_parsed, camera=camera_parsed, show_image=False)
+    image_png_data = matplotlib_renderer.render(canvas_parsed, viewports_parsed, cameras_parsed, show_image=False)
     matplotlib_renderer.close()  # free memory
 
-    print(f"Rendered image size: {len(image_png_data)} bytes")
+    print(f"Rendered image size: {text_cyan(str(len(image_png_data)))} bytes")
 
     ###############################################################################
     # Return the rendered image as a PNG file

@@ -9,6 +9,7 @@ import numpy as np
 
 # local imports
 from ...core.canvas import Canvas
+from ...core.viewport import Viewport
 from ...core.camera import Camera
 from ...core.texture import Texture
 from ...core.types import SceneDict
@@ -22,23 +23,43 @@ class JsonRenderer:
     def __init__(self) -> None:
         self._diffable_ndarray_db = DiffableNdarrayDb()
 
-    def render(self, canvas: Canvas, camera: Camera) -> SceneDict:
+    def render(self, canvas: Canvas, viewports: list[Viewport], cameras: list[Camera]) -> SceneDict:
 
+        # =============================================================================
+        # sanity checks
+        # =============================================================================
+
+        assert len(viewports) == len(cameras), f"Number of viewports must match number of cameras, got {len(viewports)} viewports and {len(cameras)} cameras."
+
+        # =============================================================================
+        # .to_json scene
+        # =============================================================================
         scene_dict: SceneDict = {
-            "camera": {
-                "uuid": camera.uuid,
-                "type": camera.camera_type,
-            },
             "canvas": {
                 "uuid": canvas.uuid,
                 "width": canvas.width,
                 "height": canvas.height,
                 "dpi": canvas.dpi,
+                "cameras": [],
                 "viewports": [],
             },
         }
 
-        for viewport in canvas.viewports:
+        for viewport, camera in zip(viewports, cameras):
+            # =============================================================================
+            # .to_json camera
+            # =============================================================================
+
+            camera_dict = {
+                "uuid": camera.uuid,
+                "type": camera.camera_type,
+            }
+            # add camera to this canvas
+            scene_dict["canvas"]["cameras"].append(camera_dict)
+
+            # =============================================================================
+            # .to_json viewport
+            # =============================================================================
             viewport_dict = {
                 "uuid": viewport.uuid,
                 "origin_x": viewport.origin_x,
@@ -86,6 +107,7 @@ class JsonRenderer:
 
                 viewport_dict["visuals"].append(visual_dict)
 
+            # Add viewport to this canvas
             scene_dict["canvas"]["viewports"].append(viewport_dict)
 
         return scene_dict

@@ -7,7 +7,6 @@ class FpsMonitor:
     """
 
     def __init__(self, smoothing=0.9):
-        self.smoothing = smoothing
         self.fps = 0.0
         self.last_time = None
 
@@ -23,8 +22,7 @@ class FpsMonitor:
         if self.last_time is not None:
             delta = current_time - self.last_time
             if delta > 0:
-                current_fps = 1.0 / delta
-                self.fps = (self.smoothing * self.fps) + ((1 - self.smoothing) * current_fps)
+                self.fps = 1.0 / delta
         self.last_time = current_time
 
     def get_fps(self):

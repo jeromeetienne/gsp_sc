@@ -26,12 +26,12 @@ viewport.add(pixels)
 # Render the scene with matplotlib
 camera = Camera("perspective")
 renderer = MatplotlibRenderer()
-png_image = renderer.render(canvas, camera)
+png_image = renderer.render(canvas, [viewport], [camera])
 
 # Export the scene to JSON
 json_renderer = JsonRenderer()
-scene_json = json_renderer.render(canvas, camera)
+scene_json = json_renderer.render(canvas, [viewport], [camera])
 
 # Render the scene remotely (if you have a GSP server running)
 network_renderer = NetworkRenderer("http://localhost:5000")
-png_image2 = network_renderer.render(canvas, camera)
+png_image2 = network_renderer.render(canvas, [viewport], [camera])

@@ -46,7 +46,7 @@ class GspAnimatorMatplotlib:
                 else:
                     raise ValueError(f"Unsupported video format: {video_ext}")
 
-    def animate(self, canvas: gsp.core.Canvas, camera: gsp.core.Camera, animator_callbacks: list[GSPAnimatorFunc]):
+    def animate(self, canvas: gsp.core.Canvas, viewports: list[gsp.core.Viewport], cameras: list[gsp.core.Camera], animator_callbacks: list[GSPAnimatorFunc]):
         """
         Animate the given canvas and camera using the provided callbacks to update visuals.
         """
@@ -55,7 +55,7 @@ class GspAnimatorMatplotlib:
         # Render the image once
         # =============================================================================
 
-        self._matplotlib_renderer.render(canvas, camera)
+        self._matplotlib_renderer.render(canvas, viewports, cameras)
 
         # =============================================================================
         # matploglib animation callback
@@ -107,11 +107,9 @@ class GspAnimatorMatplotlib:
         # Connect cameras
         # =============================================================================
 
-        cameras = [camera for _ in canvas.viewports]
-
         # connect the camera events to the render function
         def camera_update(transform) -> None:
-            self._matplotlib_renderer.render_viewports(canvas, viewports=canvas.viewports, cameras=cameras)
+            self._matplotlib_renderer.render(canvas, viewports, cameras)
 
         for camera, viewport in zip(cameras, canvas.viewports):
             mpl_axes = self._matplotlib_renderer._axes[viewport.uuid]

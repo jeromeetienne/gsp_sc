@@ -1,14 +1,12 @@
 from typing import NamedTuple, TypedDict
 
+
 ###############################################################################
 #   Type for the network payload
 #
 class SceneDict(TypedDict):
-    camera: dict
-    """Camera data in JSON format."""
     canvas: dict
     """Canvas data in JSON format."""
-
 
 
 class Color(NamedTuple):
