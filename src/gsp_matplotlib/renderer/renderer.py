@@ -128,6 +128,7 @@ class MatplotlibRenderer:
         viewports: list[Viewport],
         cameras: list[Camera],
     ) -> None:
+
         # Create the matplotlib figure from the canvas if it does not exist yet
         if canvas.uuid in self._figures:
             figure = self._figures[canvas.uuid]

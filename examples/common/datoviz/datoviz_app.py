@@ -27,8 +27,15 @@ class DatovizApp:
 
     def run(self):
         def animator_callback() -> list[gsp.core.VisualBase]:
-            # print("Animating...")
+            print("Animating...")
             changed_visuals: list[gsp.core.VisualBase] = []
+
+            # go through all visuals in the canvas and mark them as changed
+            canvas = self._dvz_figure._gsp_canvas
+            for viewport in canvas.viewports:
+                for visual in viewport.visuals:
+                    changed_visuals.append(visual)
+
             return changed_visuals
 
         self._gsp_animator_matplotlib.animate(self._dvz_figure._gsp_canvas, self._gsp_camera, [animator_callback])

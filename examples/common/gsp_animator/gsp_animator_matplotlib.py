@@ -112,10 +112,25 @@ class GspAnimatorMatplotlib:
                     continue
 
                 # get the mpl artist corresponding to the visual
-                if isinstance(visual, gsp.visuals.Pixels):
+                if isinstance(visual, gsp.visuals.Image):
+                    image: gsp.visuals.Image = visual
+                    full_uuid = image.uuid + viewport.uuid
+                    assert full_uuid in self._matplotlib_renderer._axesImages, "Image not found in renderer"
+                    mpl_artist = self._matplotlib_renderer._axesImages[full_uuid]
+                    return mpl_artist
+                elif isinstance(visual, gsp.visuals.Pixels):
                     pixels: gsp.visuals.Pixels = visual
-                    patchCollections = self._matplotlib_renderer._pathCollections[pixels.uuid + viewport.uuid]
+                    full_uuid = pixels.uuid + viewport.uuid
+                    assert full_uuid in self._matplotlib_renderer._pathCollections, "Pixels not found in renderer"
+                    patchCollections = self._matplotlib_renderer._pathCollections[full_uuid]
                     mpl_artist = patchCollections
+                    return mpl_artist
+                elif isinstance(visual, gsp.visuals.Mesh):
+                    mesh: gsp.visuals.Mesh = visual
+                    full_uuid = mesh.uuid + viewport.uuid
+                    assert full_uuid in self._matplotlib_renderer._polyCollections, "Mesh not found in renderer"
+                    polyCollections = self._matplotlib_renderer._polyCollections[full_uuid]
+                    mpl_artist = polyCollections
                     return mpl_artist
                 else:
                     assert False, "Visual type not supported yet"
