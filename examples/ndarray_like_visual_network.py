@@ -43,7 +43,7 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 
 # Use TransformChain to scale and translate positions
 npy_url = f"file://{__dirname__}/data/sample_positions_3d.npy"
-position_chain = TransformChain().load(npy_url).lambdaFunc(lambda x: x - 0.2).complete()
+position_chain = TransformChain().load(npy_url).lambdaFunc(lambda x: x + 0.2).complete()
 
 sizes_np = np.array([1])
 colors_np = np.array([gsp.Constants.Green])

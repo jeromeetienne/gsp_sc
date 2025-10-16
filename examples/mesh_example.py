@@ -2,12 +2,16 @@
 Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
 
-from common.mesh_parser import MeshParserMeshio
+# pip imports
 import numpy as np
 import os
+import mpl3d.glm
+import matplotlib.pyplot
+
+# local imports
+from common.mesh_parser import MeshParserMeshio
 import gsp
 import gsp_matplotlib
-import mpl3d.glm
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -31,7 +35,7 @@ canvas.add(viewport=viewport)
 # Add some random points
 # =============================================================================
 
-obj_mesh_path = f"{__dirname__}/../data/bunny.obj"
+obj_mesh_path = f"{__dirname__}/data/bunny.obj"
 vertices_coords, faces_indices, uvs_coords, normals_coords = MeshParserMeshio.parse_obj_file(obj_mesh_path)
 vertices_coords = mpl3d.glm.fit_unit_cube(vertices_coords)
 mesh = gsp.visuals.Mesh(vertices_coords, faces_indices, cmap=matplotlib.pyplot.get_cmap("magma"), edgecolors=(0, 0, 0, 0.25))  # type: ignore
