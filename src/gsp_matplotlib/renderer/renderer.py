@@ -153,6 +153,7 @@ class MatplotlibRenderer:
                     viewport.height / canvas.height,
                 )
                 axes: matplotlib.axes.Axes = figure.add_axes(axes_rect)
+                axes.set_facecolor(viewport.background_color)
                 axes.set_xlim(-1, 1)
                 axes.set_ylim(-1, 1)
                 axes.get_xaxis().set_visible(False)
