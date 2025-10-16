@@ -96,10 +96,17 @@ class NetworkRenderer:
                 "data": scene_dict,
             }
 
+        # =============================================================================
+        # do network request
+        # =============================================================================
         # Send the POST request with JSON data
         call_url = f"{self.__server_url}/render_scene"
         headers = {"Content-Type": "application/json"}
         response = requests.post(call_url, data=json.dumps(payload), headers=headers)
+
+        # =============================================================================
+        # Check the payload not been reject due to a lost context
+        # =============================================================================
 
         # If the server responds with 410, clear json renderer cache and resend as "absolute"
         # - this may happen if the server has lost the previous state
@@ -116,6 +123,10 @@ class NetworkRenderer:
             }
             # The server does not have the previous state, resend as absolute
             response = requests.post(call_url, data=json.dumps(payload), headers=headers)
+
+        # =============================================================================
+        #
+        # =============================================================================
 
         # Check the response status
         if response.status_code != 200:
