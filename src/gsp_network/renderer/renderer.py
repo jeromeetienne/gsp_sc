@@ -60,6 +60,14 @@ class NetworkRenderer:
         """JSON renderer to convert the scene to JSON format."""
 
     # =============================================================================
+    # .close()
+    # =============================================================================
+    def close(self) -> None:
+        """Close the renderer and free resources."""
+        self.__renderer_json.close()
+        self.__absolute_scene = None
+
+    # =============================================================================
     # .render()
     # =============================================================================
     def render(self, canvas: Canvas, viewports: list[Viewport], cameras: list[Camera]) -> bytes:

@@ -2,7 +2,6 @@
 import os
 import __main__
 from typing import Sequence
-from typing import Protocol
 
 # pip imports
 import matplotlib.pyplot
@@ -14,13 +13,9 @@ import time
 import gsp
 import gsp_matplotlib
 from gsp.core import VisualBase
-from .gsp_animator_types import GSPAnimatorFunc
+from .gsp_animator_types import GSPAnimatorFunc, VideoSavedCalledback
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
-
-
-class VideoSavedCalledback(Protocol):
-    def __call__(self) -> None: ...  # type: ignore
 
 
 class GspAnimatorMatplotlib:
@@ -42,7 +37,7 @@ class GspAnimatorMatplotlib:
         self._video_duration = video_duration
         self._video_path = video_path
         self._video_writer: str | None = None
-        self._time_last_update = None
+        self._time_last_update: float | None = None
         self._canvas: gsp.core.Canvas | None = None
         self._viewports: list[gsp.core.Viewport] | None = None
         self._cameras: list[gsp.core.Camera] | None = None
@@ -123,8 +118,6 @@ class GspAnimatorMatplotlib:
         # matploglib animation callback
         # =============================================================================
 
-        # TODO this is crap... take it from the renderer
-        # figure = matplotlib.pyplot.gcf()
         figures = list(self._matplotlib_renderer._figures.values())
         figure = figures[0]
 
@@ -137,14 +130,23 @@ class GspAnimatorMatplotlib:
 
         # if we are not in interactive mode, save a preview image and return
         if gsp_sc_interactive == False:
+            # notify all animator callbacks
+            changed_visuals: list[gsp.core.VisualBase] = []
+            for animator_callback in self._callbacks:
+                _changed_visuals = animator_callback(1.0 / self._fps)
+                changed_visuals.extend(_changed_visuals)
+
+            # render the scene to get the new image
+            image_png_data = self._matplotlib_renderer.render(canvas, canvas.viewports, cameras)
             # get the main script name
             main_script_name = os.path.basename(__main__.__file__) if hasattr(__main__, "__file__") else "interactive"
             main_script_basename = os.path.splitext(main_script_name)[0]
             # buid the output image path
             image_path = os.path.join(__dirname__, "../../output", f"{main_script_basename}_animator.png")
             image_path = os.path.abspath(image_path)
-            # save the current figure in a image file
-            figure.savefig(image_path)
+            # save image_png_data in a image file
+            with open(image_path, "wb") as image_file:
+                image_file.write(image_png_data)
             # log the event
             print(f"Saved animation preview image to: {image_path}")
             return
@@ -207,7 +209,7 @@ class GspAnimatorMatplotlib:
     # ._mpl_animate()
     # =============================================================================
 
-    def _mpl_animate(self, rame_index: int) -> list[matplotlib.artist.Artist]:
+    def _mpl_animate(self, frame_index: int) -> list[matplotlib.artist.Artist]:
         # compute delta time
         present = time.time()
         delta_time = (present - self._time_last_update) if self._time_last_update is not None else (1 / self._fps)

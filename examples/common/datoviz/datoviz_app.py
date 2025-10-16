@@ -1,4 +1,5 @@
 # pip imports
+from typing import Sequence
 import numpy as np
 
 # Local imports
@@ -28,7 +29,8 @@ class DatovizApp:
     def run(self):
         fps_monitor = FpsMonitor()
 
-        def animator_callback() -> list[gsp.core.VisualBase]:
+        @self._gsp_animator_matplotlib.event_listener
+        def animator_callback(delta_time: float) -> Sequence[gsp.core.VisualBase]:
 
             # measure FPS to monitor performance
             fps_monitor.print_fps()
@@ -43,7 +45,7 @@ class DatovizApp:
 
             return changed_visuals
 
-        self._gsp_animator_matplotlib.start(self._dvz_figure._gsp_canvas, self._dvz_figure._gsp_canvas.viewports, [self._gsp_camera], [animator_callback])
+        self._gsp_animator_matplotlib.start(self._dvz_figure._gsp_canvas, self._dvz_figure._gsp_canvas.viewports, [self._gsp_camera])
 
     def destroy(self):
         pass

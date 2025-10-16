@@ -23,6 +23,17 @@ class JsonRenderer:
     def __init__(self) -> None:
         self._diffable_ndarray_db = DiffableNdarrayDb()
 
+    # =============================================================================
+    # .close()
+    # =============================================================================
+
+    def close(self) -> None:
+        """Close the renderer and free resources."""
+        self.clear_cache()
+
+    # =============================================================================
+    # .render()
+    # =============================================================================
     def render(self, canvas: Canvas, viewports: list[Viewport], cameras: list[Camera]) -> SceneDict:
 
         # =============================================================================
@@ -112,8 +123,16 @@ class JsonRenderer:
 
         return scene_dict
 
+    # =============================================================================
+    # .clear_cache()
+    # =============================================================================
+
     def clear_cache(self) -> None:
         DiffableNdarraySerialisation.reset_db(self._diffable_ndarray_db)
+
+    # =============================================================================
+    # .texture_to_json
+    # =============================================================================
 
     @staticmethod
     def texture_to_json(texture: Texture) -> dict[str, Any]:

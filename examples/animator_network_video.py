@@ -58,19 +58,30 @@ camera = gsp.core.Camera(camera_type="ortho")
 renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=True)
 renderer.render(canvas, [viewport], [camera])
 
+video_path = os.path.join(__dirname__, f"output/{os.path.basename(__file__).replace('.py', '')}.mp4")
+print(f"Saving video to {video_path}")
+animator = GspAnimatorNetwork(renderer, fps=60, video_duration=1.0, video_path=video_path)
+
+
+@animator.on_video_saved.event_listener
+def on_save():
+    # log the video path
+    print(f"Video saved to: {video_path}")
+
+    # stop the animator
+    animator.stop()
+
+    # close the renderer
+    renderer.close()
+
+
 # =============================================================================
 # Animate the scene with matplotlib
 # =============================================================================
-current_time = 0.0
-target_fps = 60
 
 
-def animator_callback() -> list[gsp.core.VisualBase]:
-    # Update the time tracking
-    global current_time
-    delta_time = 1.0 / target_fps
-    current_time += delta_time
-
+@animator.event_listener
+def animator_callback(delta_time: float) -> list[gsp.core.VisualBase]:
     # update positions with velocities
     positions_np[:] += velocities_np * delta_time
 
@@ -87,7 +98,4 @@ def animator_callback() -> list[gsp.core.VisualBase]:
     return changed_visuals
 
 
-video_path = os.path.join(__dirname__, f"output/{os.path.basename(__file__).replace('.py', '')}.mp4")
-print(f"Saving video to {video_path}")
-animator = GspAnimatorNetwork(renderer, target_fps=target_fps, video_path=video_path)
-animator.animate(canvas, [viewport], [camera], [animator_callback])
+animator.start(canvas, [viewport], [camera])

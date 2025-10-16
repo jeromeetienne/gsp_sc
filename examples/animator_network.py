@@ -46,12 +46,12 @@ colors = gsp.types.DiffableNdarray(colors)
 pixels = gsp.visuals.Pixels(positions, sizes, colors)
 viewport.add(pixels)
 
-
 ###############################################################################
 # Render the scene with matplotlib
 #
 camera = gsp.core.Camera(camera_type="perspective")
 network_renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000/", jsondiff_allowed=False)
+gsp_animator = GspAnimatorNetwork(network_renderer)
 
 # =============================================================================
 # Animate the scene with matplotlib thru the network renderer
@@ -59,8 +59,9 @@ network_renderer = gsp_network.NetworkRenderer(server_url="http://localhost:5000
 fps_monitor = FpsMonitor()
 
 
-def animate() -> list[gsp.core.VisualBase]:
-    # copy inplace to avoid reallocations
+@gsp_animator.event_listener
+def animate(delta_time: float) -> list[gsp.core.VisualBase]:
+    # copy inplace to avoid reallocationsd
     sizes[:] = np.random.uniform(10, 100, (n_points,)).astype(np.float32)
 
     # measure FPS to monitor performance
@@ -70,5 +71,4 @@ def animate() -> list[gsp.core.VisualBase]:
     return changed_visuals
 
 
-gsp_animator = GspAnimatorNetwork(network_renderer)
-gsp_animator.animate(canvas, [viewport], [camera], [animate])
+gsp_animator.start(canvas, [viewport], [camera])
