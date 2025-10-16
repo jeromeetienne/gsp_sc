@@ -14,7 +14,7 @@ import time
 import gsp
 import gsp_matplotlib
 from gsp.core import VisualBase
-from .gsp_animator_types import GSPAnimatorFunc, GSPAnimatorFunc2
+from .gsp_animator_types import GSPAnimatorFunc
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 
@@ -36,7 +36,7 @@ class GspAnimatorMatplotlib:
         video_path: str | None = None,
         video_writer: str | None = None,
     ):
-        self._callbacks: list[GSPAnimatorFunc2] = []
+        self._callbacks: list[GSPAnimatorFunc] = []
         self._matplotlib_renderer = matplotlib_renderer
         self._fps = fps
         self._video_duration = video_duration
@@ -68,15 +68,15 @@ class GspAnimatorMatplotlib:
     # .add_callback/.remove_callback/.decorator
     # =============================================================================
 
-    def add_callback(self, func: GSPAnimatorFunc2):
+    def add_callback(self, func: GSPAnimatorFunc):
         """Add a callback to the animation loop."""
         self._callbacks.append(func)
 
-    def remove_callback(self, func: GSPAnimatorFunc2):
+    def remove_callback(self, func: GSPAnimatorFunc):
         """Remove a callback from the animation loop."""
         self._callbacks.remove(func)
 
-    def event_listener(self, func: GSPAnimatorFunc2) -> GSPAnimatorFunc2:
+    def event_listener(self, func: GSPAnimatorFunc) -> GSPAnimatorFunc:
         """A decorator to add a callback to the animation loop.
 
         Usage:
