@@ -30,8 +30,8 @@ panzoom = panel.panzoom()
 
 visual = app.image(
     rescale="keep_ratio",
-    position=position,
-    size=size,
+    positions=position,
+    sizes=size,
     anchor=anchor,
     texcoords=texcoords,
     #

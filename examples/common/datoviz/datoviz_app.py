@@ -2,6 +2,7 @@
 import numpy as np
 
 # Local imports
+from common.datoviz.datoviz_texture import DatovizTexture
 import gsp
 import gsp_matplotlib
 from ..gsp_animator import GspAnimatorMatplotlib
@@ -9,6 +10,7 @@ from ..gsp_animator import GspAnimatorMatplotlib
 from .datoviz_figure import DatovizFigure
 from .datoviz_panel import DatovizPanel
 from .datoviz_points import DatovizPoints
+from .datoviz_images import DatovizImages
 
 
 class DatovizApp:
@@ -43,3 +45,11 @@ class DatovizApp:
     def point(self, position: np.ndarray, color: np.ndarray, size: np.ndarray):
         dvz_point = DatovizPoints(positions=position, sizes=size, colors=color)
         return dvz_point
+
+    def image(self, positions: np.ndarray, sizes: np.ndarray, **kwargs) -> DatovizImages:
+        dvz_image = DatovizImages(positions=positions, sizes=sizes)
+        return dvz_image
+
+    def texture_2D(self, image: np.ndarray, **kwargs):
+        dvz_texture = DatovizTexture(image=image)
+        return dvz_texture
