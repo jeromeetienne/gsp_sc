@@ -7,6 +7,7 @@ It helps testing that all examples run without errors.
 import subprocess
 import sys
 import os
+import colorama
 
 # pip imports
 import argparse
@@ -14,6 +15,24 @@ import argparse
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 
 
+# =============================================================================
+# Colorama alias
+# =============================================================================
+def text_cyan(text: str) -> str:
+    return colorama.Fore.CYAN + text + colorama.Style.RESET_ALL
+
+
+def text_green(text: str) -> str:
+    return colorama.Fore.GREEN + text + colorama.Style.RESET_ALL
+
+
+def text_red(text: str) -> str:
+    return colorama.Fore.RED + text + colorama.Style.RESET_ALL
+
+
+# =============================================================================
+# launch example script
+# =============================================================================
 def launch_example(cmdline_args: list[str]) -> bool:
     """
     Launches the example script with the given command line arguments.
@@ -47,6 +66,9 @@ def launch_example(cmdline_args: list[str]) -> bool:
     return run_success
 
 
+# =============================================================================
+# Launch network server
+# =============================================================================
 def launch_network_server():
     """
     Launches the network server in a separate process.
@@ -113,21 +135,24 @@ def main() -> None:
     basenames.sort()
     script_paths = [os.path.abspath(os.path.join(examples_folder, basename)) for basename in basenames if basename.endswith(".py")]
 
-    print(f"Running {len(script_paths)} example scripts to verify they execute without exceptions.")
+    print(f"Running {text_cyan(str(len(script_paths)))} example scripts to verify they execute without exceptions.")
 
+    project_rootpath = os.path.abspath(os.path.join(__dirname__, ".."))
     for script_path in script_paths:
         # display the basename of the script without new line, and flush the output
         basename_script = os.path.basename(script_path)
-        print(f"Running {basename_script} ... ", end="", flush=True)
+        script_relpath = os.path.relpath(script_path, start=project_rootpath)
+
+        print(f"Running {text_cyan(script_relpath)} ... ", end="", flush=True)
 
         # launch the example script
         run_success = launch_example([sys.executable, script_path, *example_args])
 
         # display X in red if failed, or a check in green if successful
         if run_success:
-            print("\033[92mOK\033[0m")  # Green "OK"
+            print(f"{text_green('OK')}")
         else:
-            print("\033[91mFailed\033[0m")  # Red "Failed"
+            print(f"{text_red('Failed')}")
 
         if not run_success:
             sys.exit(1)
@@ -136,6 +161,8 @@ def main() -> None:
     server_process.terminate()
     server_process.wait()
     print("Network server terminated.")
+
+    print(f"All {text_cyan(str(len(script_paths)))} example scripts ran successfully. {text_green('OK')}")
 
 
 if __name__ == "__main__":
