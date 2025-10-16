@@ -25,7 +25,7 @@ class MatplotlibRendererImage:
             renderer._axesImages[full_uuid] = axes.imshow(np.zeros((2, 2, 3)))
 
         axes_image = renderer._axesImages[full_uuid]
-        axes_image.set_data(image.image_data)
+        axes_image.set_data(image.texture.image_data)
 
         #
 
@@ -47,7 +47,7 @@ class MatplotlibRendererImage:
         # )
         # axes_image.set_extent(transformed_extent)
 
-        positions = np.array([image.vertices])
+        positions = np.array([image.position])
         transformed_positions: np.ndarray = mpl3d.glm.transform(positions, camera.transform)
         # FIXME should be divided by W after rotation
         # but there is nothing to compensate for the camera z

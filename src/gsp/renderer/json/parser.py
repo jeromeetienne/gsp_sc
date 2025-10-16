@@ -11,6 +11,7 @@ from ...core import Canvas
 from ...core import Viewport
 from ...core import Camera
 from ...core import SceneDict
+from ...core import Texture
 from ...visuals import Pixels
 from ...visuals import Image
 from ...visuals import Mesh
@@ -62,13 +63,8 @@ class JsonParser:
                     pixels.uuid = visual_info["uuid"]
                     visual = pixels
                 elif visual_info["type"] == "Image":
-                    image_data_shape = tuple(visual_info["image_data_shape"])
-                    image_data = np.array(visual_info["image_data"]).reshape(image_data_shape)
-                    image = Image(
-                        vertices=np.array(visual_info["position"]),
-                        image_extent=visual_info["bounds"],
-                        image_data=image_data,
-                    )
+                    texture = JsonParser.texture_from_json(visual_info["texture"])
+                    image = Image(position=np.array(visual_info["position"]), image_extent=visual_info["bounds"], texture=texture)
                     # restore the original uuid
                     image.uuid = visual_info["uuid"]
                     visual = image
@@ -92,3 +88,9 @@ class JsonParser:
                 viewport.add(visual)
 
         return canvas, camera
+
+    @staticmethod
+    def texture_from_json(texture_dict: dict[str, Any]) -> Texture:
+        image_data = np.array(texture_dict["image_data"]).reshape(tuple(texture_dict["image_data_shape"]))
+        texture = Texture(image_data)
+        return texture

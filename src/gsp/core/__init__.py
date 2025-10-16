@@ -11,5 +11,5 @@ from .canvas import Canvas
 from .camera import Camera
 from .visual_base import VisualBase
 from .random import Random
-
+from .texture import Texture
 from .types import SceneDict, Color

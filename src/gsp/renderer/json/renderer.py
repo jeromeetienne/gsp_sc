@@ -1,5 +1,6 @@
 # stdlib imports
 import typing
+from typing import Any
 import json
 
 # pip imports
@@ -9,6 +10,7 @@ import numpy as np
 # local imports
 from ...core.canvas import Canvas
 from ...core.camera import Camera
+from ...core.texture import Texture
 from ...core.types import SceneDict
 from ...visuals.pixels import Pixels
 from ...visuals.image import Image
@@ -62,10 +64,9 @@ class JsonRenderer:
                     visual_dict = {
                         "type": "Image",
                         "uuid": image.uuid,
-                        "position": image.vertices.tolist(),
+                        "position": image.position.tolist(),
                         "bounds": image.image_extent,
-                        "image_data_shape": image.image_data.shape,
-                        "image_data": image.image_data.tolist(),
+                        "texture": JsonRenderer.texture_to_json(image.texture),
                     }
                 elif isinstance(visual, Mesh):
                     mesh = visual
@@ -91,3 +92,11 @@ class JsonRenderer:
 
     def clear_cache(self) -> None:
         DiffableNdarraySerialisation.reset_db(self._diffable_ndarray_db)
+
+    @staticmethod
+    def texture_to_json(texture: Texture) -> dict[str, Any]:
+        texture_dict: dict[str, Any] = {
+            "image_data": texture.image_data.tolist(),
+            "image_data_shape": texture.image_data.shape,
+        }
+        return texture_dict

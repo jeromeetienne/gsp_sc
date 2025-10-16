@@ -18,13 +18,9 @@ pytest_verbose: ## Run pytest in verbose mode on the tests/ directory
 
 ##############################################################################
 
-lint: lint_src lint_examples ## Run pyright type checker on src and examples
+lint: ## Run pyright type checker on src and examples
+	pyright ./src/gsp/ ./examples/ ./tools/
 
-lint_src: ## Run pyright type checker on ./src
-	pyright src/gsp/
-
-lint_examples: ## Run pyright type checker on ./examples
-	pyright ./examples/
 
 ##########################################################################
 

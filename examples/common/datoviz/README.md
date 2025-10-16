@@ -21,3 +21,11 @@ Principle "Add explicitly"
 - `app.figure()` -> `app.add(Figure())`
 - `panel = figure.panel()` -> `figure.add(Panel())`
 - `panzoom = panel.panzoom()` -> `panel.set_controller(PanZoom())`
+
+### Lack of consistency
+
+- app = dvz.App(): create an app (no adding)
+- figure = app.figure() create a figure and add it to the app
+- panel = figure.panel() create a panel and add it to the figure
+- panzoom = panel.panzoom() create a camera controller and set it to the panel
+- image = app.image() create an image (no adding to figure)
