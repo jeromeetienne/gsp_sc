@@ -99,12 +99,11 @@ class MatplotlibRenderer:
             figure = matplotlib.pyplot.gcf()
             mpl_axes = figure.get_axes()[0]
 
-            mpl3d_cameras: list[mpl3d.camera.Camera] = [camera.mpl3d_camera for camera in cameras]
-
             # connect the camera events to the render function
             def camera_update(transform) -> None:
                 self.__render(canvas, viewports=viewports, cameras=cameras)
 
+            mpl3d_cameras: list[mpl3d.camera.Camera] = [camera.mpl3d_camera for camera in cameras]
             for mpl3d_camera in mpl3d_cameras:
                 mpl3d_camera.connect(mpl_axes, camera_update)
 

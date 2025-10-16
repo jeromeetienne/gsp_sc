@@ -2,11 +2,11 @@
 import numpy as np
 
 # Local imports
-from common.datoviz.datoviz_texture import DatovizTexture
 import gsp
 import gsp_matplotlib
 from ..gsp_animator import GspAnimatorMatplotlib
-
+from ..fps_monitor import FpsMonitor
+from .datoviz_texture import DatovizTexture
 from .datoviz_figure import DatovizFigure
 from .datoviz_points import DatovizPoints
 from .datoviz_images import DatovizImages
@@ -26,12 +26,17 @@ class DatovizApp:
         self._dvz_figure = figure
 
     def run(self):
+        fps_monitor = FpsMonitor()
+
         def animator_callback() -> list[gsp.core.VisualBase]:
-            print("Animating...")
-            changed_visuals: list[gsp.core.VisualBase] = []
+
+            # measure FPS to monitor performance
+            fps_monitor.print_fps()
 
             # go through all visuals in the canvas and mark them as changed
             canvas = self._dvz_figure._gsp_canvas
+
+            changed_visuals: list[gsp.core.VisualBase] = []
             for viewport in canvas.viewports:
                 for visual in viewport.visuals:
                     changed_visuals.append(visual)

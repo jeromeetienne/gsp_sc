@@ -1,5 +1,29 @@
 # TODO
 
+- support collection for all visuals
+  - may create alias for the single case, which forwards to the collection case
+  - pixels is already done
+  - images and meshes to do
+- change the renderer to support multiple viewports
+  - DONE for MatplotlibRendererDelta
+  - TODO for MatplotlibRenderer
+- fix the multiple viewports
+  - one camera per viewport
+  - how to handle camera in the scene ?
+- handle multiple matplotlib renderers at the same time ?
+  - how to handle multiple canvas ?
+  - how to handle multiple viewport
+- get new animator function
+  - current one got poor callback
+  - it didnt update camera
+- bring the scene graph here
+  - canvas contains a scene root `Visual` visual is the new object3D
+  - visual contains children visuals
+  - cameras are also visuals
+  - lights are also visuals
+
+=========
+
 - support `Images`
   - with multiple textures
 - make a type for ndarray like nptyping

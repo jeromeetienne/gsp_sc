@@ -31,7 +31,7 @@ canvas.add(viewport=viewport)
 ###############################################################################
 # Add some random points
 #
-n_points = 2000
+n_points = 20
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.array([50 for _ in range(n_points)], np.float32)
 colors_np = np.array([gsp.Constants.Green for _ in range(n_points)], np.float32)

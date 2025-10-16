@@ -7,6 +7,8 @@ import __main__
 import matplotlib.pyplot
 import matplotlib.animation
 import matplotlib.artist
+import mpl3d
+import mpl3d.camera
 
 # local imports
 import gsp
@@ -24,7 +26,7 @@ class GspAnimatorMatplotlib:
     def __init__(
         self,
         matplotlib_renderer: gsp_matplotlib.MatplotlibRenderer,
-        target_fps: int = 30,
+        target_fps: int = 50,
         video_path: str | None = None,
         video_writer: str | None = None,
     ):
@@ -50,8 +52,16 @@ class GspAnimatorMatplotlib:
         """
         Animate the given canvas and camera using the provided callbacks to update visuals.
         """
-        # render once to get the image size
+
+        # =============================================================================
+        # Render the image once
+        # =============================================================================
+
         self._matplotlib_renderer.render(canvas, camera)
+
+        # =============================================================================
+        # matploglib animation callback
+        # =============================================================================
 
         def mpl_animate(frame_index: int) -> list[matplotlib.artist.Artist]:
             # notify all animator callbacks
@@ -69,7 +79,12 @@ class GspAnimatorMatplotlib:
             # return the changed mpl artists
             return changed_mpl_artists
 
+        # TODO this is crap... take it from the renderer
         figure = matplotlib.pyplot.gcf()
+
+        # =============================================================================
+        # Handle GSP_SC_INTERACTIVE=False
+        # =============================================================================
 
         # detect if we are in not interactive mode - used during testing
         gsp_sc_interactive = "GSP_SC_INTERACTIVE" not in os.environ or os.environ["GSP_SC_INTERACTIVE"] != "False"
@@ -88,6 +103,22 @@ class GspAnimatorMatplotlib:
             print(f"Saved animation preview image to: {image_path}")
             return
 
+        # NOTE: here we are in interactive mode!!
+
+        # =============================================================================
+        # Connect cameras
+        # =============================================================================
+
+        cameras = [camera for _ in canvas.viewports]
+
+        # connect the camera events to the render function
+        def camera_update(transform) -> None:
+            self._matplotlib_renderer.render_viewports(canvas, viewports=canvas.viewports, cameras=cameras)
+
+        for camera, viewport in zip(cameras, canvas.viewports):
+            mpl_axes = self._matplotlib_renderer._axes[viewport.uuid]
+            camera.mpl3d_camera.connect(mpl_axes, camera_update)
+
         # =============================================================================
         # Initialize the animation
         # =============================================================================
@@ -96,8 +127,21 @@ class GspAnimatorMatplotlib:
         if self._video_path is not None:
             anim.save(self._video_path, writer=self._video_writer, fps=self._target_fps)
 
-        # show the animation
+        # =============================================================================
+        # Show the animation
+        # =============================================================================
+
         matplotlib.pyplot.show()
+
+        # =============================================================================
+        # Disconnect cameras
+        # =============================================================================
+        for camera in cameras:
+            camera.mpl3d_camera.disconnect()
+
+    # =============================================================================
+    #
+    # =============================================================================
 
     # TODO move that in the matplotlib renderer?
     def _get_mpl_artists(self, canvas: gsp.core.Canvas, visual_base: gsp.core.VisualBase) -> matplotlib.artist.Artist:
