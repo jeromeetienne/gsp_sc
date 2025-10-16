@@ -37,6 +37,9 @@ class MatplotlibRenderer:
     def close(self) -> None:
         """Close all matplotlib figures managed by this renderer."""
         for figure in self._figures.values():
+            # stop the event loop if any - thus .show(block=True) will return
+            figure.canvas.stop_event_loop()
+            # close the figure
             matplotlib.pyplot.close(figure)
         self._figures.clear()
         self._axes.clear()

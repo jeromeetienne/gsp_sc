@@ -1,19 +1,26 @@
 # stdlib imports
 import os
 import __main__
-
+from typing import Sequence
+from typing import Protocol
 
 # pip imports
 import matplotlib.pyplot
 import matplotlib.animation
 import matplotlib.artist
+import time
 
 # local imports
 import gsp
 import gsp_matplotlib
-from .gsp_animator_types import GSPAnimatorFunc
+from gsp.core import VisualBase
+from .gsp_animator_types import GSPAnimatorFunc, GSPAnimatorFunc2
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
+
+
+class VideoSavedCalledback(Protocol):
+    def __call__(self) -> None: ...  # type: ignore
 
 
 class GspAnimatorMatplotlib:
@@ -24,14 +31,25 @@ class GspAnimatorMatplotlib:
     def __init__(
         self,
         matplotlib_renderer: gsp_matplotlib.MatplotlibRenderer,
-        target_fps: int = 50,
+        fps: int = 50,
+        video_duration: float = 10.0,
         video_path: str | None = None,
         video_writer: str | None = None,
     ):
+        self._callbacks: list[GSPAnimatorFunc2] = []
         self._matplotlib_renderer = matplotlib_renderer
-        self._target_fps = target_fps
+        self._fps = fps
+        self._video_duration = video_duration
         self._video_path = video_path
         self._video_writer: str | None = None
+        self._time_last_update = None
+        self._canvas: gsp.core.Canvas | None = None
+        self._viewports: list[gsp.core.Viewport] | None = None
+        self._cameras: list[gsp.core.Camera] | None = None
+        self._funcAnimation: matplotlib.animation.FuncAnimation | None = None
+
+        self.on_video_saved = gsp.core.Event[VideoSavedCalledback]()
+        """Event triggered when the video is saved."""
 
         # guess the video writer from the file extension if not provided
         if self._video_path is not None:
@@ -46,10 +64,54 @@ class GspAnimatorMatplotlib:
                 else:
                     raise ValueError(f"Unsupported video format: {video_ext}")
 
-    def animate(self, canvas: gsp.core.Canvas, viewports: list[gsp.core.Viewport], cameras: list[gsp.core.Camera], animator_callbacks: list[GSPAnimatorFunc]):
+    # =============================================================================
+    # .add_callback/.remove_callback/.decorator
+    # =============================================================================
+
+    def add_callback(self, func: GSPAnimatorFunc2):
+        """Add a callback to the animation loop."""
+        self._callbacks.append(func)
+
+    def remove_callback(self, func: GSPAnimatorFunc2):
+        """Remove a callback from the animation loop."""
+        self._callbacks.remove(func)
+
+    def event_listener(self, func: GSPAnimatorFunc2) -> GSPAnimatorFunc2:
+        """A decorator to add a callback to the animation loop.
+
+        Usage:
+            ```python
+                @animation_loop.decorator
+                def my_callback(delta_time: float) -> Sequence[Object3D]:
+                    ...
+
+                # later, if needed
+                animation_loop.remove_callback(my_callback)
+            ```
+        """
+
+        self.add_callback(func)
+
+        def wrapper(delta_time: float) -> Sequence[VisualBase]:
+            # print("Before the function runs")
+            result = func(delta_time)
+            # print("After the function runs")
+            return result
+
+        return wrapper
+
+    # =============================================================================
+    # .start()
+    # =============================================================================
+    def start(self, canvas: gsp.core.Canvas, viewports: list[gsp.core.Viewport], cameras: list[gsp.core.Camera]) -> None:
         """
         Animate the given canvas and camera using the provided callbacks to update visuals.
         """
+
+        self._canvas = canvas
+        self._viewports = viewports
+        self._cameras = cameras
+        self._time_last_update = time.time()
 
         # =============================================================================
         # Render the image once
@@ -61,24 +123,10 @@ class GspAnimatorMatplotlib:
         # matploglib animation callback
         # =============================================================================
 
-        def mpl_animate(frame_index: int) -> list[matplotlib.artist.Artist]:
-            # notify all animator callbacks
-            changed_visuals: list[gsp.core.VisualBase] = []
-            for callback in animator_callbacks:
-                _changed_visuals = callback()
-                changed_visuals.extend(_changed_visuals)
-
-            # convert all changed visuals to mpl artists
-            changed_mpl_artists: list[matplotlib.artist.Artist] = []
-            for visual in changed_visuals:
-                mpl_artist = self._get_mpl_artists(canvas, visual)
-                changed_mpl_artists.append(mpl_artist)
-
-            # return the changed mpl artists
-            return changed_mpl_artists
-
         # TODO this is crap... take it from the renderer
-        figure = matplotlib.pyplot.gcf()
+        # figure = matplotlib.pyplot.gcf()
+        figures = list(self._matplotlib_renderer._figures.values())
+        figure = figures[0]
 
         # =============================================================================
         # Handle GSP_SC_INTERACTIVE=False
@@ -118,10 +166,16 @@ class GspAnimatorMatplotlib:
         # =============================================================================
         # Initialize the animation
         # =============================================================================
-        anim = matplotlib.animation.FuncAnimation(figure, mpl_animate, frames=100, interval=1000.0 / self._target_fps)
+
+        self._funcAnimation = matplotlib.animation.FuncAnimation(
+            figure, self._mpl_animate, frames=int(self._video_duration * self._fps), interval=1000.0 / self._fps
+        )
+
         # save the animation if a path is provided
         if self._video_path is not None:
-            anim.save(self._video_path, writer=self._video_writer, fps=self._target_fps)
+            self._funcAnimation.save(self._video_path, writer=self._video_writer, fps=self._fps)
+            # Dispatch the video saved event
+            self.on_video_saved.dispatch()
 
         # =============================================================================
         # Show the animation
@@ -136,7 +190,48 @@ class GspAnimatorMatplotlib:
             camera.mpl3d_camera.disconnect()
 
     # =============================================================================
-    #
+    # .stop()
+    # =============================================================================
+    def stop(self):
+        self._canvas = None
+        self._viewports = None
+        self._cameras = None
+        self._time_last_update = None
+
+        # stop the animation function timer
+        if self._funcAnimation is not None:
+            self._funcAnimation.event_source.stop()
+            self._funcAnimation = None
+
+    # =============================================================================
+    # ._mpl_animate()
+    # =============================================================================
+
+    def _mpl_animate(self, rame_index: int) -> list[matplotlib.artist.Artist]:
+        # compute delta time
+        present = time.time()
+        delta_time = (present - self._time_last_update) if self._time_last_update is not None else (1 / self._fps)
+        self._time_last_update = present
+
+        # notify all animator callbacks
+        changed_visuals: list[gsp.core.VisualBase] = []
+
+        for callback in self._callbacks:
+            _changed_visuals = callback(delta_time)
+            changed_visuals.extend(_changed_visuals)
+
+        # convert all changed visuals to mpl artists
+        changed_mpl_artists: list[matplotlib.artist.Artist] = []
+        for visual in changed_visuals:
+            assert self._canvas is not None, "Canvas MUST be set during the animation"
+            mpl_artist = self._get_mpl_artists(self._canvas, visual)
+            changed_mpl_artists.append(mpl_artist)
+
+        # return the changed mpl artists
+        return changed_mpl_artists
+
+    # =============================================================================
+    # ._get_mpl_artists()
     # =============================================================================
 
     # TODO move that in the matplotlib renderer?

@@ -26,6 +26,32 @@ viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.Wh
 canvas.add(viewport)
 
 
+# Initializee the camera
+camera = gsp.core.Camera(camera_type="ortho")
+
+# matplotlib renderer
+renderer = gsp_matplotlib.MatplotlibRenderer()
+
+# Save the animation to a video file
+video_path = os.path.join(__dirname__, f"output/{os.path.basename(__file__).replace('.py', '')}.mp4")
+print(f"Saving video to {video_path}")
+
+# Init a animator
+animator = GspAnimatorMatplotlib(renderer, fps=60, video_duration=10.0, video_path=video_path)
+
+
+@animator.on_video_saved.event_listener
+def on_save():
+    # log the video path
+    print(f"Video saved to: {video_path}")
+
+    # stop the animator
+    animator.stop()
+
+    # close the renderer
+    renderer.close()
+
+
 # =============================================================================
 # Add some random points
 # =============================================================================
@@ -46,26 +72,14 @@ for i in range(n_points):
     velocities[i, 0] = speed * np.cos(angle)
     velocities[i, 1] = speed * np.sin(angle)
 
-# =============================================================================
-# Render the canvas with matplotlib
-# =============================================================================
-camera = gsp.core.Camera(camera_type="ortho")
-renderer = gsp_matplotlib.MatplotlibRenderer()
-renderer.render(canvas, [viewport], [camera])
 
 # =============================================================================
 # Animate the scene with matplotlib
 # =============================================================================
-current_time = 0.0
-target_fps = 60
 
 
-def animator_callback() -> list[gsp.core.VisualBase]:
-    # Update the time tracking
-    global current_time
-    delta_time = 1.0 / target_fps
-    current_time += delta_time
-
+@animator.event_listener
+def animator_callback(delta_time: float) -> list[gsp.core.VisualBase]:
     # update positions with velocities
     positions[:] += velocities * delta_time
 
@@ -88,10 +102,5 @@ def animator_callback() -> list[gsp.core.VisualBase]:
     return changed_visuals
 
 
-# Save the animation to a video file
-video_path = os.path.join(__dirname__, f"output/{os.path.basename(__file__).replace('.py', '')}.mp4")
-print(f"Saving video to {video_path}")
-
 # Create the animator and start the animation
-animator = GspAnimatorMatplotlib(renderer, target_fps=target_fps, video_path=video_path)
-animator.animate(canvas, [viewport], [camera], [animator_callback])
+animator.start(canvas, [viewport], [camera])

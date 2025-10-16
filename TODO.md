@@ -1,5 +1,7 @@
 # TODO
 
+- take end of video save from scene-graph
+  - exit the script on end of video recording
 - fix the multiple viewports
   - one camera per viewport
   - how to handle camera in the scene ?

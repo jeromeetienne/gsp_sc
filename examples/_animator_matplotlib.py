@@ -77,4 +77,4 @@ def animator_callback() -> list[gsp.core.VisualBase]:
 
 
 animator_matplotlib = GspAnimatorMatplotlib(renderer)
-animator_matplotlib.animate(canvas, [viewport], [camera], [animator_callback])
+animator_matplotlib.start(canvas, [viewport], [camera], [animator_callback])

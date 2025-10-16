@@ -43,7 +43,7 @@ class DatovizApp:
 
             return changed_visuals
 
-        self._gsp_animator_matplotlib.animate(self._dvz_figure._gsp_canvas, self._dvz_figure._gsp_canvas.viewports, [self._gsp_camera], [animator_callback])
+        self._gsp_animator_matplotlib.start(self._dvz_figure._gsp_canvas, self._dvz_figure._gsp_canvas.viewports, [self._gsp_camera], [animator_callback])
 
     def destroy(self):
         pass

@@ -14,6 +14,7 @@ import matplotlib.pyplot
 from common.gsp_animator import GspAnimatorMatplotlib
 from common.fps_monitor import FpsMonitor
 from common.mesh_parser import MeshParserMeshio
+from gsp_matplotlib.renderer import renderer
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
 # Set random seed for reproducibility
@@ -26,6 +27,15 @@ np.random.seed(10)
 canvas = gsp.core.Canvas(512, 512, 100)
 viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
 canvas.add(viewport)
+
+# Init the camera
+camera = gsp.core.Camera(camera_type="perspective")
+
+# init the matplotlib renderer
+renderer = gsp_matplotlib.MatplotlibRenderer()
+
+# init the animator with the renderer
+animator_matplotlib = GspAnimatorMatplotlib(renderer)
 
 ###############################################################################
 # Add some random points
@@ -47,12 +57,6 @@ vertices_coords = mpl3d.glm.fit_unit_cube(vertices_coords)
 mesh = gsp.visuals.Mesh(vertices_coords, faces_indices, cmap=matplotlib.pyplot.get_cmap("magma"), edgecolors=(0, 0, 0, 0.25))  # type: ignore
 viewport.add(mesh)
 
-###############################################################################
-# Render the scene with matplotlib
-#
-camera = gsp.core.Camera(camera_type="perspective")
-renderer = gsp_matplotlib.MatplotlibRenderer()
-renderer.render(canvas, [viewport], [camera])
 
 # =============================================================================
 # Animate the scene with matplotlib
@@ -60,7 +64,8 @@ renderer.render(canvas, [viewport], [camera])
 fps_monitor = FpsMonitor()
 
 
-def animator_callback() -> list[gsp.core.VisualBase]:
+@animator_matplotlib.event_listener
+def animator_callback(delta_time: float) -> list[gsp.core.VisualBase]:
     new_sizes = np.random.uniform(10, 100, (n_points,)).astype(np.float32)
     # copy inplace to avoid reallocations
     sizes_np[:] = new_sizes
@@ -72,5 +77,5 @@ def animator_callback() -> list[gsp.core.VisualBase]:
     return changed_visuals
 
 
-animator_matplotlib = GspAnimatorMatplotlib(renderer)
-animator_matplotlib.animate(canvas, [viewport], [camera], [animator_callback])
+# start the animation loop
+animator_matplotlib.start(canvas, [viewport], [camera])

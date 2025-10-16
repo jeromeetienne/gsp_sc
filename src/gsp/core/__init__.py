@@ -13,3 +13,4 @@ from .visual_base import VisualBase
 from .random import Random
 from .texture import Texture
 from .types import SceneDict, Color
+from .event import Event
