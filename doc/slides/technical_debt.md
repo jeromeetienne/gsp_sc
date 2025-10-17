@@ -66,6 +66,13 @@ theme: marpit-custom
 
 ## List of Known Issues
 
+- code style
+  - single letter variable
+  - no comment
+  - confusing names
+  - lack of type hinting
+  - globals / eval
+  - Against all engineering best practices
 - no notion of camera
   - so from which point of view are we rendering ?
   - how to handle multiple viewports ?
