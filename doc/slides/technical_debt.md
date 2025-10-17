@@ -76,7 +76,8 @@ theme: marpit-custom
 - no notion of camera
   - so from which point of view are we rendering ?
   - how to handle multiple viewports ?
-- even the most basic, aka generating command doesnt work. it never worked. it is not buggy as in doesnt work as expected, the code is just not there. no ./examples
+- even the most basic, aka generating command doesnt work. it never worked. it is not buggy as in doesnt work as expected, the code is just not
+  there. no ./examples
 - add the len(on transform) in most constructor
 - i estimate that 30%-40% of the code is never executed
   - command never executed
@@ -103,6 +104,7 @@ theme: marpit-custom
   - _this_ and _that_ are two screenshots of the command generation/parsing tests
   - <https://github.com/vispy/GSP/issues/14#issuecomment-3376478461> on github
   - the other is on signal
+  - at this rythm it will be over in 8 months
 - numpy advices against subtyping it and say it is dangerous (find the link). TODO count how many
   - <https://numpy.org/doc/stable/user/basics.subclassing.html#implications-for-subclassing>
 - now we got test for the whole pipeline

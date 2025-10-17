@@ -8,6 +8,7 @@ import gsp
 import gsp_matplotlib
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
+
 # Set random seed for reproducibility
 gsp.core.Random.set_random_seed(10)
 np.random.seed(10)
