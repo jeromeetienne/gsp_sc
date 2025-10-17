@@ -9,16 +9,16 @@ import matplotlib.axes
 import numpy as np
 
 # local imports
-from ...gsp.core.object_3d import Object3D
-from ...gsp.core import Constants
-from ...gsp.objects.points import Points
-from ...gsp.objects.lines import Lines
-from ...gsp.objects.polygons import Polygons
-from ...gsp.objects.sprite import Sprite
-from ...gsp.objects.mesh import Mesh
-from ...gsp.objects.scene import Scene
-from ...gsp.objects.text import Text
-from ...gsp.cameras.camera import Camera
+from gsp.core.object_3d import Object3D
+from gsp.core import Constants
+from gsp.objects.points import Points
+from gsp.objects.lines import Lines
+from gsp.objects.polygons import Polygons
+from gsp.objects.sprite import Sprite
+from gsp.objects.mesh import Mesh
+from gsp.objects.scene import Scene
+from gsp.objects.text import Text
+from gsp.cameras.camera import Camera
 
 
 class Renderer:
@@ -71,7 +71,7 @@ class Renderer:
     def get_axis(self) -> matplotlib.axes.Axes:
         return self._axis
 
-    def render(self, scene: Scene, camera: Camera) -> list[matplotlib.artist.Artist]:
+    def render(self, scene: Object3D, camera: Camera) -> list[matplotlib.artist.Artist]:
         # update world matrices
         scene.update_world_matrix()
 
@@ -80,6 +80,8 @@ class Renderer:
         for object3d in scene.traverse():
             _changed_artists = self._render_object(object3d, camera)
             changed_artists.extend(_changed_artists)
+
+        # TODO
 
         return changed_artists
 

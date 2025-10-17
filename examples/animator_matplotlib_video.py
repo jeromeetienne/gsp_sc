@@ -22,7 +22,7 @@ np.random.seed(10)
 # Create a GSP canvas
 # =============================================================================
 canvas = gsp.core.Canvas(512, 512, 100)
-viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
 canvas.add(viewport)
 
 
@@ -58,7 +58,7 @@ def on_save():
 n_points = 10
 positions = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes = np.array([100 for _ in range(n_points)], np.float32)
-colors = np.array([gsp.Constants.Green for _ in range(n_points)], np.float32)
+colors = np.array([gsp.core.Constants.Green for _ in range(n_points)], np.float32)
 pixels = gsp.visuals.Pixels(positions, sizes, colors)
 viewport.add(pixels)
 

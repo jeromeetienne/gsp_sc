@@ -25,7 +25,7 @@ np.random.seed(10)
 # Create a GSP scene
 #
 canvas = gsp.core.Canvas(512, 512, 100)
-viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
 canvas.add(viewport)
 
 # Init the camera
@@ -43,7 +43,7 @@ animator_matplotlib = GspAnimatorMatplotlib(renderer)
 n_points = 20
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.array([50 for _ in range(n_points)], np.float32)
-colors_np = np.array([gsp.Constants.Green for _ in range(n_points)], np.float32)
+colors_np = np.array([gsp.core.Constants.Green for _ in range(n_points)], np.float32)
 pixels = gsp.visuals.Pixels(positions_np, sizes_np, colors_np)
 viewport.add(pixels)
 

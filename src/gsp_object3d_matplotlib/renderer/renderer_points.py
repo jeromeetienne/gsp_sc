@@ -7,11 +7,11 @@ import matplotlib.collections
 import numpy as np
 
 # local imports
-from ...gsp.objects.points import Points
+from gsp.objects.points import Points
 from .renderer import Renderer
-from ...gsp.cameras.camera import Camera
-from ...gsp.math.transform_utils import TransformUtils
-from ...gsp.geometry.geometry_utils import GeometryUtils
+from gsp.cameras.camera import Camera
+from gsp.math.transform_utils import TransformUtils
+from gsp.geometry.geometry_utils import GeometryUtils
 from .renderer_utils import RendererUtils
 
 

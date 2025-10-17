@@ -3,10 +3,10 @@ import matplotlib.artist
 import numpy as np
 
 # local imports
-from ...gsp.cameras.camera import Camera
-from ...gsp.core import Object3D
-from ...gsp.core.constants import Constants
-from ...gsp.lights import Light, DirectionalLight, PointLight, AmbientLight
+from gsp.cameras.camera import Camera
+from gsp.core import Object3D
+from gsp.core.constants import Constants
+from gsp.lights import Light, DirectionalLight, PointLight, AmbientLight
 
 
 class RendererUtils:

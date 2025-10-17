@@ -2,12 +2,20 @@
 Basic example of creating and rendering a simple GSP scene with matplotlib.
 """
 
+# pip imports
 import numpy as np
 import os
+import matplotlib.pyplot
+
+# local imports
 import gsp
-import gsp_object3d_matplotlib
+from gsp_object3d_matplotlib.renderer import Renderer
+from gsp.geometry import Geometry
+from gsp.materials import PointsMaterial
+from gsp.objects.points import Points
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
+
 # Set random seed for reproducibility
 gsp.core.Random.set_random_seed(10)
 np.random.seed(10)
@@ -22,7 +30,7 @@ viewport = gsp.core.Viewport(
     origin_y=0,
     width=canvas.width,
     height=canvas.height,
-    background_color=gsp.Constants.White,
+    background_color=gsp.core.Constants.White,
 )
 canvas.add(viewport=viewport)
 
@@ -30,23 +38,27 @@ canvas.add(viewport=viewport)
 # Add some random points
 # =============================================================================
 
-n_points = 300
-positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
-sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
-colors_np = np.array([gsp.Constants.Green])
-pixels = gsp.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=colors_np)
-viewport.add(pixels)
+# Add points
+point_count = 1000
+geometry = Geometry(np.random.uniform(-1, 1, (point_count, 3)))
+colors = np.array([[1, 0, 0, 1] for i in range(point_count)])
+material = PointsMaterial(colors=colors)
+points = Points(geometry, material)
+points.scale[:] = 0.5
+viewport.scene.add(points)
 
 # =============================================================================
 # Render the canvas with a perspective camera
 # =============================================================================
 
-camera = gsp.core.Camera(camera_type="perspective")
-renderer = gsp_object3d_matplotlib.MatplotlibRenderer()
-image_png_buffer = renderer.render(canvas, [viewport], [camera], interactive=True)
 
-# Save the rendered image to a file
-image_path = f"{__dirname__}/output/{os.path.basename(__file__).replace('.py', '')}.png"
-with open(image_path, "wb") as png_file:
-    png_file.write(image_png_buffer)
-print(f"Rendered image saved to {image_path}")
+camera = gsp.cameras.CameraOrthographic()
+viewport.scene.add(camera)
+camera.position = np.array([0.0, 0.0, 5.0])
+
+
+renderer = Renderer()
+renderer.render(viewport.scene, camera)
+
+# show the result
+matplotlib.pyplot.show(block=True)

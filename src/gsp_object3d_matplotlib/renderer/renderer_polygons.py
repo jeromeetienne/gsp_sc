@@ -11,12 +11,12 @@ import numpy as np
 from .renderer_utils import RendererUtils
 
 # local imports
-from ...gsp.objects.polygons import Polygons
+from gsp.objects.polygons import Polygons
 from .renderer import Renderer
-from ...gsp.cameras.camera import Camera
-from ...gsp.math.transform_utils import TransformUtils
-from ...gsp.geometry.geometry_utils import GeometryUtils
-from ...gsp.core.constants import Constants
+from gsp.cameras.camera import Camera
+from gsp.math.transform_utils import TransformUtils
+from gsp.geometry.geometry_utils import GeometryUtils
+from gsp.core.constants import Constants
 
 
 class RendererPolygons:

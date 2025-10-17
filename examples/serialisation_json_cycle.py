@@ -22,10 +22,10 @@ canvas = gsp.core.Canvas(512, 512, 100)
 ###############################################################################
 # Create two viewports
 #
-viewport1 = gsp.core.Viewport(0, 0, 256, 256, gsp.Constants.White)
+viewport1 = gsp.core.Viewport(0, 0, 256, 256, gsp.core.Constants.White)
 canvas.add(viewport1)
 
-viewport2 = gsp.core.Viewport(256, 0, 256, 256, gsp.Constants.White)
+viewport2 = gsp.core.Viewport(256, 0, 256, 256, gsp.core.Constants.White)
 canvas.add(viewport2)
 
 ###############################################################################

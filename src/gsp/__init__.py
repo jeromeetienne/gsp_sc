@@ -13,6 +13,13 @@ from . import core
 from . import renderer
 from . import visuals
 from . import types
-from .core.constants import Constants
 
 from . import transform
+
+from . import math
+
+from . import materials
+from . import geometry
+from . import objects
+from . import lights
+from . import cameras

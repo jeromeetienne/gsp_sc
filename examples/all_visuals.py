@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 # local imports
-from common.scene_examples import SceneExamples
+from common.visual_examples import VisualExamples
 import gsp
 import gsp_matplotlib
 
@@ -19,14 +19,14 @@ np.random.seed(10)
 # Create a canvas and a viewport
 # =============================================================================
 canvas = gsp.core.Canvas(512, 512, 100)
-viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
 canvas.add(viewport)
 
 # =============================================================================
 # Add all visuals to the viewport
 # =============================================================================
 
-SceneExamples.add_all_visuals(viewport)
+VisualExamples.add_all_visuals(viewport)
 
 # =============================================================================
 # Render the scene with a perspective camera

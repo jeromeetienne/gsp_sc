@@ -7,12 +7,12 @@ import matplotlib.text
 import numpy as np
 
 # local imports
-from ...gsp.objects.text import Text
+from gsp.objects.text import Text
 from .renderer import Renderer
-from ...gsp.cameras.camera import Camera
-from ...gsp.math.transform_utils import TransformUtils
-from ...gsp.geometry.geometry_utils import GeometryUtils
-from ...gsp.materials.text_material import TextMaterial
+from gsp.cameras.camera import Camera
+from gsp.math.transform_utils import TransformUtils
+from gsp.geometry.geometry_utils import GeometryUtils
+from gsp.materials.text_material import TextMaterial
 from .renderer_utils import RendererUtils
 
 

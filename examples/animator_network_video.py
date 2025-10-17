@@ -27,7 +27,7 @@ viewport = gsp.core.Viewport(
     origin_y=0,
     width=canvas.width,
     height=canvas.height,
-    background_color=gsp.Constants.White,
+    background_color=gsp.core.Constants.White,
 )
 canvas.add(viewport=viewport)
 
@@ -37,7 +37,7 @@ canvas.add(viewport=viewport)
 n_points = 10
 positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes_np = np.array([100 for _ in range(n_points)], np.float32)
-colors_np = np.array([gsp.Constants.Green for _ in range(n_points)], np.float32)
+colors_np = np.array([gsp.core.Constants.Green for _ in range(n_points)], np.float32)
 pixels = gsp.visuals.Pixels(positions_np, sizes_np, colors_np)
 viewport.add(pixels)
 

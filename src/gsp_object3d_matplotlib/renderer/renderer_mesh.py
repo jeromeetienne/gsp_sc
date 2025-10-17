@@ -7,13 +7,13 @@ import numpy as np
 
 
 # local imports
-from ...gsp.core.constants import Constants
-from ...gsp.objects.mesh import Mesh
-from ...gsp.materials import MeshBasicMaterial, MeshPhongMaterial, MeshNormalMaterial, MeshDepthMaterial, MeshTexturedMaterial
+from gsp.core.constants import Constants
+from gsp.objects.mesh import Mesh
+from gsp.materials import MeshBasicMaterial, MeshPhongMaterial, MeshNormalMaterial, MeshDepthMaterial, MeshTexturedMaterial
 from .renderer import Renderer
-from ...gsp.cameras.camera import Camera
-from ...gsp.math.transform_utils import TransformUtils
-from ...gsp.geometry.geometry_utils import GeometryUtils
+from gsp.cameras.camera import Camera
+from gsp.math.transform_utils import TransformUtils
+from gsp.geometry.geometry_utils import GeometryUtils
 
 # https://chatgpt.com/c/68ee0eab-776c-8331-b44a-f131ba3f166b
 # local -> world -> view -> clip (NDC) -> screen (2D)

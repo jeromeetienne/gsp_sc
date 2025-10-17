@@ -27,7 +27,7 @@ viewport = gsp.core.Viewport(
     origin_y=0,
     width=canvas.width,
     height=canvas.height,
-    background_color=gsp.Constants.White,
+    background_color=gsp.core.Constants.White,
 )
 canvas.add(viewport=viewport)
 

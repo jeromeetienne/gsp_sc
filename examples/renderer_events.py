@@ -22,7 +22,7 @@ np.random.seed(10)
 # Create a GSP scene
 #
 canvas = gsp.core.Canvas(256, 256, 100)
-viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
 canvas.add(viewport)
 
 ###############################################################################

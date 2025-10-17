@@ -46,7 +46,7 @@ class Viewport:
         # self._canvas: Canvas | None = None
         """Set internally when the viewport is added to a canvas."""
 
-        self.scene: Object3D = Object3D()
+        self.scene: Object3D = Object3D()  # type: ignore
         """The root scene object of the viewport."""
 
         self.visuals: list[VisualBase] = []

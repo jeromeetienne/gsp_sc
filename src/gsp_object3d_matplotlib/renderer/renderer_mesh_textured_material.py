@@ -11,12 +11,12 @@ import numpy as np
 
 
 # local imports
-from ...gsp.objects import Mesh, Scene
-from ...gsp.core import Texture, Object3D
+from gsp.objects import Mesh, Scene
+from gsp.core import Texture, Object3D
 from .renderer import Renderer
-from ...gsp.cameras import Camera
-from ...gsp.lights import Light
-from ...gsp.materials import MeshTexturedMaterial
+from gsp.cameras import Camera
+from gsp.lights import Light
+from gsp.materials import MeshTexturedMaterial
 from .renderer_utils import RendererUtils
 
 

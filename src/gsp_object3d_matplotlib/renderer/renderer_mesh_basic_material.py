@@ -8,10 +8,10 @@ import numpy as np
 
 
 # local imports
-from ...gsp.materials import MeshBasicMaterial
-from ...gsp.objects.mesh import Mesh
+from gsp.materials import MeshBasicMaterial
+from gsp.objects.mesh import Mesh
 from .renderer import Renderer
-from ...gsp.cameras.camera import Camera
+from gsp.cameras.camera import Camera
 from .renderer_utils import RendererUtils
 
 

@@ -8,7 +8,7 @@ from .datoviz_mesh import DatovizMesh
 class DatovizPanel:
     def __init__(self):
         # self._gsp_viewport = gsp.core.Viewport(width=512, height=512, dpi=100)
-        self._gsp_viewport = gsp.core.Viewport(origin_x=0, origin_y=0, width=512, height=512, background_color=gsp.Constants.Black)
+        self._gsp_viewport = gsp.core.Viewport(origin_x=0, origin_y=0, width=512, height=512, background_color=gsp.core.Constants.Black)
 
     def add(self, visual: DatovizPoints | DatovizImages | DatovizMesh) -> None:
         if isinstance(visual, DatovizPoints):

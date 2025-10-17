@@ -30,7 +30,7 @@ viewport = gsp.core.Viewport(
     origin_y=0,
     width=canvas.width,
     height=canvas.height,
-    background_color=gsp.Constants.White,
+    background_color=gsp.core.Constants.White,
 )
 canvas.add(viewport=viewport)
 
@@ -46,7 +46,7 @@ npy_url = f"file://{__dirname__}/data/sample_positions_3d.npy"
 position_chain = TransformChain().load(npy_url).lambdaFunc(lambda x: x + 0.2).complete()
 
 sizes_np = np.array([1])
-colors_np = np.array([gsp.Constants.Green])
+colors_np = np.array([gsp.core.Constants.Green])
 pixels = gsp.visuals.Pixels(positions=position_chain, sizes=sizes_np, colors=colors_np)
 viewport.add(pixels)
 

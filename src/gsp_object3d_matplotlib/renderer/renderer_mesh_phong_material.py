@@ -8,12 +8,12 @@ import numpy as np
 from pyrr import vector, vector3
 
 # local imports
-from ...gsp.objects import Mesh, Scene
-from ...gsp.lights import Light, DirectionalLight, PointLight, AmbientLight
+from gsp.objects import Mesh, Scene
+from gsp.lights import Light, DirectionalLight, PointLight, AmbientLight
 from .renderer import Renderer
-from ...gsp.cameras.camera import Camera
-from ...gsp.core import Object3D
-from ...gsp.materials import MeshPhongMaterial
+from gsp.cameras.camera import Camera
+from gsp.core import Object3D
+from gsp.materials import MeshPhongMaterial
 from .renderer_mesh import RendererMesh
 from .renderer_utils import RendererUtils
 

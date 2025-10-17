@@ -3,45 +3,102 @@ import os
 
 # pip imports
 import numpy as np
-import matplotlib.pyplot
-import matplotlib.image
-import mpl3d.glm
 
 # local imports
-import gsp
-from .mesh_parser import MeshParserMeshio
+from gsp.core import Constants, Texture, Object3D
+from gsp.geometry import Geometry, GeometryUtils
+from gsp.materials import PointsMaterial, MeshPhongMaterial, MeshTexturedMaterial
+from gsp.objects import Points, Mesh
+from gsp.lights import DirectionalLight, AmbientLight
+from .mesh_utils import MeshUtils
+
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
+data_path = os.path.join(__dirname__, "../../assets")
+models_path = os.path.join(data_path, "models")
+images_path = os.path.join(data_path, "images")
 
 
 class SceneExamples:
+
     @staticmethod
-    def add_all_visuals(viewport: gsp.core.Viewport):
-        # =============================================================================
-        # Add some random points as a Pixels visual
-        # =============================================================================
-        n_points = 1000
-        positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
-        sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
-        colors_np = np.array([gsp.Constants.Green])
-        pixels = gsp.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=colors_np)
-        viewport.add(pixels)
+    def addRandomPoints(point_count: int = 1000) -> Points:
+        vertices = np.random.uniform(-1, 1, (point_count, 3))
+        geometry = Geometry(vertices)
+        colors = np.random.uniform(0, 1, (point_count, 4))
+        colors[:, 3] = 1.0  # set alpha to 1
+        material = PointsMaterial(colors=colors)
+        random_points = Points(geometry, material)
+        return random_points
 
-        # =============================================================================
-        # Add an image
-        # =============================================================================
-        image_path = f"{__dirname__}/../images/UV_Grid_Sm.jpg"
-        image_data_np = matplotlib.image.imread(image_path)
-        texture = gsp.core.Texture(image_data=image_data_np)
-        image_position = np.array([0, 0, 0])
-        image = gsp.visuals.Image(position=image_position, image_extent=(-1, +1, -1, +1), texture=texture)
-        viewport.add(image)
+    @staticmethod
+    def getBunnyPoints() -> Points:
+        geometry = MeshUtils.parse_obj_file_manual(os.path.join(models_path, "bunny.obj"))
+        geometry.vertices = GeometryUtils.fit_unit_cube(geometry.vertices)
+        material = PointsMaterial(colors=np.array(Constants.Color.PURPLE))
+        points_bunny = Points(geometry, material)
+        return points_bunny
 
-        # =============================================================================
-        # Add a mesh from an OBJ file
-        # =============================================================================
-        obj_mesh_path = f"{__dirname__}/../data/bunny.obj"
-        vertices_coords, faces_indices, uvs_coords, normals_coords = MeshParserMeshio.parse_obj_file(obj_mesh_path)
-        vertices_coords = mpl3d.glm.fit_unit_cube(vertices_coords)
-        mesh = gsp.visuals.Mesh(vertices_coords, faces_indices, cmap=matplotlib.pyplot.get_cmap("magma"), edgecolors=(0, 0, 0, 0.25))  # type: ignore
-        viewport.add(mesh)
+    @staticmethod
+    def getCubePoints() -> Points:
+        geometry = MeshUtils.parse_obj_file_manual(os.path.join(models_path, "cube_meshio.obj"))
+        geometry.vertices = GeometryUtils.fit_unit_cube(geometry.vertices)
+        material = PointsMaterial(colors=np.array(Constants.Color.CYAN))
+        points_bunny = Points(geometry, material)
+        return points_bunny
+
+    @staticmethod
+    def getSuzannePoints() -> Points:
+        geometry = MeshUtils.parse_obj_file_manual(os.path.join(models_path, "suzanne_meshio.obj"))
+        geometry.vertices = GeometryUtils.fit_unit_cube(geometry.vertices)
+        material = PointsMaterial(colors=np.array(Constants.Color.CYAN))
+        points_bunny = Points(geometry, material)
+        return points_bunny
+
+    @staticmethod
+    def getHeadPoints() -> Points:
+        geometry = MeshUtils.parse_obj_file_manual(os.path.join(models_path, "head_meshio.obj"))
+        geometry.vertices = GeometryUtils.fit_unit_cube(geometry.vertices)
+        material = PointsMaterial(colors=np.array(Constants.Color.CYAN))
+        points_bunny = Points(geometry, material)
+        return points_bunny
+
+    @staticmethod
+    def getHeadTexturedMesh() -> Mesh:
+        # Load a texture image
+        texture_path = os.path.join(images_path, "uv-grid.png")
+        texture = Texture.from_file(texture_path)
+
+        # Load a obj model
+        obj_path = os.path.join(models_path, "head_meshio.obj")
+        # obj_path = os.path.join(models_path, "cube_meshio.obj")
+        mesh_geometry = MeshUtils.parse_obj_file_manual(obj_path)
+        assert mesh_geometry.uvs is not None, "The .obj file must contain texture coordinates (vt)"
+
+        # Create a textured mesh
+        material = MeshTexturedMaterial(texture=texture)
+        textured_mesh = Mesh(mesh_geometry, material)
+        return textured_mesh
+
+    @staticmethod
+    def getThreePointsLighting() -> Object3D:
+        """Returns a list of 3 lights for a three-point lighting setup"""
+
+        group = Object3D()
+
+        key_light = DirectionalLight(intensity=0.8)
+        key_light.position = np.array([5.0, 5.0, 5.0])
+        group.add(key_light)
+
+        fill_light = DirectionalLight(intensity=0.4)
+        fill_light.position = np.array([-5.0, 5.0, 5.0])
+        group.add(fill_light)
+
+        back_light = DirectionalLight(intensity=0.3)
+        back_light.position = np.array([0.0, 5.0, -5.0])
+        group.add(back_light)
+
+        ambient_light = AmbientLight(intensity=0.2)
+        group.add(ambient_light)
+
+        return group

@@ -24,7 +24,7 @@ np.random.seed(10)
 # Create a canvas and a viewport
 # =============================================================================
 canvas = gsp.core.Canvas(512, 512, 100)
-viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
 canvas.add(viewport)
 
 # =============================================================================
@@ -38,7 +38,7 @@ positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
 position_ndarray_like = DiffableNdarray(positions_np)
 
 sizes_ndarray_like = TransformChain(np.ones((n_points,))).lambdaFunc(lambda x: x * 100).complete()
-colors_np = np.array([gsp.Constants.Green])
+colors_np = np.array([gsp.core.Constants.Green])
 pixels = gsp.visuals.Pixels(position_ndarray_like, sizes_ndarray_like, colors_np)
 viewport.add(pixels)
 

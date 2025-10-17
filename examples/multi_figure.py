@@ -32,7 +32,7 @@ def create_scene_1() -> gsp_matplotlib.MatplotlibRenderer:
     # =============================================================================
 
     canvas = gsp.core.Canvas(width=512, height=512, dpi=100)
-    viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+    viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
     canvas.add(viewport=viewport)
 
     # =============================================================================
@@ -42,7 +42,7 @@ def create_scene_1() -> gsp_matplotlib.MatplotlibRenderer:
     n_points = 300
     positions_np = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float64)
     sizes_np = np.random.uniform(5, 10, n_points).astype(np.float32)
-    colors_np = np.array([gsp.Constants.Green])
+    colors_np = np.array([gsp.core.Constants.Green])
     pixels = gsp.visuals.Pixels(positions=positions_np, sizes=sizes_np, colors=colors_np)
     viewport.add(pixels)
 
@@ -80,7 +80,7 @@ def create_scene_2() -> gsp_matplotlib.MatplotlibRenderer:
     # =============================================================================
 
     canvas = gsp.core.Canvas(width=512, height=512, dpi=100)
-    viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+    viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
     canvas.add(viewport=viewport)
 
     # =============================================================================

@@ -27,7 +27,7 @@ np.random.seed(10)
 # Create a GSP scene
 #
 canvas = gsp.core.Canvas(256, 256, 100)
-viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.Constants.White)
+viewport = gsp.core.Viewport(0, 0, canvas.width, canvas.height, gsp.core.Constants.White)
 canvas.add(viewport)
 
 
@@ -37,7 +37,7 @@ canvas.add(viewport)
 n_points = 3_000
 positions = np.random.uniform(-0.5, 0.5, (n_points, 3)).astype(np.float32)
 sizes = np.array([50 for _ in range(n_points)], np.float32)
-colors = np.array([gsp.Constants.Green for _ in range(n_points)], np.float32)
+colors = np.array([gsp.core.Constants.Green for _ in range(n_points)], np.float32)
 
 positions = gsp.types.DiffableNdarray(positions)
 sizes = gsp.types.DiffableNdarray(sizes)
