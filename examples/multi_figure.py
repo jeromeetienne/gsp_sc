@@ -7,8 +7,8 @@ import matplotlib.pyplot
 import numpy as np
 import os
 from typing import Sequence
-import time
 import mpl3d.glm
+import sys
 
 # local imports
 from common.gsp_animator import GspAnimatorMatplotlib
@@ -26,7 +26,7 @@ np.random.seed(10)
 # =============================================================================
 
 
-def create_scene_1():
+def create_scene_1() -> gsp_matplotlib.MatplotlibRenderer:
     # =============================================================================
     # Create a canvas and a viewport
     # =============================================================================
@@ -66,13 +66,15 @@ def create_scene_1():
 
     animator.start(canvas, [viewport], [camera], block=False)
 
+    return renderer
+
 
 # =============================================================================
 # Figure 2
 # =============================================================================
 
 
-def create_scene_2():
+def create_scene_2() -> gsp_matplotlib.MatplotlibRenderer:
     # =============================================================================
     # Create a canvas and a viewport
     # =============================================================================
@@ -109,13 +111,26 @@ def create_scene_2():
 
     animator.start(canvas, [viewport], [camera], block=False)
 
+    return renderer
+
 
 # =============================================================================
 # Main entry point
 # =============================================================================
 
 if __name__ == "__main__":
-    create_scene_1()
-    create_scene_2()
+    renderer1 = create_scene_1()
+    renderer2 = create_scene_2()
 
+    # detect if we are in not interactive mode - used during testing
+    gsp_sc_interactive = "GSP_SC_INTERACTIVE" not in os.environ or os.environ["GSP_SC_INTERACTIVE"] != "False"
+    if gsp_sc_interactive == False:
+        basename = os.path.splitext(os.path.basename(__file__))[0]
+        figure1 = list(renderer1._figures.values())[0]
+        figure1.savefig(f"{__dirname__}/output/{basename}_1.png")
+        figure2 = list(renderer2._figures.values())[0]
+        figure2.savefig(f"{__dirname__}/output/{basename}_2.png")
+        sys.exit(0)
+
+    # show all figures
     matplotlib.pyplot.show()
