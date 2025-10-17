@@ -29,8 +29,7 @@
   - to renamed `Shapes`
 - `shapeCollection.add_obj(file_path)` -> `shapes.add(Mesh(...))`
   - should receive a geometry + material, not a file
-  - if file parsing is needed do it outside
-  -
+  - if file parsing is needed, do it outside
 
 ## Method Changes
 
