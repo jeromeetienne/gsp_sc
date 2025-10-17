@@ -98,7 +98,7 @@ class GspAnimatorMatplotlib:
     # =============================================================================
     # .start()
     # =============================================================================
-    def start(self, canvas: gsp.core.Canvas, viewports: list[gsp.core.Viewport], cameras: list[gsp.core.Camera]) -> None:
+    def start(self, canvas: gsp.core.Canvas, viewports: list[gsp.core.Viewport], cameras: list[gsp.core.Camera], block: bool = True) -> None:
         """
         Animate the given canvas and camera using the provided callbacks to update visuals.
         """
@@ -183,21 +183,21 @@ class GspAnimatorMatplotlib:
         # Show the animation
         # =============================================================================
 
-        matplotlib.pyplot.show()
-
-        # =============================================================================
-        # Disconnect cameras
-        # =============================================================================
-        for camera in cameras:
-            camera.mpl3d_camera.disconnect()
+        if block is True:
+            matplotlib.pyplot.show()
 
     # =============================================================================
     # .stop()
     # =============================================================================
     def stop(self):
+        # disconnect the cameras connected in .start()
+        if self._cameras is not None:
+            for camera in self._cameras:
+                camera.mpl3d_camera.disconnect()
+            self._cameras = None
+
         self._canvas = None
         self._viewports = None
-        self._cameras = None
         self._time_last_update = None
 
         # stop the animation function timer

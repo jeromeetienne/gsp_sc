@@ -1,24 +1,15 @@
 # TODO
 
-- take end of video save from scene-graph
-  - exit the script on end of video recording
-- fix the multiple viewports
-  - one camera per viewport
-  - how to handle camera in the scene ?
 - can i do the network renderer with camera ?
+  - currently the camera is not properly serialized at all, it save the type only
   - locally it would change the camera...
   - and send the new camera position to the server ?
   - the server will render with the new camera position
   - aka the controller run on client and may change the camera
-- multi viewport in json is broken
-  - fixed ? write a test `multi_viewport_network.py`
 - support collection for all visuals
   - may create alias for the single case, which forwards to the collection case
   - pixels is already done
   - images and meshes to do
-- change the renderer to support multiple viewports
-  - DONE for MatplotlibRendererDelta
-  - TODO for MatplotlibRenderer
 - handle multiple matplotlib renderers at the same time ?
   - how to handle multiple canvas ?
   - how to handle multiple viewport
@@ -33,6 +24,9 @@
 
 =========
 
+- DONE change the renderer to support multiple viewports
+  - DONE for MatplotlibRendererDelta
+  - TODO for MatplotlibRenderer
 - support `Images`
   - with multiple textures
 - make a type for ndarray like nptyping
@@ -47,6 +41,13 @@
 
 ---
 
+- DONE take end of video save from scene-graph
+  - exit the script on end of video recording
+- DONE fix the multiple viewports
+  - one camera per viewport
+  - how to handle camera in the scene ?
+- FIXED multi viewport in json is broken
+  - fixed ? write a test `multi_viewport_network.py`
 - DONE move transform_chain to ./examples/common
 - DONE the image is blank when interactive mode is on
   - because plt.savefig is not called ?

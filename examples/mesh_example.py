@@ -32,7 +32,7 @@ viewport = gsp.core.Viewport(
 canvas.add(viewport=viewport)
 
 # =============================================================================
-# Add some random points
+# Add content to the viewport
 # =============================================================================
 
 obj_mesh_path = f"{__dirname__}/data/bunny.obj"
