@@ -1,23 +1,9 @@
 # pip imports
 import blinker
-from typing import Protocol
-import numpy as np
 
 # local imports
 from .random import Random
 from .event import Event
-
-
-class VisualPreRenderingCallback(Protocol):
-    def __call__(self, visual: "VisualBase") -> None: ...
-
-
-class VisualTransformCallback(Protocol):
-    def __call__(self, renderer: object, camera: object, transformed_positions: "np.ndarray") -> None: ...
-
-
-class VisualPostRenderingCallback(Protocol):
-    def __call__(self, visual: "VisualBase") -> None: ...
 
 
 class VisualBase:
@@ -38,17 +24,18 @@ class VisualBase:
         #   - e.g. gsp do a sort of all position at all rendering, even when there is no transform.
         #   Just because the Transform class "likes" it, eg to implement fog based on z
         # - much less code to maintain
-        self.pre_rendering = Event[VisualPreRenderingCallback]
+        self.pre_rendering = blinker.Signal()
         """Event triggered before rendering the visual."""
 
-        self.post_transform = Event[VisualTransformCallback]
+        self.post_transform = blinker.Signal()
         """
         Event triggered after applying 3d transformations to the visual.
-        Happening in the rendering pipeline after model-view-projection transformations.
 
         Arguments sent to subscribers:
+        - renderer: The renderer instance performing the rendering.
+        - camera: The camera used for rendering.
         - transformed_positions: The numpy array of transformed positions (shape: n x 3).
         """
 
-        self.post_rendering = Event[VisualPostRenderingCallback]
+        self.post_rendering = blinker.Signal()
         """Event triggered after rendering the visual."""
