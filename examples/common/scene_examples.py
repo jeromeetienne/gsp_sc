@@ -14,7 +14,7 @@ from .mesh_utils import MeshUtils
 
 
 __dirname__ = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(__dirname__, "../../assets")
+data_path = os.path.join(__dirname__, "../assets")
 models_path = os.path.join(data_path, "models")
 images_path = os.path.join(data_path, "images")
 
@@ -67,7 +67,7 @@ class SceneExamples:
     def getHeadTexturedMesh() -> Mesh:
         # Load a texture image
         texture_path = os.path.join(images_path, "uv-grid.png")
-        texture = Texture.from_file(texture_path)
+        texture = Texture.from_file(texture_path).ensure_no_alpha()
 
         # Load a obj model
         obj_path = os.path.join(models_path, "head_meshio.obj")

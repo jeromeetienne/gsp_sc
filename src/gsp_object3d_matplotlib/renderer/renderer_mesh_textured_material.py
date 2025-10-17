@@ -51,7 +51,6 @@ class RendererMeshTexturedMaterial:
 
         # get the scene lights in the scene graph
         scene = mesh.root()
-        assert isinstance(scene, Scene)
         lights: list[Light] = [child for child in scene.traverse() if isinstance(child, Light)]
 
         # compute face normals and centroids in world space
