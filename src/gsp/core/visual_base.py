@@ -4,12 +4,14 @@ import blinker
 # local imports
 from .random import Random
 from .event import Event
+from .object_3d import Object3D
 
 
-class VisualBase:
+class VisualBase(Object3D):
     __slots__ = ("uuid", "pre_rendering", "post_transform", "post_rendering")
 
     def __init__(self) -> None:
+        super().__init__()
         self.uuid = Random.random_uuid()
         """
         The unique identifier of the visual.
