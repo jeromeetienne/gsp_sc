@@ -63,9 +63,11 @@ def render_scene_json() -> Response:
     #
     client_id = payload["client_id"]
     if payload["type"] == "absolute":
+        payload_data = payload["data"]
+        assert isinstance(payload_data, dict), f"Expected payload data to be a dictionary for 'absolute' type, got {type(payload_data).__name__}"
         # Store the absolute scene for this client
-        absolute_scenes[client_id] = payload["data"]
-        scene_dict: SceneDict = payload["data"]
+        absolute_scenes[client_id] = payload_data
+        scene_dict: SceneDict = payload_data
         # log the operation
         print(f"Rendering scene for client_id={client_id}. {text_green('Absolute')} Scene size: {text_cyan(str(len(str(scene_dict))))} bytes")
     elif payload["type"] == "json_diff":
