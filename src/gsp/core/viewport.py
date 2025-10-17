@@ -3,6 +3,7 @@ from __future__ import annotations
 from .visual_base import VisualBase
 from .random import Random
 from .canvas import Canvas
+from .object_3d import Object3D
 
 
 class Viewport:
@@ -15,6 +16,7 @@ class Viewport:
         "background_color",
         "_canvas",
         "visuals",
+        "scene",
     )
 
     def __init__(self, origin_x: int, origin_y: int, width: int, height: int, background_color: tuple[float, float, float, float] = (1, 1, 1, 1)) -> None:
@@ -40,8 +42,12 @@ class Viewport:
         """The height of the viewport in the Canvas"""
         self.background_color = background_color
         """The background color of the viewport"""
-        self._canvas: Canvas | None = None
+
+        # self._canvas: Canvas | None = None
         """Set internally when the viewport is added to a canvas."""
+
+        self.scene: Object3D = Object3D()
+        """The root scene object of the viewport."""
 
         self.visuals: list[VisualBase] = []
         """List of visuals associated with this viewport"""
@@ -54,6 +60,7 @@ class Viewport:
             visual (VisualBase): The visual to add.
         """
         self.visuals.append(visual)
+        self.scene.add(visual)
 
     def remove(self, visual: VisualBase) -> None:
         """
@@ -63,33 +70,34 @@ class Viewport:
             visual (VisualBase): The visual to remove.
         """
         self.visuals.remove(visual)
+        self.scene.remove(visual)
 
-    def set_canvas(self, canvas: Canvas | None) -> None:
-        """
-        Set the canvas for the viewport.
+    # def set_canvas(self, canvas: Canvas | None) -> None:
+    #     """
+    #     Set the canvas for the viewport.
 
-        Args:
-            canvas (Canvas | None): The canvas to set. Use None to unset.
-        """
-        self._canvas = canvas
+    #     Args:
+    #         canvas (Canvas | None): The canvas to set. Use None to unset.
+    #     """
+    #     self._canvas = canvas
 
-    def has_canvas(self) -> bool:
-        """
-        Check if the viewport is associated with a canvas.
+    # def has_canvas(self) -> bool:
+    #     """
+    #     Check if the viewport is associated with a canvas.
 
-        Returns:
-            bool: True if the viewport has a canvas, False otherwise.
-        """
-        return self._canvas is not None
+    #     Returns:
+    #         bool: True if the viewport has a canvas, False otherwise.
+    #     """
+    #     return self._canvas is not None
 
-    def get_canvas(self) -> Canvas:
-        """
-        Get the canvas associated with the viewport.
+    # def get_canvas(self) -> Canvas:
+    #     """
+    #     Get the canvas associated with the viewport.
 
-        Returns:
-            Canvas | None: The canvas associated with the viewport, or None if not set.
-        """
-        # sanity check
-        assert self._canvas is not None, "Viewport is not associated with any canvas. Check with .has_canvas() before calling get_canvas()."
+    #     Returns:
+    #         Canvas | None: The canvas associated with the viewport, or None if not set.
+    #     """
+    #     # sanity check
+    #     assert self._canvas is not None, "Viewport is not associated with any canvas. Check with .has_canvas() before calling get_canvas()."
 
-        return self._canvas
+    #     return self._canvas

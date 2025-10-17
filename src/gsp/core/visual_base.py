@@ -12,12 +12,12 @@ class VisualBase(Object3D):
 
     def __init__(self) -> None:
         super().__init__()
-        self.uuid = Random.random_uuid()
-        """
-        The unique identifier of the visual.
+        # self.uuid = Random.random_uuid()
+        # """
+        # The unique identifier of the visual.
 
-        - Used in renderers to track visuals context across multiple render calls.
-        """
+        # - Used in renderers to track visuals context across multiple render calls.
+        # """
 
         # NOTE comparison to gsp
         # - more flexible, more in controls of the users

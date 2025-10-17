@@ -10,6 +10,7 @@ from .viewport import Viewport
 from .canvas import Canvas
 from .camera import Camera
 from .visual_base import VisualBase
+from .constants import Constants
 from .object_3d import Object3D
 from .random import Random
 from .texture import Texture

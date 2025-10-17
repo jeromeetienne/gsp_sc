@@ -45,7 +45,7 @@ class Canvas:
             viewport ("Viewport"): The viewport to add.
         """
         self.viewports.append(viewport)
-        viewport.set_canvas(self)
+        # viewport.set_canvas(self)
 
     def remove(self, viewport: "Viewport") -> None:  # type: ignore[valid-type]
         """
@@ -55,4 +55,4 @@ class Canvas:
             viewport ("Viewport"): The viewport to remove.
         """
         self.viewports.remove(viewport)
-        viewport.set_canvas(None)
+        # viewport.set_canvas(None)

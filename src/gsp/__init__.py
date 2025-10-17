@@ -13,6 +13,6 @@ from . import core
 from . import renderer
 from . import visuals
 from . import types
-from .constants import Constants
+from .core.constants import Constants
 
 from . import transform
