@@ -10,6 +10,7 @@
   - may create alias for the single case, which forwards to the collection case
   - pixels is already done
   - images and meshes to do
+- how to do the global transform chain with global
 - handle multiple matplotlib renderers at the same time ?
   - how to handle multiple canvas ?
   - how to handle multiple viewport
