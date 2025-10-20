@@ -26,6 +26,7 @@ class Camera:
     # A getter for the internal mpl3d camera.transform
     @property
     def transform(self) -> np.ndarray:
+        """MVP transformation matrix of the camera."""
         return self.__mpl3d_camera.transform
 
     @property
@@ -40,7 +41,6 @@ class Camera:
             raise ValueError("Position must be a 3D vector.")
         self.__position = position.copy()
         self.__update_mpl3d_matrix()
-
 
     def __update_mpl3d_matrix(self) -> None:
         position_x, position_y, position_z = self.__position
