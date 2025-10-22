@@ -52,7 +52,14 @@ class MatplotlibRenderer:
     # =============================================================================
 
     def render(
-        self, canvas: Canvas, viewports: list[Viewport], cameras: list[Camera], show_image: bool = False, return_image: bool = True, interactive: bool = False
+        self,
+        canvas: Canvas,
+        viewports: list[Viewport],
+        cameras: list[Camera],
+        show_image: bool = False,
+        return_image: bool = True,
+        interactive: bool = False,
+        image_format: str = "png",
     ) -> bytes:
 
         self.__render(canvas, viewports=viewports, cameras=cameras)
@@ -65,7 +72,7 @@ class MatplotlibRenderer:
         if return_image:
             # Render the image to a PNG buffer
             image_png_buffer = io.BytesIO()
-            matplotlib.pyplot.savefig(image_png_buffer, format="png")
+            matplotlib.pyplot.savefig(image_png_buffer, format=image_format)
             image_png_buffer.seek(0)
             image_png_data = image_png_buffer.getvalue()
             image_png_buffer.close()

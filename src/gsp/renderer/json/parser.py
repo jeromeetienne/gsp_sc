@@ -92,7 +92,7 @@ class JsonParser:
                     pixels.uuid = visual_info["uuid"]
                     visual = pixels
                 elif visual_info["type"] == "Image":
-                    texture = JsonParser.texture_from_json(visual_info["texture"])
+                    texture = JsonParser._texture_from_json(visual_info["texture"])
                     image = Image(position=np.array(visual_info["position"]), image_extent=visual_info["bounds"], texture=texture)
                     # restore the original uuid
                     image.uuid = visual_info["uuid"]
@@ -123,7 +123,7 @@ class JsonParser:
         return canvas, viewports, cameras
 
     @staticmethod
-    def texture_from_json(texture_dict: dict[str, Any]) -> Texture:
+    def _texture_from_json(texture_dict: dict[str, Any]) -> Texture:
         image_data = np.array(texture_dict["image_data"]).reshape(tuple(texture_dict["image_data_shape"]))
         texture = Texture(image_data)
         return texture
