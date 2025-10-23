@@ -47,7 +47,7 @@ blockquote {
 ul,
 ol {
     /* increase the space between the line */
-    line-height: 2.5rem;
+    line-height: 1.5rem;
     font-size: 40px;
     color: #333;
     /* list-style-type: square; */
