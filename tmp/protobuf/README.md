@@ -1,0 +1,13 @@
+- no doc associated to the fields
+  - similar to __doc__ for classes
+- no string typing in the generated python code
+  - https://pypi.org/project/types-protobuf/ suppose to fix the problem
+  - cant make it work for now 
+  - WORK with --pyi_out option of protoc
+- LOTS of globals in the generated python code
+  - hard to track where things come from
+- ALL the id fields are uint32
+  - should be uint64 to avoid collisions in a distributed system
+- requirement of a compiler tool (protoc)
+  - need to integrate that in the build system
+  - need to distribute the protoc binary with the project

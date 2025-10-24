@@ -1,0 +1,284 @@
+syntax = "proto3";
+
+package gsp;
+
+message COMMAND {
+    oneof command {
+
+        // reserved 100 to 199
+        CANVAS canvas = 100;
+        CANVAST_SET_SIZE canvas_set_size = 101;
+        CANVAST_SET_DPI canvas_set_dpi = 102;
+
+        // reserved 200 to 299;
+        VIEWPORT viewport = 200;
+        VIEWPORT_SET_POSITON viewport_set_position = 201;
+        VIEWPORT_SET_SIZE viewport_set_size = 202;
+
+        // reserved 300 to 399;
+        BUFFER buffer = 300;
+        BUFFER_SET_DATA buffer_set_data = 301;
+
+        // reserved 500 to 599;
+        PIXELS pixels = 500;
+
+        TRANSFORM transform = 6;
+        TRANSFORM_BIND transform_bind = 7;
+        TRANSFORM_SET_BASE transform_set_base = 8;
+        TRANSFORM_SET_LEFT transform_set_left = 9;
+        TRANSFORM_SET_RIGHT transform_set_right = 10;
+    }
+}
+
+message POSITIONS {
+    oneof positions {
+        BUFFER positions_buffer = 2;
+        TRANSFORM positions_transform = 3;
+        NESTED_LIST positions_list = 4;
+    }
+}
+
+// COLOR message: 4 unsigned bytes as raw bytes (RGBA)
+message COLOR {
+    bytes rgba = 1; // exactly 4 bytes: R, G, B, A
+}
+
+// COLORS message (oneof for color, buffer, or transform)
+message COLORS {
+    oneof colors {
+        COLOR colors_single = 1;        // Single color (RGBA)
+        BUFFER colors_buffer = 2;       // Color buffer reference
+        TRANSFORM colors_transform = 3; // Color transform reference
+    }
+}
+
+// List of uint32
+message LIST {
+    repeated uint32 values = 1;
+}
+
+// Repeated list of LIST
+message NESTED_LIST {
+    repeated LIST lists = 1;
+}
+
+// GROUPS message (oneof for single group, group list, or group matrix)
+message GROUPS {
+    oneof groups {
+        uint32 groups_size = 1;         // Contiguous groups with same size
+        LIST group_sizes = 2;           // Contiguous groups with different sizes
+        NESTED_LIST group_indices = 3;  // Groups as list of indices
+    }
+}
+
+enum BufferType {
+    BYTE = 0;       // A single signed 8-bit integer.
+    UBYTE = 1;      // A single unsigned 8-bit integer.
+    SHORT = 2;      // A signed 16-bit integer.
+    USHORT = 3;     // An unsigned 16-bit integer.
+    LONG = 4;       // A signed 32-bit integer.
+    ULONG = 5;      // An unsigned 32-bit integer.
+    FLOAT = 6;      // A single-precision floating-point number (32-bit).
+    VEC2 = 7;       // A 2-component vector of `float` (2x32-bit floating-point numbers).
+    VEC3 = 8;       // A 3-component vector of `float` (3x32-bit floating-point numbers).
+    VEC4 = 9;       // A 4-component vector of `float` (4x32-bit floating-point numbers).
+    IVEC2 = 10;     // A 2-component vector of `byte` (2x8-bit signed integers).
+    IVEC3 = 11;     // A 3-component vector of `byte` (3x8-bit signed integers).
+    IVEC4 = 12;     // A 4-component vector of `byte` (4x8-bit signed integers).
+    UVEC2 = 13;     // A 2-component vector of `ubyte` (2x8-bit unsigned integers).
+    UVEC3 = 14;     // A 3-component vector of `ubyte` (3x8-bit unsigned integers).
+    UVEC4 = 15;     // A 4-component vector of `ubyte` (4x8-bit unsigned integers).
+    DATETIME = 16;  // A timestamp representing a specific point in time.
+    TIMEDELTA = 17; // A duration representing a difference between two `datetime` values.
+}
+
+enum OutputType {
+    IMAGE = 0;   // Rendered pixels (RGBA)
+    OUTPUT_BUFFER = 1;  // Binary data in an existing buffer
+    METADATA = 2;// Information only (stats, logs)
+}
+
+enum OutputFormat {
+    FORMAT_RGBA = 0;    // Rendered pixels as RGBA (bytes)
+    FORMAT_FLOAT = 1;   // Rendered pixels as float (32-bit float per channel)
+    FORMAT_DEPTH = 2;   // Depth buffer as float (32-bit float)
+    FORMAT_ID = 3;      // Object IDs as unsigned integers (32-bit uint per pixel)
+}
+
+enum FormatType {
+    RGB  = 0;   // Rendered pixels as RGB (bytes)
+    RGBA = 1;  // Rendered pixels as RGBA (bytes)
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// BUFFER
+////////////////////////////////////////////////////////////////////////////////
+
+message BUFFER {
+    uint32 id = 1;
+    uint32 count = 2;
+    BufferType type = 3;
+}
+
+message BUFFER_SET_DATA {
+    uint32 id = 1;
+    uint32 offset = 2;     // Offset in bytes where the data should be set
+    bytes data = 3;        // Actual data to set at the given offset
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// CANVAS
+////////////////////////////////////////////////////////////////////////////////
+
+message CANVAS {
+    uint32 id = 1;
+    uint32 width = 2;
+    uint32 height = 3;
+    float dpi = 4;
+    repeated VIEWPORT viewports = 5;
+}
+
+message CANVAST_SET_SIZE {
+    uint32 id = 1;
+    uint32 canvas_id = 2;
+    uint32 width = 3;
+    uint32 height = 4;
+}
+
+message CANVAST_SET_DPI {
+    uint32 id = 1;
+    uint32 canvas_id = 2;
+    float dpi = 3;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// VIEWPORT
+////////////////////////////////////////////////////////////////////////////////
+
+message VIEWPORT {
+    uint32 id = 1;
+    uint32 canvas_id = 2;
+    uint32 x = 3;
+    uint32 y = 4;
+    uint32 width = 5;
+    uint32 height = 6;
+}
+
+message VIEWPORT_SET_POSITON {
+    uint32 id = 1;
+    uint32 viewport_id = 2;
+    uint32 x = 3;
+    uint32 y = 4;
+}
+
+message VIEWPORT_SET_SIZE {
+    uint32 id = 1;
+    uint32 viewport_id = 2;
+    uint32 width = 3;
+    uint32 height = 4;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// VISUALS
+////////////////////////////////////////////////////////////////////////////////
+
+
+message VISUAL {
+    oneof visual {
+        PIXELS pixels = 1;
+    }
+}
+
+message PIXELS {
+    uint32 id = 1;
+    POSITIONS positions = 2;
+    COLORS colors = 3;
+    GROUPS groups = 4;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// TRANSFORMS
+////////////////////////////////////////////////////////////////////////////////
+
+// Base TRANSFORM message with a oneof to allow multiple types of transforms
+message TRANSFORM {
+    oneof transform_type {
+        TRANSFORM_COLORMAP colormap = 2;      // Colormap transform
+        TRANSFORM_ACCESSOR accessor = 3;      // Accessor transform
+        TRANSFORM_OPERATOR operator = 4;      // Operator transform
+        TRANSFORM_MEASURE measure = 5;        // Measure transform
+    }
+}
+
+message TRANSFORM_BIND {
+    uint32 id = 1;         // Transform id
+    uint32 buffer_id = 2;  // Buffer id
+}
+
+message TRANSFORM_SET_BASE {
+    uint32 id = 1;          
+    uint32 transform_id = 2;
+}
+
+message TRANSFORM_SET_LEFT {
+    uint32 id = 1;
+    oneof right {
+      uint32 right_buffer = 2;
+      uint32 right_transform = 3;
+    }
+}
+
+message TRANSFORM_SET_RIGHT {
+    uint32 id = 1;
+    oneof right {
+      uint32 right_buffer = 2;
+      uint32 right_transform = 3;
+    }
+}
+
+message TRANSFORM_COLORMAP {
+    uint32 id = 1;
+    string name = 2;
+    float vmin = 3;
+    float vmax = 4;
+}
+
+message TRANSFORM_ACCESSOR {
+    uint32 id = 1;
+    float x = 2;
+    float y = 3;
+    float z = 4;
+    float w = 5;
+}
+
+message TRANSFORM_OPERATOR {
+    uint32 id = 1;
+    uint32 add = 2;
+    uint32 subtract = 3;
+    uint32 multiply = 4;
+    uint32 divide = 5;
+}
+
+message TRANSFORM_MEASURE {
+    uint32 id = 1;
+    uint32 pixel = 2;
+    uint32 point = 3;
+    uint32 inch = 4;
+    uint32 cm = 5;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// RENDERI
+////////////////////////////////////////////////////////////////////////////////
+
+message RENDER {
+  uint32 id = 1;               // Unique ID for this render request
+  uint32 canvas_id = 2;        // The canvas to render
+  uint32 viewport_id = 3;      // Optional: specify a viewport (subset of canvas)
+  OutputType output = 4;       // Output type
+  OutputFormat format = 5;     // Output format: "rgba", "float", etc.
+  bool request_data = 6;       // If true, send data back in RENDER_RESULT
+  uint32 target_buffer_id = 7; // Optional buffer ID:
+                               // store result here instead of sending back
+}
